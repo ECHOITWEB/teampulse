@@ -1,0 +1,700 @@
+
+> teampulse-backend@1.0.0 dev
+> nodemon src/index.js
+
+[33m[nodemon] 3.1.10[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+Server is running on port 5001
+Environment: development
+::1 - - [23/Jul/2025:07:37:18 +0000] "GET /health HTTP/1.1" 200 54 "-" "curl/8.7.1"
+::1 - - [23/Jul/2025:07:37:57 +0000] "GET /socket.io/?EIO=4&transport=polling&t=nipyqqx5 HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:37:57 +0000] "GET /socket.io/?EIO=4&transport=polling&t=nipyrwuv HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:37:59 +0000] "GET /socket.io/?EIO=4&transport=polling&t=nirhym3w HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:01 +0000] "GET /socket.io/?EIO=4&transport=polling&t=nit1hazs HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:04 +0000] "GET /socket.io/?EIO=4&transport=polling&t=nivcuh04 HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:10 +0000] "GET /socket.io/?EIO=4&transport=polling&t=nizzli6d HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:16 +0000] "GET /socket.io/?EIO=4&transport=polling&t=nj4ma14j HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:30 +0000] "GET /api/departments HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:30 +0000] "GET /api/goals HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:31 +0000] "GET /api/users/organization-structure HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:32 +0000] "GET /api/departments HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:32 +0000] "GET /api/goals HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:36 +0000] "GET /api/departments HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:36 +0000] "GET /api/goals HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:38 +0000] "GET /api/goals HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:38 +0000] "GET /api/departments HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:39 +0000] "GET /api/goals HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:39 +0000] "GET /api/departments HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:41 +0000] "GET /api/goals HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:41 +0000] "GET /api/departments HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:45 +0000] "GET /api/goals HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:38:45 +0000] "GET /api/departments HTTP/1.1" 404 21 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:09 +0000] "POST /api/users/demo-login HTTP/1.1" 200 257 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:09 +0000] "POST /api/users/demo-login HTTP/1.1" 200 257 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+Database query error: Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:18:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  code: 'ER_WRONG_ARGUMENTS',
+  errno: 1210,
+  sql: '\n' +
+    '      SELECT \n' +
+    '        cs.*,\n' +
+    '        COUNT(cm.id) as message_count,\n' +
+    '        MAX(cm.created_at) as last_message_at\n' +
+    '      FROM chat_sessions cs\n' +
+    '      LEFT JOIN chat_messages cm ON cs.id = cm.session_id\n' +
+    '      WHERE cs.user_id = ?\n' +
+    '     AND cs.tool_type = ? GROUP BY cs.id ORDER BY cs.updated_at DESC LIMIT ? OFFSET ?',
+  sqlState: 'HY000',
+  sqlMessage: 'Incorrect arguments to mysqld_stmt_execute'
+}
+Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:18:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+::1 - - [23/Jul/2025:07:42:09 +0000] "GET /api/chat/sessions?limit=20&offset=0&tool_type=teampulse_ai HTTP/1.1" 500 79 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+Database query error: Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:18:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  code: 'ER_WRONG_ARGUMENTS',
+  errno: 1210,
+  sql: '\n' +
+    '      SELECT \n' +
+    '        cs.*,\n' +
+    '        COUNT(cm.id) as message_count,\n' +
+    '        MAX(cm.created_at) as last_message_at\n' +
+    '      FROM chat_sessions cs\n' +
+    '      LEFT JOIN chat_messages cm ON cs.id = cm.session_id\n' +
+    '      WHERE cs.user_id = ?\n' +
+    '     AND cs.tool_type = ? GROUP BY cs.id ORDER BY cs.updated_at DESC LIMIT ? OFFSET ?',
+  sqlState: 'HY000',
+  sqlMessage: 'Incorrect arguments to mysqld_stmt_execute'
+}
+Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:18:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+::1 - - [23/Jul/2025:07:42:09 +0000] "GET /api/chat/sessions?limit=20&offset=0&tool_type=teampulse_ai HTTP/1.1" 500 79 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:09 +0000] "POST /api/chat/sessions HTTP/1.1" 201 122 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:09 +0000] "POST /api/chat/sessions HTTP/1.1" 201 122 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:23 +0000] "POST /api/users/demo-login HTTP/1.1" 200 257 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:23 +0000] "POST /api/users/demo-login HTTP/1.1" 200 257 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+Database query error: Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:36:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  code: 'ER_WRONG_ARGUMENTS',
+  errno: 1210,
+  sql: '\n' +
+    '      SELECT \n' +
+    '        cs.*,\n' +
+    '        COUNT(cm.id) as message_count,\n' +
+    '        MAX(cm.created_at) as last_message_at\n' +
+    '      FROM chat_sessions cs\n' +
+    '      LEFT JOIN chat_messages cm ON cs.id = cm.session_id\n' +
+    '      WHERE cs.user_id = ?\n' +
+    '     AND cs.tool_type = ? GROUP BY cs.id ORDER BY cs.updated_at DESC LIMIT ? OFFSET ?',
+  sqlState: 'HY000',
+  sqlMessage: 'Incorrect arguments to mysqld_stmt_execute'
+}
+Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:36:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+::1 - - [23/Jul/2025:07:42:23 +0000] "GET /api/chat/sessions?limit=20&offset=0&tool_type=teampulse_ai HTTP/1.1" 500 79 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+Database query error: Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:36:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  code: 'ER_WRONG_ARGUMENTS',
+  errno: 1210,
+  sql: '\n' +
+    '      SELECT \n' +
+    '        cs.*,\n' +
+    '        COUNT(cm.id) as message_count,\n' +
+    '        MAX(cm.created_at) as last_message_at\n' +
+    '      FROM chat_sessions cs\n' +
+    '      LEFT JOIN chat_messages cm ON cs.id = cm.session_id\n' +
+    '      WHERE cs.user_id = ?\n' +
+    '     AND cs.tool_type = ? GROUP BY cs.id ORDER BY cs.updated_at DESC LIMIT ? OFFSET ?',
+  sqlState: 'HY000',
+  sqlMessage: 'Incorrect arguments to mysqld_stmt_execute'
+}
+Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:36:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+::1 - - [23/Jul/2025:07:42:23 +0000] "GET /api/chat/sessions?limit=20&offset=0&tool_type=teampulse_ai HTTP/1.1" 500 79 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:23 +0000] "POST /api/chat/sessions HTTP/1.1" 201 122 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:23 +0000] "POST /api/chat/sessions HTTP/1.1" 201 122 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:28 +0000] "POST /api/users/demo-login HTTP/1.1" 200 257 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:28 +0000] "POST /api/users/demo-login HTTP/1.1" 200 257 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+Database query error: Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:36:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  code: 'ER_WRONG_ARGUMENTS',
+  errno: 1210,
+  sql: '\n' +
+    '      SELECT \n' +
+    '        cs.*,\n' +
+    '        COUNT(cm.id) as message_count,\n' +
+    '        MAX(cm.created_at) as last_message_at\n' +
+    '      FROM chat_sessions cs\n' +
+    '      LEFT JOIN chat_messages cm ON cs.id = cm.session_id\n' +
+    '      WHERE cs.user_id = ?\n' +
+    '     AND cs.tool_type = ? GROUP BY cs.id ORDER BY cs.updated_at DESC LIMIT ? OFFSET ?',
+  sqlState: 'HY000',
+  sqlMessage: 'Incorrect arguments to mysqld_stmt_execute'
+}
+Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:36:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+::1 - - [23/Jul/2025:07:42:28 +0000] "GET /api/chat/sessions?limit=20&offset=0&tool_type=teampulse_ai HTTP/1.1" 500 79 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+Database query error: Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:36:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  code: 'ER_WRONG_ARGUMENTS',
+  errno: 1210,
+  sql: '\n' +
+    '      SELECT \n' +
+    '        cs.*,\n' +
+    '        COUNT(cm.id) as message_count,\n' +
+    '        MAX(cm.created_at) as last_message_at\n' +
+    '      FROM chat_sessions cs\n' +
+    '      LEFT JOIN chat_messages cm ON cs.id = cm.session_id\n' +
+    '      WHERE cs.user_id = ?\n' +
+    '     AND cs.tool_type = ? GROUP BY cs.id ORDER BY cs.updated_at DESC LIMIT ? OFFSET ?',
+  sqlState: 'HY000',
+  sqlMessage: 'Incorrect arguments to mysqld_stmt_execute'
+}
+Error: Incorrect arguments to mysqld_stmt_execute
+    at PromisePool.execute (/Users/pablokim/teampulse/backend/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at Object.query (/Users/pablokim/teampulse/backend/src/utils/database.js:26:34)
+    at exports.getSessions (/Users/pablokim/teampulse/backend/src/controllers/chatController.js:51:31)
+    at Layer.handle [as handle_request] (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/pablokim/teampulse/backend/node_modules/express/lib/router/route.js:149:13)
+    at exports.authenticateUser (/Users/pablokim/teampulse/backend/src/middleware/auth.js:36:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+::1 - - [23/Jul/2025:07:42:28 +0000] "GET /api/chat/sessions?limit=20&offset=0&tool_type=teampulse_ai HTTP/1.1" 500 79 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:28 +0000] "POST /api/chat/sessions HTTP/1.1" 201 122 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+::1 - - [23/Jul/2025:07:42:28 +0000] "POST /api/chat/sessions HTTP/1.1" 201 122 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+Server is running on port 5001
+Environment: development
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+(node:10997) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 exit listeners added to [Bus]. Use emitter.setMaxListeners() to increase limit
+(Use `node --trace-warnings ...` to show where the warning was created)
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (/Users/pablokim/teampulse/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:76:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:99:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:99:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:99:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/index.js`[39m
+Database connection successful
+Database connected successfully
+node:events:495
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at startServer (/Users/pablokim/teampulse/backend/src/index.js:99:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1844:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+
+Node.js v18.20.5
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
