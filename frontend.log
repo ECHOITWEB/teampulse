@@ -1,0 +1,3651 @@
+
+> temp-app@0.1.0 start
+> react-scripts start
+
+(node:66093) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:66093) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view temp-app in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.200.142:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+ERROR in src/config/firebase.ts:1:31
+TS2307: Cannot find module 'firebase/app' or its corresponding type declarations.
+  > 1 | import { initializeApp } from 'firebase/app';
+      |                               ^^^^^^^^^^^^^^
+    2 | import { 
+    3 |   getAuth, 
+    4 |   GoogleAuthProvider, 
+
+ERROR in src/config/firebase.ts:9:8
+TS2307: Cannot find module 'firebase/auth' or its corresponding type declarations.
+     7 |   onAuthStateChanged,
+     8 |   User
+  >  9 | } from 'firebase/auth';
+       |        ^^^^^^^^^^^^^^^
+    10 |
+    11 | // Firebase configuration
+    12 | const firebaseConfig = {
+
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+ERROR in src/config/firebase.ts:1:31
+TS2307: Cannot find module 'firebase/app' or its corresponding type declarations.
+  > 1 | import { initializeApp } from 'firebase/app';
+      |                               ^^^^^^^^^^^^^^
+    2 | import { 
+    3 |   getAuth, 
+    4 |   GoogleAuthProvider, 
+
+ERROR in src/config/firebase.ts:9:8
+TS2307: Cannot find module 'firebase/auth' or its corresponding type declarations.
+     7 |   onAuthStateChanged,
+     8 |   User
+  >  9 | } from 'firebase/auth';
+       |        ^^^^^^^^^^^^^^^
+    10 |
+    11 | // Firebase configuration
+    12 | const firebaseConfig = {
+
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+ERROR in src/config/firebase.ts:1:31
+TS2307: Cannot find module 'firebase/app' or its corresponding type declarations.
+  > 1 | import { initializeApp } from 'firebase/app';
+      |                               ^^^^^^^^^^^^^^
+    2 | import { 
+    3 |   getAuth, 
+    4 |   GoogleAuthProvider, 
+
+ERROR in src/config/firebase.ts:9:8
+TS2307: Cannot find module 'firebase/auth' or its corresponding type declarations.
+     7 |   onAuthStateChanged,
+     8 |   User
+  >  9 | } from 'firebase/auth';
+       |        ^^^^^^^^^^^^^^^
+    10 |
+    11 | // Firebase configuration
+    12 | const firebaseConfig = {
+
+ERROR in src/contexts/AuthContext.tsx:2:22
+TS2307: Cannot find module 'firebase/auth' or its corresponding type declarations.
+    1 | import React, { createContext, useContext, useState, useEffect } from 'react';
+  > 2 | import { User } from 'firebase/auth';
+      |                      ^^^^^^^^^^^^^^^
+    3 | import { 
+    4 |   signInWithGoogle, 
+    5 |   signOut, 
+
+ERROR in src/contexts/AuthContext.tsx:53:11
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    51 |       
+    52 |       // Set token in API service
+  > 53 |       api.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
+       |           ^^^^^^^^
+    54 |       
+    55 |       // Get or create user in backend
+    56 |       const response = await api.post('/api/auth/sync', {
+
+ERROR in src/contexts/AuthContext.tsx:56:34
+TS2339: Property 'post' does not exist on type 'ApiService'.
+    54 |       
+    55 |       // Get or create user in backend
+  > 56 |       const response = await api.post('/api/auth/sync', {
+       |                                  ^^^^
+    57 |         firebase_uid: firebaseUser.uid,
+    58 |         email: firebaseUser.email,
+    59 |         name: firebaseUser.displayName,
+
+ERROR in src/contexts/AuthContext.tsx:82:20
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    80 |         setFirebaseUser(null);
+    81 |         setUser(null);
+  > 82 |         delete api.defaults.headers.common['Authorization'];
+       |                    ^^^^^^^^
+    83 |       }
+    84 |       
+    85 |       setLoading(false);
+
+ERROR in src/contexts/AuthContext.tsx:115:18
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    113 |       setFirebaseUser(null);
+    114 |       setUser(null);
+  > 115 |       delete api.defaults.headers.common['Authorization'];
+        |                  ^^^^^^^^
+    116 |     } catch (error: any) {
+    117 |       console.error('Sign out error:', error);
+    118 |       setError(error.message);
+
+ERROR in src/contexts/AuthContext.tsx:132:11
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    130 |     const token = await refreshIdToken();
+    131 |     if (token) {
+  > 132 |       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        |           ^^^^^^^^
+    133 |     }
+    134 |     return token;
+    135 |   };
+
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+ERROR in src/config/firebase.ts:1:31
+TS2307: Cannot find module 'firebase/app' or its corresponding type declarations.
+  > 1 | import { initializeApp } from 'firebase/app';
+      |                               ^^^^^^^^^^^^^^
+    2 | import { 
+    3 |   getAuth, 
+    4 |   GoogleAuthProvider, 
+
+ERROR in src/config/firebase.ts:9:8
+TS2307: Cannot find module 'firebase/auth' or its corresponding type declarations.
+     7 |   onAuthStateChanged,
+     8 |   User
+  >  9 | } from 'firebase/auth';
+       |        ^^^^^^^^^^^^^^^
+    10 |
+    11 | // Firebase configuration
+    12 | const firebaseConfig = {
+
+ERROR in src/contexts/AuthContext.tsx:2:22
+TS2307: Cannot find module 'firebase/auth' or its corresponding type declarations.
+    1 | import React, { createContext, useContext, useState, useEffect } from 'react';
+  > 2 | import { User } from 'firebase/auth';
+      |                      ^^^^^^^^^^^^^^^
+    3 | import { 
+    4 |   signInWithGoogle, 
+    5 |   signOut, 
+
+ERROR in src/contexts/AuthContext.tsx:53:11
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    51 |       
+    52 |       // Set token in API service
+  > 53 |       api.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
+       |           ^^^^^^^^
+    54 |       
+    55 |       // Get or create user in backend
+    56 |       const response = await api.post('/api/auth/sync', {
+
+ERROR in src/contexts/AuthContext.tsx:56:34
+TS2339: Property 'post' does not exist on type 'ApiService'.
+    54 |       
+    55 |       // Get or create user in backend
+  > 56 |       const response = await api.post('/api/auth/sync', {
+       |                                  ^^^^
+    57 |         firebase_uid: firebaseUser.uid,
+    58 |         email: firebaseUser.email,
+    59 |         name: firebaseUser.displayName,
+
+ERROR in src/contexts/AuthContext.tsx:82:20
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    80 |         setFirebaseUser(null);
+    81 |         setUser(null);
+  > 82 |         delete api.defaults.headers.common['Authorization'];
+       |                    ^^^^^^^^
+    83 |       }
+    84 |       
+    85 |       setLoading(false);
+
+ERROR in src/contexts/AuthContext.tsx:115:18
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    113 |       setFirebaseUser(null);
+    114 |       setUser(null);
+  > 115 |       delete api.defaults.headers.common['Authorization'];
+        |                  ^^^^^^^^
+    116 |     } catch (error: any) {
+    117 |       console.error('Sign out error:', error);
+    118 |       setError(error.message);
+
+ERROR in src/contexts/AuthContext.tsx:132:11
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    130 |     const token = await refreshIdToken();
+    131 |     if (token) {
+  > 132 |       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        |           ^^^^^^^^
+    133 |     }
+    134 |     return token;
+    135 |   };
+
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+ERROR in src/config/firebase.ts:1:31
+TS2307: Cannot find module 'firebase/app' or its corresponding type declarations.
+  > 1 | import { initializeApp } from 'firebase/app';
+      |                               ^^^^^^^^^^^^^^
+    2 | import { 
+    3 |   getAuth, 
+    4 |   GoogleAuthProvider, 
+
+ERROR in src/config/firebase.ts:9:8
+TS2307: Cannot find module 'firebase/auth' or its corresponding type declarations.
+     7 |   onAuthStateChanged,
+     8 |   User
+  >  9 | } from 'firebase/auth';
+       |        ^^^^^^^^^^^^^^^
+    10 |
+    11 | // Firebase configuration
+    12 | const firebaseConfig = {
+
+ERROR in src/contexts/AuthContext.tsx:2:22
+TS2307: Cannot find module 'firebase/auth' or its corresponding type declarations.
+    1 | import React, { createContext, useContext, useState, useEffect } from 'react';
+  > 2 | import { User } from 'firebase/auth';
+      |                      ^^^^^^^^^^^^^^^
+    3 | import { 
+    4 |   signInWithGoogle, 
+    5 |   signOut, 
+
+ERROR in src/contexts/AuthContext.tsx:53:11
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    51 |       
+    52 |       // Set token in API service
+  > 53 |       api.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
+       |           ^^^^^^^^
+    54 |       
+    55 |       // Get or create user in backend
+    56 |       const response = await api.post('/api/auth/sync', {
+
+ERROR in src/contexts/AuthContext.tsx:56:34
+TS2339: Property 'post' does not exist on type 'ApiService'.
+    54 |       
+    55 |       // Get or create user in backend
+  > 56 |       const response = await api.post('/api/auth/sync', {
+       |                                  ^^^^
+    57 |         firebase_uid: firebaseUser.uid,
+    58 |         email: firebaseUser.email,
+    59 |         name: firebaseUser.displayName,
+
+ERROR in src/contexts/AuthContext.tsx:82:20
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    80 |         setFirebaseUser(null);
+    81 |         setUser(null);
+  > 82 |         delete api.defaults.headers.common['Authorization'];
+       |                    ^^^^^^^^
+    83 |       }
+    84 |       
+    85 |       setLoading(false);
+
+ERROR in src/contexts/AuthContext.tsx:115:18
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    113 |       setFirebaseUser(null);
+    114 |       setUser(null);
+  > 115 |       delete api.defaults.headers.common['Authorization'];
+        |                  ^^^^^^^^
+    116 |     } catch (error: any) {
+    117 |       console.error('Sign out error:', error);
+    118 |       setError(error.message);
+
+ERROR in src/contexts/AuthContext.tsx:132:11
+TS2339: Property 'defaults' does not exist on type 'ApiService'.
+    130 |     const token = await refreshIdToken();
+    131 |     if (token) {
+  > 132 |       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        |           ^^^^^^^^
+    133 |     }
+    134 |     return token;
+    135 |   };
+
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+ERROR in src/config/firebase.ts:1:31
+TS2307: Cannot find module 'firebase/app' or its corresponding type declarations.
+  > 1 | import { initializeApp } from 'firebase/app';
+      |                               ^^^^^^^^^^^^^^
+    2 | import { 
+    3 |   getAuth, 
+    4 |   GoogleAuthProvider, 
+
+ERROR in src/config/firebase.ts:9:8
+TS2307: Cannot find module 'firebase/auth' or its corresponding type declarations.
+     7 |   onAuthStateChanged,
+     8 |   User
+  >  9 | } from 'firebase/auth';
+       |        ^^^^^^^^^^^^^^^
+    10 |
+    11 | // Firebase configuration
+    12 | const firebaseConfig = {
+
+ERROR in src/contexts/AuthContext.tsx:2:22
+TS2307: Cannot find module 'firebase/auth' or its corresponding type declarations.
+    1 | import React, { createContext, useContext, useState, useEffect } from 'react';
+  > 2 | import { User } from 'firebase/auth';
+      |                      ^^^^^^^^^^^^^^^
+    3 | import { 
+    4 |   signInWithGoogle, 
+    5 |   signOut, 
+
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/Header.tsx
+  Line 5:8:    'WorkspaceSwitcher' is defined but never used           @typescript-eslint/no-unused-vars
+  Line 6:10:   'LogOut' is defined but never used                      @typescript-eslint/no-unused-vars
+  Line 6:18:   'User' is defined but never used                        @typescript-eslint/no-unused-vars
+  Line 10:11:  'user' is assigned a value but never used               @typescript-eslint/no-unused-vars
+  Line 10:17:  'signOut' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  Line 11:11:  'currentWorkspace' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  Line 13:10:  'isUserMenuOpen' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 13:26:  'setIsUserMenuOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/Header.tsx
+  Line 5:8:    'WorkspaceSwitcher' is defined but never used           @typescript-eslint/no-unused-vars
+  Line 6:10:   'LogOut' is defined but never used                      @typescript-eslint/no-unused-vars
+  Line 6:18:   'User' is defined but never used                        @typescript-eslint/no-unused-vars
+  Line 10:11:  'user' is assigned a value but never used               @typescript-eslint/no-unused-vars
+  Line 10:17:  'signOut' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  Line 11:11:  'currentWorkspace' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  Line 13:10:  'isUserMenuOpen' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 13:26:  'setIsUserMenuOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/config/firebase.ts
+  Line 10:10:  'getAnalytics' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/config/firebase.ts
+  Line 10:10:  'getAnalytics' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+ERROR in src/hooks/useFirebaseRealtime.ts:34:8
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    32 |     const unsubscribe = firebaseCollection.subscribe(
+    33 |       documentId,
+  > 34 |       (doc) => {
+       |        ^^^
+    35 |         setData(doc as T);
+    36 |         setLoading(false);
+    37 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:39:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    37 |         setError(null);
+    38 |       },
+  > 39 |       (err) => {
+       |        ^^^
+    40 |         setError(err);
+    41 |         setLoading(false);
+    42 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:65:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    63 |     const unsubscribe = firebaseCollection.subscribeToQuery(
+    64 |       constraints,
+  > 65 |       (docs) => {
+       |        ^^^^
+    66 |         setData(docs as T[]);
+    67 |         setLoading(false);
+    68 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:70:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    68 |         setError(null);
+    69 |       },
+  > 70 |       (err) => {
+       |        ^^^
+    71 |         setError(err);
+    72 |         setLoading(false);
+    73 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:91:37
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    89 |   
+    90 |   const constraints = [
+  > 91 |     where('assigneeId', '==', user?.uid || ''),
+       |                                     ^^^
+    92 |     ...(filters?.status ? [where('status', '==', filters.status)] : []),
+    93 |     ...(filters?.priority ? [where('priority', '==', filters.priority)] : []),
+    94 |     orderBy('createdAt', 'desc'),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:121:47
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    119 |     const meetingCollection = new FirebaseCollection(COLLECTIONS.MEETINGS);
+    120 |     unsubscribers.push(
+  > 121 |       meetingCollection.subscribe(meetingId, (doc) => {
+        |                                               ^^^
+    122 |         setMeeting(doc);
+    123 |         setLoading(false);
+    124 |       })
+
+ERROR in src/hooks/useFirebaseRealtime.ts:134:34
+TS7006: Parameter 'notesDocs' implicitly has an 'any' type.
+    132 |     );
+    133 |     unsubscribers.push(
+  > 134 |       notesCollection.subscribe((notesDocs) => {
+        |                                  ^^^^^^^^^
+    135 |         setNotes(notesDocs);
+    136 |       })
+    137 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:145:48
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    143 |     
+    144 |     // Set user presence
+  > 145 |     presenceSystemRef.current.setPresence(user.uid, {
+        |                                                ^^^
+    146 |       name: user.displayName || user.email,
+    147 |       email: user.email,
+    148 |       status: 'active'
+
+ERROR in src/hooks/useFirebaseRealtime.ts:146:18
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    144 |     // Set user presence
+    145 |     presenceSystemRef.current.setPresence(user.uid, {
+  > 146 |       name: user.displayName || user.email,
+        |                  ^^^^^^^^^^^
+    147 |       email: user.email,
+    148 |       status: 'active'
+    149 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:153:54
+TS7006: Parameter 'users' implicitly has an 'any' type.
+    151 |     // Subscribe to presence updates
+    152 |     unsubscribers.push(
+  > 153 |       presenceSystemRef.current.subscribeToPresence((users) => {
+        |                                                      ^^^^^
+    154 |         setActiveUsers(users);
+    155 |       })
+    156 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:162:55
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    160 |       unsubscribers.forEach(unsub => unsub());
+    161 |       if (presenceSystemRef.current && user) {
+  > 162 |         presenceSystemRef.current.removePresence(user.uid);
+        |                                                       ^^^
+    163 |       }
+    164 |     };
+    165 |   }, [meetingId, user]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:170:50
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    168 |   const updateUserStatus = useCallback((status: string) => {
+    169 |     if (presenceSystemRef.current && user) {
+  > 170 |       presenceSystemRef.current.setPresence(user.uid, {
+        |                                                  ^^^
+    171 |         name: user.displayName || user.email,
+    172 |         email: user.email,
+    173 |         status
+
+ERROR in src/hooks/useFirebaseRealtime.ts:171:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    169 |     if (presenceSystemRef.current && user) {
+    170 |       presenceSystemRef.current.setPresence(user.uid, {
+  > 171 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    172 |         email: user.email,
+    173 |         status
+    174 |       });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:218:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    216 |     const firebaseCollection = new FirebaseCollection(collection);
+    217 |     firebaseCollection.update(documentId, {
+  > 218 |       [`editing.${user.uid}`]: {
+        |                        ^^^
+    219 |         userId: user.uid,
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+
+ERROR in src/hooks/useFirebaseRealtime.ts:219:22
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    217 |     firebaseCollection.update(documentId, {
+    218 |       [`editing.${user.uid}`]: {
+  > 219 |         userId: user.uid,
+        |                      ^^^
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:220:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    218 |       [`editing.${user.uid}`]: {
+    219 |         userId: user.uid,
+  > 220 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+    223 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:243:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    241 |     const firebaseCollection = new FirebaseCollection(collection);
+    242 |     firebaseCollection.update(documentId, {
+  > 243 |       [`editing.${user.uid}`]: null
+        |                        ^^^
+    244 |     });
+    245 |   }, [collection, documentId, user]);
+    246 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:256:27
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    254 |     await firebaseCollection.update(documentId, {
+    255 |       ...updates,
+  > 256 |       lastEditedBy: user?.uid,
+        |                           ^^^
+    257 |       lastEditedAt: new Date().toISOString()
+    258 |     });
+    259 |   }, [collection, documentId, user, startEditing]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:265:58
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    263 |     if (document?.editing) {
+    264 |       const activeCollaborators = Object.values(document.editing)
+  > 265 |         .filter((editor: any) => editor.userId !== user?.uid);
+        |                                                          ^^^
+    266 |       setCollaborators(activeCollaborators);
+    267 |     } else {
+    268 |       setCollaborators([]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:299:33
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    297 |   
+    298 |   const constraints = [
+  > 299 |     where('userId', '==', user?.uid || ''),
+        |                                 ^^^
+    300 |     where('read', '==', false),
+    301 |     orderBy('createdAt', 'desc'),
+    302 |     limit(50)
+
+ERROR in src/hooks/useFirebaseRealtime.ts:317:18
+TS18046: 'notification' is of type 'unknown'.
+    315 |   const markAllAsRead = useCallback(async () => {
+    316 |     const batch = notifications.map(notification => 
+  > 317 |       markAsRead(notification.id)
+        |                  ^^^^^^^^^^^^
+    318 |     );
+    319 |     await Promise.all(batch);
+    320 |   }, [notifications, markAsRead]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:342:47
+TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+    340 |     if (!user) return;
+    341 |
+  > 342 |     const collection = new FirebaseCollection(COLLECTIONS[entityType.toUpperCase()]);
+        |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    343 |     
+    344 |     const constraints = [
+    345 |       where('userId', '==', user.uid),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:345:34
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    343 |     
+    344 |     const constraints = [
+  > 345 |       where('userId', '==', user.uid),
+        |                                  ^^^
+    346 |       ...queryHelpers.byDateRange('createdAt', timeRange.start, timeRange.end)
+    347 |     ];
+    348 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:351:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    349 |     const unsubscribe = collection.subscribeToQuery(
+    350 |       constraints,
+  > 351 |       (docs) => {
+        |        ^^^^
+    352 |         // Calculate real-time statistics
+    353 |         const newStats = {
+    354 |           total: docs.length,
+
+ERROR in src/hooks/useFirebaseRealtime.ts:364:22
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    362 |         let totalCompletionTime = 0;
+    363 |
+  > 364 |         docs.forEach(doc => {
+        |                      ^^^
+    365 |           // Count by status
+    366 |           if (doc.status) {
+    367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:46
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:50
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+ERROR in src/hooks/useFirebaseRealtime.ts:34:8
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    32 |     const unsubscribe = firebaseCollection.subscribe(
+    33 |       documentId,
+  > 34 |       (doc) => {
+       |        ^^^
+    35 |         setData(doc as T);
+    36 |         setLoading(false);
+    37 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:39:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    37 |         setError(null);
+    38 |       },
+  > 39 |       (err) => {
+       |        ^^^
+    40 |         setError(err);
+    41 |         setLoading(false);
+    42 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:65:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    63 |     const unsubscribe = firebaseCollection.subscribeToQuery(
+    64 |       constraints,
+  > 65 |       (docs) => {
+       |        ^^^^
+    66 |         setData(docs as T[]);
+    67 |         setLoading(false);
+    68 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:70:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    68 |         setError(null);
+    69 |       },
+  > 70 |       (err) => {
+       |        ^^^
+    71 |         setError(err);
+    72 |         setLoading(false);
+    73 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:91:37
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    89 |   
+    90 |   const constraints = [
+  > 91 |     where('assigneeId', '==', user?.uid || ''),
+       |                                     ^^^
+    92 |     ...(filters?.status ? [where('status', '==', filters.status)] : []),
+    93 |     ...(filters?.priority ? [where('priority', '==', filters.priority)] : []),
+    94 |     orderBy('createdAt', 'desc'),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:121:47
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    119 |     const meetingCollection = new FirebaseCollection(COLLECTIONS.MEETINGS);
+    120 |     unsubscribers.push(
+  > 121 |       meetingCollection.subscribe(meetingId, (doc) => {
+        |                                               ^^^
+    122 |         setMeeting(doc);
+    123 |         setLoading(false);
+    124 |       })
+
+ERROR in src/hooks/useFirebaseRealtime.ts:134:34
+TS7006: Parameter 'notesDocs' implicitly has an 'any' type.
+    132 |     );
+    133 |     unsubscribers.push(
+  > 134 |       notesCollection.subscribe((notesDocs) => {
+        |                                  ^^^^^^^^^
+    135 |         setNotes(notesDocs);
+    136 |       })
+    137 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:145:48
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    143 |     
+    144 |     // Set user presence
+  > 145 |     presenceSystemRef.current.setPresence(user.uid, {
+        |                                                ^^^
+    146 |       name: user.displayName || user.email,
+    147 |       email: user.email,
+    148 |       status: 'active'
+
+ERROR in src/hooks/useFirebaseRealtime.ts:146:18
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    144 |     // Set user presence
+    145 |     presenceSystemRef.current.setPresence(user.uid, {
+  > 146 |       name: user.displayName || user.email,
+        |                  ^^^^^^^^^^^
+    147 |       email: user.email,
+    148 |       status: 'active'
+    149 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:153:54
+TS7006: Parameter 'users' implicitly has an 'any' type.
+    151 |     // Subscribe to presence updates
+    152 |     unsubscribers.push(
+  > 153 |       presenceSystemRef.current.subscribeToPresence((users) => {
+        |                                                      ^^^^^
+    154 |         setActiveUsers(users);
+    155 |       })
+    156 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:162:55
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    160 |       unsubscribers.forEach(unsub => unsub());
+    161 |       if (presenceSystemRef.current && user) {
+  > 162 |         presenceSystemRef.current.removePresence(user.uid);
+        |                                                       ^^^
+    163 |       }
+    164 |     };
+    165 |   }, [meetingId, user]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:170:50
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    168 |   const updateUserStatus = useCallback((status: string) => {
+    169 |     if (presenceSystemRef.current && user) {
+  > 170 |       presenceSystemRef.current.setPresence(user.uid, {
+        |                                                  ^^^
+    171 |         name: user.displayName || user.email,
+    172 |         email: user.email,
+    173 |         status
+
+ERROR in src/hooks/useFirebaseRealtime.ts:171:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    169 |     if (presenceSystemRef.current && user) {
+    170 |       presenceSystemRef.current.setPresence(user.uid, {
+  > 171 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    172 |         email: user.email,
+    173 |         status
+    174 |       });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:218:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    216 |     const firebaseCollection = new FirebaseCollection(collection);
+    217 |     firebaseCollection.update(documentId, {
+  > 218 |       [`editing.${user.uid}`]: {
+        |                        ^^^
+    219 |         userId: user.uid,
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+
+ERROR in src/hooks/useFirebaseRealtime.ts:219:22
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    217 |     firebaseCollection.update(documentId, {
+    218 |       [`editing.${user.uid}`]: {
+  > 219 |         userId: user.uid,
+        |                      ^^^
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:220:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    218 |       [`editing.${user.uid}`]: {
+    219 |         userId: user.uid,
+  > 220 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+    223 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:243:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    241 |     const firebaseCollection = new FirebaseCollection(collection);
+    242 |     firebaseCollection.update(documentId, {
+  > 243 |       [`editing.${user.uid}`]: null
+        |                        ^^^
+    244 |     });
+    245 |   }, [collection, documentId, user]);
+    246 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:256:27
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    254 |     await firebaseCollection.update(documentId, {
+    255 |       ...updates,
+  > 256 |       lastEditedBy: user?.uid,
+        |                           ^^^
+    257 |       lastEditedAt: new Date().toISOString()
+    258 |     });
+    259 |   }, [collection, documentId, user, startEditing]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:265:58
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    263 |     if (document?.editing) {
+    264 |       const activeCollaborators = Object.values(document.editing)
+  > 265 |         .filter((editor: any) => editor.userId !== user?.uid);
+        |                                                          ^^^
+    266 |       setCollaborators(activeCollaborators);
+    267 |     } else {
+    268 |       setCollaborators([]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:299:33
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    297 |   
+    298 |   const constraints = [
+  > 299 |     where('userId', '==', user?.uid || ''),
+        |                                 ^^^
+    300 |     where('read', '==', false),
+    301 |     orderBy('createdAt', 'desc'),
+    302 |     limit(50)
+
+ERROR in src/hooks/useFirebaseRealtime.ts:317:18
+TS18046: 'notification' is of type 'unknown'.
+    315 |   const markAllAsRead = useCallback(async () => {
+    316 |     const batch = notifications.map(notification => 
+  > 317 |       markAsRead(notification.id)
+        |                  ^^^^^^^^^^^^
+    318 |     );
+    319 |     await Promise.all(batch);
+    320 |   }, [notifications, markAsRead]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:342:47
+TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+    340 |     if (!user) return;
+    341 |
+  > 342 |     const collection = new FirebaseCollection(COLLECTIONS[entityType.toUpperCase()]);
+        |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    343 |     
+    344 |     const constraints = [
+    345 |       where('userId', '==', user.uid),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:345:34
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    343 |     
+    344 |     const constraints = [
+  > 345 |       where('userId', '==', user.uid),
+        |                                  ^^^
+    346 |       ...queryHelpers.byDateRange('createdAt', timeRange.start, timeRange.end)
+    347 |     ];
+    348 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:351:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    349 |     const unsubscribe = collection.subscribeToQuery(
+    350 |       constraints,
+  > 351 |       (docs) => {
+        |        ^^^^
+    352 |         // Calculate real-time statistics
+    353 |         const newStats = {
+    354 |           total: docs.length,
+
+ERROR in src/hooks/useFirebaseRealtime.ts:364:22
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    362 |         let totalCompletionTime = 0;
+    363 |
+  > 364 |         docs.forEach(doc => {
+        |                      ^^^
+    365 |           // Count by status
+    366 |           if (doc.status) {
+    367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:46
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:50
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+ERROR in src/hooks/useFirebaseRealtime.ts:34:8
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    32 |     const unsubscribe = firebaseCollection.subscribe(
+    33 |       documentId,
+  > 34 |       (doc) => {
+       |        ^^^
+    35 |         setData(doc as T);
+    36 |         setLoading(false);
+    37 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:39:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    37 |         setError(null);
+    38 |       },
+  > 39 |       (err) => {
+       |        ^^^
+    40 |         setError(err);
+    41 |         setLoading(false);
+    42 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:65:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    63 |     const unsubscribe = firebaseCollection.subscribeToQuery(
+    64 |       constraints,
+  > 65 |       (docs) => {
+       |        ^^^^
+    66 |         setData(docs as T[]);
+    67 |         setLoading(false);
+    68 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:70:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    68 |         setError(null);
+    69 |       },
+  > 70 |       (err) => {
+       |        ^^^
+    71 |         setError(err);
+    72 |         setLoading(false);
+    73 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:91:37
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    89 |   
+    90 |   const constraints = [
+  > 91 |     where('assigneeId', '==', user?.uid || ''),
+       |                                     ^^^
+    92 |     ...(filters?.status ? [where('status', '==', filters.status)] : []),
+    93 |     ...(filters?.priority ? [where('priority', '==', filters.priority)] : []),
+    94 |     orderBy('createdAt', 'desc'),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:121:47
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    119 |     const meetingCollection = new FirebaseCollection(COLLECTIONS.MEETINGS);
+    120 |     unsubscribers.push(
+  > 121 |       meetingCollection.subscribe(meetingId, (doc) => {
+        |                                               ^^^
+    122 |         setMeeting(doc);
+    123 |         setLoading(false);
+    124 |       })
+
+ERROR in src/hooks/useFirebaseRealtime.ts:134:34
+TS7006: Parameter 'notesDocs' implicitly has an 'any' type.
+    132 |     );
+    133 |     unsubscribers.push(
+  > 134 |       notesCollection.subscribe((notesDocs) => {
+        |                                  ^^^^^^^^^
+    135 |         setNotes(notesDocs);
+    136 |       })
+    137 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:145:48
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    143 |     
+    144 |     // Set user presence
+  > 145 |     presenceSystemRef.current.setPresence(user.uid, {
+        |                                                ^^^
+    146 |       name: user.displayName || user.email,
+    147 |       email: user.email,
+    148 |       status: 'active'
+
+ERROR in src/hooks/useFirebaseRealtime.ts:146:18
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    144 |     // Set user presence
+    145 |     presenceSystemRef.current.setPresence(user.uid, {
+  > 146 |       name: user.displayName || user.email,
+        |                  ^^^^^^^^^^^
+    147 |       email: user.email,
+    148 |       status: 'active'
+    149 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:153:54
+TS7006: Parameter 'users' implicitly has an 'any' type.
+    151 |     // Subscribe to presence updates
+    152 |     unsubscribers.push(
+  > 153 |       presenceSystemRef.current.subscribeToPresence((users) => {
+        |                                                      ^^^^^
+    154 |         setActiveUsers(users);
+    155 |       })
+    156 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:162:55
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    160 |       unsubscribers.forEach(unsub => unsub());
+    161 |       if (presenceSystemRef.current && user) {
+  > 162 |         presenceSystemRef.current.removePresence(user.uid);
+        |                                                       ^^^
+    163 |       }
+    164 |     };
+    165 |   }, [meetingId, user]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:170:50
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    168 |   const updateUserStatus = useCallback((status: string) => {
+    169 |     if (presenceSystemRef.current && user) {
+  > 170 |       presenceSystemRef.current.setPresence(user.uid, {
+        |                                                  ^^^
+    171 |         name: user.displayName || user.email,
+    172 |         email: user.email,
+    173 |         status
+
+ERROR in src/hooks/useFirebaseRealtime.ts:171:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    169 |     if (presenceSystemRef.current && user) {
+    170 |       presenceSystemRef.current.setPresence(user.uid, {
+  > 171 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    172 |         email: user.email,
+    173 |         status
+    174 |       });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:218:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    216 |     const firebaseCollection = new FirebaseCollection(collection);
+    217 |     firebaseCollection.update(documentId, {
+  > 218 |       [`editing.${user.uid}`]: {
+        |                        ^^^
+    219 |         userId: user.uid,
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+
+ERROR in src/hooks/useFirebaseRealtime.ts:219:22
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    217 |     firebaseCollection.update(documentId, {
+    218 |       [`editing.${user.uid}`]: {
+  > 219 |         userId: user.uid,
+        |                      ^^^
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:220:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    218 |       [`editing.${user.uid}`]: {
+    219 |         userId: user.uid,
+  > 220 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+    223 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:243:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    241 |     const firebaseCollection = new FirebaseCollection(collection);
+    242 |     firebaseCollection.update(documentId, {
+  > 243 |       [`editing.${user.uid}`]: null
+        |                        ^^^
+    244 |     });
+    245 |   }, [collection, documentId, user]);
+    246 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:256:27
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    254 |     await firebaseCollection.update(documentId, {
+    255 |       ...updates,
+  > 256 |       lastEditedBy: user?.uid,
+        |                           ^^^
+    257 |       lastEditedAt: new Date().toISOString()
+    258 |     });
+    259 |   }, [collection, documentId, user, startEditing]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:265:58
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    263 |     if (document?.editing) {
+    264 |       const activeCollaborators = Object.values(document.editing)
+  > 265 |         .filter((editor: any) => editor.userId !== user?.uid);
+        |                                                          ^^^
+    266 |       setCollaborators(activeCollaborators);
+    267 |     } else {
+    268 |       setCollaborators([]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:299:33
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    297 |   
+    298 |   const constraints = [
+  > 299 |     where('userId', '==', user?.uid || ''),
+        |                                 ^^^
+    300 |     where('read', '==', false),
+    301 |     orderBy('createdAt', 'desc'),
+    302 |     limit(50)
+
+ERROR in src/hooks/useFirebaseRealtime.ts:317:18
+TS18046: 'notification' is of type 'unknown'.
+    315 |   const markAllAsRead = useCallback(async () => {
+    316 |     const batch = notifications.map(notification => 
+  > 317 |       markAsRead(notification.id)
+        |                  ^^^^^^^^^^^^
+    318 |     );
+    319 |     await Promise.all(batch);
+    320 |   }, [notifications, markAsRead]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:342:47
+TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+    340 |     if (!user) return;
+    341 |
+  > 342 |     const collection = new FirebaseCollection(COLLECTIONS[entityType.toUpperCase()]);
+        |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    343 |     
+    344 |     const constraints = [
+    345 |       where('userId', '==', user.uid),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:345:34
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    343 |     
+    344 |     const constraints = [
+  > 345 |       where('userId', '==', user.uid),
+        |                                  ^^^
+    346 |       ...queryHelpers.byDateRange('createdAt', timeRange.start, timeRange.end)
+    347 |     ];
+    348 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:351:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    349 |     const unsubscribe = collection.subscribeToQuery(
+    350 |       constraints,
+  > 351 |       (docs) => {
+        |        ^^^^
+    352 |         // Calculate real-time statistics
+    353 |         const newStats = {
+    354 |           total: docs.length,
+
+ERROR in src/hooks/useFirebaseRealtime.ts:364:22
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    362 |         let totalCompletionTime = 0;
+    363 |
+  > 364 |         docs.forEach(doc => {
+        |                      ^^^
+    365 |           // Count by status
+    366 |           if (doc.status) {
+    367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:46
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:50
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+ERROR in src/hooks/useFirebaseRealtime.ts:34:8
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    32 |     const unsubscribe = firebaseCollection.subscribe(
+    33 |       documentId,
+  > 34 |       (doc) => {
+       |        ^^^
+    35 |         setData(doc as T);
+    36 |         setLoading(false);
+    37 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:39:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    37 |         setError(null);
+    38 |       },
+  > 39 |       (err) => {
+       |        ^^^
+    40 |         setError(err);
+    41 |         setLoading(false);
+    42 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:65:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    63 |     const unsubscribe = firebaseCollection.subscribeToQuery(
+    64 |       constraints,
+  > 65 |       (docs) => {
+       |        ^^^^
+    66 |         setData(docs as T[]);
+    67 |         setLoading(false);
+    68 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:70:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    68 |         setError(null);
+    69 |       },
+  > 70 |       (err) => {
+       |        ^^^
+    71 |         setError(err);
+    72 |         setLoading(false);
+    73 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:91:37
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    89 |   
+    90 |   const constraints = [
+  > 91 |     where('assigneeId', '==', user?.uid || ''),
+       |                                     ^^^
+    92 |     ...(filters?.status ? [where('status', '==', filters.status)] : []),
+    93 |     ...(filters?.priority ? [where('priority', '==', filters.priority)] : []),
+    94 |     orderBy('createdAt', 'desc'),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:121:47
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    119 |     const meetingCollection = new FirebaseCollection(COLLECTIONS.MEETINGS);
+    120 |     unsubscribers.push(
+  > 121 |       meetingCollection.subscribe(meetingId, (doc) => {
+        |                                               ^^^
+    122 |         setMeeting(doc);
+    123 |         setLoading(false);
+    124 |       })
+
+ERROR in src/hooks/useFirebaseRealtime.ts:134:34
+TS7006: Parameter 'notesDocs' implicitly has an 'any' type.
+    132 |     );
+    133 |     unsubscribers.push(
+  > 134 |       notesCollection.subscribe((notesDocs) => {
+        |                                  ^^^^^^^^^
+    135 |         setNotes(notesDocs);
+    136 |       })
+    137 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:145:48
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    143 |     
+    144 |     // Set user presence
+  > 145 |     presenceSystemRef.current.setPresence(user.uid, {
+        |                                                ^^^
+    146 |       name: user.displayName || user.email,
+    147 |       email: user.email,
+    148 |       status: 'active'
+
+ERROR in src/hooks/useFirebaseRealtime.ts:146:18
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    144 |     // Set user presence
+    145 |     presenceSystemRef.current.setPresence(user.uid, {
+  > 146 |       name: user.displayName || user.email,
+        |                  ^^^^^^^^^^^
+    147 |       email: user.email,
+    148 |       status: 'active'
+    149 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:153:54
+TS7006: Parameter 'users' implicitly has an 'any' type.
+    151 |     // Subscribe to presence updates
+    152 |     unsubscribers.push(
+  > 153 |       presenceSystemRef.current.subscribeToPresence((users) => {
+        |                                                      ^^^^^
+    154 |         setActiveUsers(users);
+    155 |       })
+    156 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:162:55
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    160 |       unsubscribers.forEach(unsub => unsub());
+    161 |       if (presenceSystemRef.current && user) {
+  > 162 |         presenceSystemRef.current.removePresence(user.uid);
+        |                                                       ^^^
+    163 |       }
+    164 |     };
+    165 |   }, [meetingId, user]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:170:50
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    168 |   const updateUserStatus = useCallback((status: string) => {
+    169 |     if (presenceSystemRef.current && user) {
+  > 170 |       presenceSystemRef.current.setPresence(user.uid, {
+        |                                                  ^^^
+    171 |         name: user.displayName || user.email,
+    172 |         email: user.email,
+    173 |         status
+
+ERROR in src/hooks/useFirebaseRealtime.ts:171:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    169 |     if (presenceSystemRef.current && user) {
+    170 |       presenceSystemRef.current.setPresence(user.uid, {
+  > 171 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    172 |         email: user.email,
+    173 |         status
+    174 |       });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:218:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    216 |     const firebaseCollection = new FirebaseCollection(collection);
+    217 |     firebaseCollection.update(documentId, {
+  > 218 |       [`editing.${user.uid}`]: {
+        |                        ^^^
+    219 |         userId: user.uid,
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+
+ERROR in src/hooks/useFirebaseRealtime.ts:219:22
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    217 |     firebaseCollection.update(documentId, {
+    218 |       [`editing.${user.uid}`]: {
+  > 219 |         userId: user.uid,
+        |                      ^^^
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:220:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    218 |       [`editing.${user.uid}`]: {
+    219 |         userId: user.uid,
+  > 220 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+    223 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:243:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    241 |     const firebaseCollection = new FirebaseCollection(collection);
+    242 |     firebaseCollection.update(documentId, {
+  > 243 |       [`editing.${user.uid}`]: null
+        |                        ^^^
+    244 |     });
+    245 |   }, [collection, documentId, user]);
+    246 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:256:27
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    254 |     await firebaseCollection.update(documentId, {
+    255 |       ...updates,
+  > 256 |       lastEditedBy: user?.uid,
+        |                           ^^^
+    257 |       lastEditedAt: new Date().toISOString()
+    258 |     });
+    259 |   }, [collection, documentId, user, startEditing]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:265:58
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    263 |     if (document?.editing) {
+    264 |       const activeCollaborators = Object.values(document.editing)
+  > 265 |         .filter((editor: any) => editor.userId !== user?.uid);
+        |                                                          ^^^
+    266 |       setCollaborators(activeCollaborators);
+    267 |     } else {
+    268 |       setCollaborators([]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:299:33
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    297 |   
+    298 |   const constraints = [
+  > 299 |     where('userId', '==', user?.uid || ''),
+        |                                 ^^^
+    300 |     where('read', '==', false),
+    301 |     orderBy('createdAt', 'desc'),
+    302 |     limit(50)
+
+ERROR in src/hooks/useFirebaseRealtime.ts:317:18
+TS18046: 'notification' is of type 'unknown'.
+    315 |   const markAllAsRead = useCallback(async () => {
+    316 |     const batch = notifications.map(notification => 
+  > 317 |       markAsRead(notification.id)
+        |                  ^^^^^^^^^^^^
+    318 |     );
+    319 |     await Promise.all(batch);
+    320 |   }, [notifications, markAsRead]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:342:47
+TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+    340 |     if (!user) return;
+    341 |
+  > 342 |     const collection = new FirebaseCollection(COLLECTIONS[entityType.toUpperCase()]);
+        |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    343 |     
+    344 |     const constraints = [
+    345 |       where('userId', '==', user.uid),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:345:34
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    343 |     
+    344 |     const constraints = [
+  > 345 |       where('userId', '==', user.uid),
+        |                                  ^^^
+    346 |       ...queryHelpers.byDateRange('createdAt', timeRange.start, timeRange.end)
+    347 |     ];
+    348 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:351:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    349 |     const unsubscribe = collection.subscribeToQuery(
+    350 |       constraints,
+  > 351 |       (docs) => {
+        |        ^^^^
+    352 |         // Calculate real-time statistics
+    353 |         const newStats = {
+    354 |           total: docs.length,
+
+ERROR in src/hooks/useFirebaseRealtime.ts:364:22
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    362 |         let totalCompletionTime = 0;
+    363 |
+  > 364 |         docs.forEach(doc => {
+        |                      ^^^
+    365 |           // Count by status
+    366 |           if (doc.status) {
+    367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:46
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:50
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+ERROR in src/hooks/useFirebaseRealtime.ts:34:8
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    32 |     const unsubscribe = firebaseCollection.subscribe(
+    33 |       documentId,
+  > 34 |       (doc) => {
+       |        ^^^
+    35 |         setData(doc as T);
+    36 |         setLoading(false);
+    37 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:39:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    37 |         setError(null);
+    38 |       },
+  > 39 |       (err) => {
+       |        ^^^
+    40 |         setError(err);
+    41 |         setLoading(false);
+    42 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:65:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    63 |     const unsubscribe = firebaseCollection.subscribeToQuery(
+    64 |       constraints,
+  > 65 |       (docs) => {
+       |        ^^^^
+    66 |         setData(docs as T[]);
+    67 |         setLoading(false);
+    68 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:70:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    68 |         setError(null);
+    69 |       },
+  > 70 |       (err) => {
+       |        ^^^
+    71 |         setError(err);
+    72 |         setLoading(false);
+    73 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:91:37
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    89 |   
+    90 |   const constraints = [
+  > 91 |     where('assigneeId', '==', user?.uid || ''),
+       |                                     ^^^
+    92 |     ...(filters?.status ? [where('status', '==', filters.status)] : []),
+    93 |     ...(filters?.priority ? [where('priority', '==', filters.priority)] : []),
+    94 |     orderBy('createdAt', 'desc'),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:121:47
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    119 |     const meetingCollection = new FirebaseCollection(COLLECTIONS.MEETINGS);
+    120 |     unsubscribers.push(
+  > 121 |       meetingCollection.subscribe(meetingId, (doc) => {
+        |                                               ^^^
+    122 |         setMeeting(doc);
+    123 |         setLoading(false);
+    124 |       })
+
+ERROR in src/hooks/useFirebaseRealtime.ts:134:34
+TS7006: Parameter 'notesDocs' implicitly has an 'any' type.
+    132 |     );
+    133 |     unsubscribers.push(
+  > 134 |       notesCollection.subscribe((notesDocs) => {
+        |                                  ^^^^^^^^^
+    135 |         setNotes(notesDocs);
+    136 |       })
+    137 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:145:48
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    143 |     
+    144 |     // Set user presence
+  > 145 |     presenceSystemRef.current.setPresence(user.uid, {
+        |                                                ^^^
+    146 |       name: user.displayName || user.email,
+    147 |       email: user.email,
+    148 |       status: 'active'
+
+ERROR in src/hooks/useFirebaseRealtime.ts:146:18
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    144 |     // Set user presence
+    145 |     presenceSystemRef.current.setPresence(user.uid, {
+  > 146 |       name: user.displayName || user.email,
+        |                  ^^^^^^^^^^^
+    147 |       email: user.email,
+    148 |       status: 'active'
+    149 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:153:54
+TS7006: Parameter 'users' implicitly has an 'any' type.
+    151 |     // Subscribe to presence updates
+    152 |     unsubscribers.push(
+  > 153 |       presenceSystemRef.current.subscribeToPresence((users) => {
+        |                                                      ^^^^^
+    154 |         setActiveUsers(users);
+    155 |       })
+    156 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:162:55
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    160 |       unsubscribers.forEach(unsub => unsub());
+    161 |       if (presenceSystemRef.current && user) {
+  > 162 |         presenceSystemRef.current.removePresence(user.uid);
+        |                                                       ^^^
+    163 |       }
+    164 |     };
+    165 |   }, [meetingId, user]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:170:50
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    168 |   const updateUserStatus = useCallback((status: string) => {
+    169 |     if (presenceSystemRef.current && user) {
+  > 170 |       presenceSystemRef.current.setPresence(user.uid, {
+        |                                                  ^^^
+    171 |         name: user.displayName || user.email,
+    172 |         email: user.email,
+    173 |         status
+
+ERROR in src/hooks/useFirebaseRealtime.ts:171:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    169 |     if (presenceSystemRef.current && user) {
+    170 |       presenceSystemRef.current.setPresence(user.uid, {
+  > 171 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    172 |         email: user.email,
+    173 |         status
+    174 |       });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:218:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    216 |     const firebaseCollection = new FirebaseCollection(collection);
+    217 |     firebaseCollection.update(documentId, {
+  > 218 |       [`editing.${user.uid}`]: {
+        |                        ^^^
+    219 |         userId: user.uid,
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+
+ERROR in src/hooks/useFirebaseRealtime.ts:219:22
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    217 |     firebaseCollection.update(documentId, {
+    218 |       [`editing.${user.uid}`]: {
+  > 219 |         userId: user.uid,
+        |                      ^^^
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:220:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    218 |       [`editing.${user.uid}`]: {
+    219 |         userId: user.uid,
+  > 220 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+    223 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:243:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    241 |     const firebaseCollection = new FirebaseCollection(collection);
+    242 |     firebaseCollection.update(documentId, {
+  > 243 |       [`editing.${user.uid}`]: null
+        |                        ^^^
+    244 |     });
+    245 |   }, [collection, documentId, user]);
+    246 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:256:27
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    254 |     await firebaseCollection.update(documentId, {
+    255 |       ...updates,
+  > 256 |       lastEditedBy: user?.uid,
+        |                           ^^^
+    257 |       lastEditedAt: new Date().toISOString()
+    258 |     });
+    259 |   }, [collection, documentId, user, startEditing]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:265:58
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    263 |     if (document?.editing) {
+    264 |       const activeCollaborators = Object.values(document.editing)
+  > 265 |         .filter((editor: any) => editor.userId !== user?.uid);
+        |                                                          ^^^
+    266 |       setCollaborators(activeCollaborators);
+    267 |     } else {
+    268 |       setCollaborators([]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:299:33
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    297 |   
+    298 |   const constraints = [
+  > 299 |     where('userId', '==', user?.uid || ''),
+        |                                 ^^^
+    300 |     where('read', '==', false),
+    301 |     orderBy('createdAt', 'desc'),
+    302 |     limit(50)
+
+ERROR in src/hooks/useFirebaseRealtime.ts:317:18
+TS18046: 'notification' is of type 'unknown'.
+    315 |   const markAllAsRead = useCallback(async () => {
+    316 |     const batch = notifications.map(notification => 
+  > 317 |       markAsRead(notification.id)
+        |                  ^^^^^^^^^^^^
+    318 |     );
+    319 |     await Promise.all(batch);
+    320 |   }, [notifications, markAsRead]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:342:47
+TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+    340 |     if (!user) return;
+    341 |
+  > 342 |     const collection = new FirebaseCollection(COLLECTIONS[entityType.toUpperCase()]);
+        |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    343 |     
+    344 |     const constraints = [
+    345 |       where('userId', '==', user.uid),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:345:34
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    343 |     
+    344 |     const constraints = [
+  > 345 |       where('userId', '==', user.uid),
+        |                                  ^^^
+    346 |       ...queryHelpers.byDateRange('createdAt', timeRange.start, timeRange.end)
+    347 |     ];
+    348 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:351:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    349 |     const unsubscribe = collection.subscribeToQuery(
+    350 |       constraints,
+  > 351 |       (docs) => {
+        |        ^^^^
+    352 |         // Calculate real-time statistics
+    353 |         const newStats = {
+    354 |           total: docs.length,
+
+ERROR in src/hooks/useFirebaseRealtime.ts:364:22
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    362 |         let totalCompletionTime = 0;
+    363 |
+  > 364 |         docs.forEach(doc => {
+        |                      ^^^
+    365 |           // Count by status
+    366 |           if (doc.status) {
+    367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:46
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:50
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/auth/LoginPage.tsx
+  Line 4:10:  'LogIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+ERROR in src/hooks/useFirebaseRealtime.ts:34:8
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    32 |     const unsubscribe = firebaseCollection.subscribe(
+    33 |       documentId,
+  > 34 |       (doc) => {
+       |        ^^^
+    35 |         setData(doc as T);
+    36 |         setLoading(false);
+    37 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:39:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    37 |         setError(null);
+    38 |       },
+  > 39 |       (err) => {
+       |        ^^^
+    40 |         setError(err);
+    41 |         setLoading(false);
+    42 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:65:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    63 |     const unsubscribe = firebaseCollection.subscribeToQuery(
+    64 |       constraints,
+  > 65 |       (docs) => {
+       |        ^^^^
+    66 |         setData(docs as T[]);
+    67 |         setLoading(false);
+    68 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:70:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    68 |         setError(null);
+    69 |       },
+  > 70 |       (err) => {
+       |        ^^^
+    71 |         setError(err);
+    72 |         setLoading(false);
+    73 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:91:37
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    89 |   
+    90 |   const constraints = [
+  > 91 |     where('assigneeId', '==', user?.uid || ''),
+       |                                     ^^^
+    92 |     ...(filters?.status ? [where('status', '==', filters.status)] : []),
+    93 |     ...(filters?.priority ? [where('priority', '==', filters.priority)] : []),
+    94 |     orderBy('createdAt', 'desc'),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:121:47
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    119 |     const meetingCollection = new FirebaseCollection(COLLECTIONS.MEETINGS);
+    120 |     unsubscribers.push(
+  > 121 |       meetingCollection.subscribe(meetingId, (doc) => {
+        |                                               ^^^
+    122 |         setMeeting(doc);
+    123 |         setLoading(false);
+    124 |       })
+
+ERROR in src/hooks/useFirebaseRealtime.ts:134:34
+TS7006: Parameter 'notesDocs' implicitly has an 'any' type.
+    132 |     );
+    133 |     unsubscribers.push(
+  > 134 |       notesCollection.subscribe((notesDocs) => {
+        |                                  ^^^^^^^^^
+    135 |         setNotes(notesDocs);
+    136 |       })
+    137 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:145:48
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    143 |     
+    144 |     // Set user presence
+  > 145 |     presenceSystemRef.current.setPresence(user.uid, {
+        |                                                ^^^
+    146 |       name: user.displayName || user.email,
+    147 |       email: user.email,
+    148 |       status: 'active'
+
+ERROR in src/hooks/useFirebaseRealtime.ts:146:18
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    144 |     // Set user presence
+    145 |     presenceSystemRef.current.setPresence(user.uid, {
+  > 146 |       name: user.displayName || user.email,
+        |                  ^^^^^^^^^^^
+    147 |       email: user.email,
+    148 |       status: 'active'
+    149 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:153:54
+TS7006: Parameter 'users' implicitly has an 'any' type.
+    151 |     // Subscribe to presence updates
+    152 |     unsubscribers.push(
+  > 153 |       presenceSystemRef.current.subscribeToPresence((users) => {
+        |                                                      ^^^^^
+    154 |         setActiveUsers(users);
+    155 |       })
+    156 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:162:55
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    160 |       unsubscribers.forEach(unsub => unsub());
+    161 |       if (presenceSystemRef.current && user) {
+  > 162 |         presenceSystemRef.current.removePresence(user.uid);
+        |                                                       ^^^
+    163 |       }
+    164 |     };
+    165 |   }, [meetingId, user]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:170:50
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    168 |   const updateUserStatus = useCallback((status: string) => {
+    169 |     if (presenceSystemRef.current && user) {
+  > 170 |       presenceSystemRef.current.setPresence(user.uid, {
+        |                                                  ^^^
+    171 |         name: user.displayName || user.email,
+    172 |         email: user.email,
+    173 |         status
+
+ERROR in src/hooks/useFirebaseRealtime.ts:171:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    169 |     if (presenceSystemRef.current && user) {
+    170 |       presenceSystemRef.current.setPresence(user.uid, {
+  > 171 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    172 |         email: user.email,
+    173 |         status
+    174 |       });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:218:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    216 |     const firebaseCollection = new FirebaseCollection(collection);
+    217 |     firebaseCollection.update(documentId, {
+  > 218 |       [`editing.${user.uid}`]: {
+        |                        ^^^
+    219 |         userId: user.uid,
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+
+ERROR in src/hooks/useFirebaseRealtime.ts:219:22
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    217 |     firebaseCollection.update(documentId, {
+    218 |       [`editing.${user.uid}`]: {
+  > 219 |         userId: user.uid,
+        |                      ^^^
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:220:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    218 |       [`editing.${user.uid}`]: {
+    219 |         userId: user.uid,
+  > 220 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+    223 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:243:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    241 |     const firebaseCollection = new FirebaseCollection(collection);
+    242 |     firebaseCollection.update(documentId, {
+  > 243 |       [`editing.${user.uid}`]: null
+        |                        ^^^
+    244 |     });
+    245 |   }, [collection, documentId, user]);
+    246 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:256:27
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    254 |     await firebaseCollection.update(documentId, {
+    255 |       ...updates,
+  > 256 |       lastEditedBy: user?.uid,
+        |                           ^^^
+    257 |       lastEditedAt: new Date().toISOString()
+    258 |     });
+    259 |   }, [collection, documentId, user, startEditing]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:265:58
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    263 |     if (document?.editing) {
+    264 |       const activeCollaborators = Object.values(document.editing)
+  > 265 |         .filter((editor: any) => editor.userId !== user?.uid);
+        |                                                          ^^^
+    266 |       setCollaborators(activeCollaborators);
+    267 |     } else {
+    268 |       setCollaborators([]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:299:33
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    297 |   
+    298 |   const constraints = [
+  > 299 |     where('userId', '==', user?.uid || ''),
+        |                                 ^^^
+    300 |     where('read', '==', false),
+    301 |     orderBy('createdAt', 'desc'),
+    302 |     limit(50)
+
+ERROR in src/hooks/useFirebaseRealtime.ts:317:18
+TS18046: 'notification' is of type 'unknown'.
+    315 |   const markAllAsRead = useCallback(async () => {
+    316 |     const batch = notifications.map(notification => 
+  > 317 |       markAsRead(notification.id)
+        |                  ^^^^^^^^^^^^
+    318 |     );
+    319 |     await Promise.all(batch);
+    320 |   }, [notifications, markAsRead]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:342:47
+TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+    340 |     if (!user) return;
+    341 |
+  > 342 |     const collection = new FirebaseCollection(COLLECTIONS[entityType.toUpperCase()]);
+        |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    343 |     
+    344 |     const constraints = [
+    345 |       where('userId', '==', user.uid),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:345:34
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    343 |     
+    344 |     const constraints = [
+  > 345 |       where('userId', '==', user.uid),
+        |                                  ^^^
+    346 |       ...queryHelpers.byDateRange('createdAt', timeRange.start, timeRange.end)
+    347 |     ];
+    348 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:351:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    349 |     const unsubscribe = collection.subscribeToQuery(
+    350 |       constraints,
+  > 351 |       (docs) => {
+        |        ^^^^
+    352 |         // Calculate real-time statistics
+    353 |         const newStats = {
+    354 |           total: docs.length,
+
+ERROR in src/hooks/useFirebaseRealtime.ts:364:22
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    362 |         let totalCompletionTime = 0;
+    363 |
+  > 364 |         docs.forEach(doc => {
+        |                      ^^^
+    365 |           // Count by status
+    366 |           if (doc.status) {
+    367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:46
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:50
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+ERROR in src/hooks/useFirebaseRealtime.ts:34:8
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    32 |     const unsubscribe = firebaseCollection.subscribe(
+    33 |       documentId,
+  > 34 |       (doc) => {
+       |        ^^^
+    35 |         setData(doc as T);
+    36 |         setLoading(false);
+    37 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:39:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    37 |         setError(null);
+    38 |       },
+  > 39 |       (err) => {
+       |        ^^^
+    40 |         setError(err);
+    41 |         setLoading(false);
+    42 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:65:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    63 |     const unsubscribe = firebaseCollection.subscribeToQuery(
+    64 |       constraints,
+  > 65 |       (docs) => {
+       |        ^^^^
+    66 |         setData(docs as T[]);
+    67 |         setLoading(false);
+    68 |         setError(null);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:70:8
+TS7006: Parameter 'err' implicitly has an 'any' type.
+    68 |         setError(null);
+    69 |       },
+  > 70 |       (err) => {
+       |        ^^^
+    71 |         setError(err);
+    72 |         setLoading(false);
+    73 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:91:37
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    89 |   
+    90 |   const constraints = [
+  > 91 |     where('assigneeId', '==', user?.uid || ''),
+       |                                     ^^^
+    92 |     ...(filters?.status ? [where('status', '==', filters.status)] : []),
+    93 |     ...(filters?.priority ? [where('priority', '==', filters.priority)] : []),
+    94 |     orderBy('createdAt', 'desc'),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:121:47
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    119 |     const meetingCollection = new FirebaseCollection(COLLECTIONS.MEETINGS);
+    120 |     unsubscribers.push(
+  > 121 |       meetingCollection.subscribe(meetingId, (doc) => {
+        |                                               ^^^
+    122 |         setMeeting(doc);
+    123 |         setLoading(false);
+    124 |       })
+
+ERROR in src/hooks/useFirebaseRealtime.ts:134:34
+TS7006: Parameter 'notesDocs' implicitly has an 'any' type.
+    132 |     );
+    133 |     unsubscribers.push(
+  > 134 |       notesCollection.subscribe((notesDocs) => {
+        |                                  ^^^^^^^^^
+    135 |         setNotes(notesDocs);
+    136 |       })
+    137 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:145:48
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    143 |     
+    144 |     // Set user presence
+  > 145 |     presenceSystemRef.current.setPresence(user.uid, {
+        |                                                ^^^
+    146 |       name: user.displayName || user.email,
+    147 |       email: user.email,
+    148 |       status: 'active'
+
+ERROR in src/hooks/useFirebaseRealtime.ts:146:18
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    144 |     // Set user presence
+    145 |     presenceSystemRef.current.setPresence(user.uid, {
+  > 146 |       name: user.displayName || user.email,
+        |                  ^^^^^^^^^^^
+    147 |       email: user.email,
+    148 |       status: 'active'
+    149 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:153:54
+TS7006: Parameter 'users' implicitly has an 'any' type.
+    151 |     // Subscribe to presence updates
+    152 |     unsubscribers.push(
+  > 153 |       presenceSystemRef.current.subscribeToPresence((users) => {
+        |                                                      ^^^^^
+    154 |         setActiveUsers(users);
+    155 |       })
+    156 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:162:55
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    160 |       unsubscribers.forEach(unsub => unsub());
+    161 |       if (presenceSystemRef.current && user) {
+  > 162 |         presenceSystemRef.current.removePresence(user.uid);
+        |                                                       ^^^
+    163 |       }
+    164 |     };
+    165 |   }, [meetingId, user]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:170:50
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    168 |   const updateUserStatus = useCallback((status: string) => {
+    169 |     if (presenceSystemRef.current && user) {
+  > 170 |       presenceSystemRef.current.setPresence(user.uid, {
+        |                                                  ^^^
+    171 |         name: user.displayName || user.email,
+    172 |         email: user.email,
+    173 |         status
+
+ERROR in src/hooks/useFirebaseRealtime.ts:171:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    169 |     if (presenceSystemRef.current && user) {
+    170 |       presenceSystemRef.current.setPresence(user.uid, {
+  > 171 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    172 |         email: user.email,
+    173 |         status
+    174 |       });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:218:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    216 |     const firebaseCollection = new FirebaseCollection(collection);
+    217 |     firebaseCollection.update(documentId, {
+  > 218 |       [`editing.${user.uid}`]: {
+        |                        ^^^
+    219 |         userId: user.uid,
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+
+ERROR in src/hooks/useFirebaseRealtime.ts:219:22
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    217 |     firebaseCollection.update(documentId, {
+    218 |       [`editing.${user.uid}`]: {
+  > 219 |         userId: user.uid,
+        |                      ^^^
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:220:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    218 |       [`editing.${user.uid}`]: {
+    219 |         userId: user.uid,
+  > 220 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+    223 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:243:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    241 |     const firebaseCollection = new FirebaseCollection(collection);
+    242 |     firebaseCollection.update(documentId, {
+  > 243 |       [`editing.${user.uid}`]: null
+        |                        ^^^
+    244 |     });
+    245 |   }, [collection, documentId, user]);
+    246 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:256:27
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    254 |     await firebaseCollection.update(documentId, {
+    255 |       ...updates,
+  > 256 |       lastEditedBy: user?.uid,
+        |                           ^^^
+    257 |       lastEditedAt: new Date().toISOString()
+    258 |     });
+    259 |   }, [collection, documentId, user, startEditing]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:265:58
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    263 |     if (document?.editing) {
+    264 |       const activeCollaborators = Object.values(document.editing)
+  > 265 |         .filter((editor: any) => editor.userId !== user?.uid);
+        |                                                          ^^^
+    266 |       setCollaborators(activeCollaborators);
+    267 |     } else {
+    268 |       setCollaborators([]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:299:33
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    297 |   
+    298 |   const constraints = [
+  > 299 |     where('userId', '==', user?.uid || ''),
+        |                                 ^^^
+    300 |     where('read', '==', false),
+    301 |     orderBy('createdAt', 'desc'),
+    302 |     limit(50)
+
+ERROR in src/hooks/useFirebaseRealtime.ts:317:18
+TS18046: 'notification' is of type 'unknown'.
+    315 |   const markAllAsRead = useCallback(async () => {
+    316 |     const batch = notifications.map(notification => 
+  > 317 |       markAsRead(notification.id)
+        |                  ^^^^^^^^^^^^
+    318 |     );
+    319 |     await Promise.all(batch);
+    320 |   }, [notifications, markAsRead]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:342:47
+TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+    340 |     if (!user) return;
+    341 |
+  > 342 |     const collection = new FirebaseCollection(COLLECTIONS[entityType.toUpperCase()]);
+        |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    343 |     
+    344 |     const constraints = [
+    345 |       where('userId', '==', user.uid),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:345:34
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    343 |     
+    344 |     const constraints = [
+  > 345 |       where('userId', '==', user.uid),
+        |                                  ^^^
+    346 |       ...queryHelpers.byDateRange('createdAt', timeRange.start, timeRange.end)
+    347 |     ];
+    348 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:351:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    349 |     const unsubscribe = collection.subscribeToQuery(
+    350 |       constraints,
+  > 351 |       (docs) => {
+        |        ^^^^
+    352 |         // Calculate real-time statistics
+    353 |         const newStats = {
+    354 |           total: docs.length,
+
+ERROR in src/hooks/useFirebaseRealtime.ts:364:22
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    362 |         let totalCompletionTime = 0;
+    363 |
+  > 364 |         docs.forEach(doc => {
+        |                      ^^^
+    365 |           // Count by status
+    366 |           if (doc.status) {
+    367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:46
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:50
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+ERROR in src/hooks/useFirebaseRealtime.ts:153:54
+TS7006: Parameter 'users' implicitly has an 'any' type.
+    151 |     // Subscribe to presence updates
+    152 |     unsubscribers.push(
+  > 153 |       presenceSystemRef.current.subscribeToPresence((users) => {
+        |                                                      ^^^^^
+    154 |         setActiveUsers(users);
+    155 |       })
+    156 |     );
+
+ERROR in src/hooks/useFirebaseRealtime.ts:162:55
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    160 |       unsubscribers.forEach(unsub => unsub());
+    161 |       if (presenceSystemRef.current && user) {
+  > 162 |         presenceSystemRef.current.removePresence(user.uid);
+        |                                                       ^^^
+    163 |       }
+    164 |     };
+    165 |   }, [meetingId, user]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:170:50
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    168 |   const updateUserStatus = useCallback((status: string) => {
+    169 |     if (presenceSystemRef.current && user) {
+  > 170 |       presenceSystemRef.current.setPresence(user.uid, {
+        |                                                  ^^^
+    171 |         name: user.displayName || user.email,
+    172 |         email: user.email,
+    173 |         status
+
+ERROR in src/hooks/useFirebaseRealtime.ts:171:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    169 |     if (presenceSystemRef.current && user) {
+    170 |       presenceSystemRef.current.setPresence(user.uid, {
+  > 171 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    172 |         email: user.email,
+    173 |         status
+    174 |       });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:218:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    216 |     const firebaseCollection = new FirebaseCollection(collection);
+    217 |     firebaseCollection.update(documentId, {
+  > 218 |       [`editing.${user.uid}`]: {
+        |                        ^^^
+    219 |         userId: user.uid,
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+
+ERROR in src/hooks/useFirebaseRealtime.ts:219:22
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    217 |     firebaseCollection.update(documentId, {
+    218 |       [`editing.${user.uid}`]: {
+  > 219 |         userId: user.uid,
+        |                      ^^^
+    220 |         name: user.displayName || user.email,
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+
+ERROR in src/hooks/useFirebaseRealtime.ts:220:20
+TS2339: Property 'displayName' does not exist on type 'AuthUser'.
+    218 |       [`editing.${user.uid}`]: {
+    219 |         userId: user.uid,
+  > 220 |         name: user.displayName || user.email,
+        |                    ^^^^^^^^^^^
+    221 |         timestamp: new Date().toISOString()
+    222 |       }
+    223 |     });
+
+ERROR in src/hooks/useFirebaseRealtime.ts:243:24
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    241 |     const firebaseCollection = new FirebaseCollection(collection);
+    242 |     firebaseCollection.update(documentId, {
+  > 243 |       [`editing.${user.uid}`]: null
+        |                        ^^^
+    244 |     });
+    245 |   }, [collection, documentId, user]);
+    246 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:256:27
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    254 |     await firebaseCollection.update(documentId, {
+    255 |       ...updates,
+  > 256 |       lastEditedBy: user?.uid,
+        |                           ^^^
+    257 |       lastEditedAt: new Date().toISOString()
+    258 |     });
+    259 |   }, [collection, documentId, user, startEditing]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:265:58
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    263 |     if (document?.editing) {
+    264 |       const activeCollaborators = Object.values(document.editing)
+  > 265 |         .filter((editor: any) => editor.userId !== user?.uid);
+        |                                                          ^^^
+    266 |       setCollaborators(activeCollaborators);
+    267 |     } else {
+    268 |       setCollaborators([]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:299:33
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    297 |   
+    298 |   const constraints = [
+  > 299 |     where('userId', '==', user?.uid || ''),
+        |                                 ^^^
+    300 |     where('read', '==', false),
+    301 |     orderBy('createdAt', 'desc'),
+    302 |     limit(50)
+
+ERROR in src/hooks/useFirebaseRealtime.ts:317:18
+TS18046: 'notification' is of type 'unknown'.
+    315 |   const markAllAsRead = useCallback(async () => {
+    316 |     const batch = notifications.map(notification => 
+  > 317 |       markAsRead(notification.id)
+        |                  ^^^^^^^^^^^^
+    318 |     );
+    319 |     await Promise.all(batch);
+    320 |   }, [notifications, markAsRead]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:342:47
+TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+    340 |     if (!user) return;
+    341 |
+  > 342 |     const collection = new FirebaseCollection(COLLECTIONS[entityType.toUpperCase()]);
+        |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    343 |     
+    344 |     const constraints = [
+    345 |       where('userId', '==', user.uid),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:345:34
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    343 |     
+    344 |     const constraints = [
+  > 345 |       where('userId', '==', user.uid),
+        |                                  ^^^
+    346 |       ...queryHelpers.byDateRange('createdAt', timeRange.start, timeRange.end)
+    347 |     ];
+    348 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:351:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    349 |     const unsubscribe = collection.subscribeToQuery(
+    350 |       constraints,
+  > 351 |       (docs) => {
+        |        ^^^^
+    352 |         // Calculate real-time statistics
+    353 |         const newStats = {
+    354 |           total: docs.length,
+
+ERROR in src/hooks/useFirebaseRealtime.ts:364:22
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    362 |         let totalCompletionTime = 0;
+    363 |
+  > 364 |         docs.forEach(doc => {
+        |                      ^^^
+    365 |           // Count by status
+    366 |           if (doc.status) {
+    367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:46
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:50
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+ERROR in src/hooks/useFirebaseRealtime.ts:265:58
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    263 |     if (document?.editing) {
+    264 |       const activeCollaborators = Object.values(document.editing)
+  > 265 |         .filter((editor: any) => editor.userId !== user?.uid);
+        |                                                          ^^^
+    266 |       setCollaborators(activeCollaborators);
+    267 |     } else {
+    268 |       setCollaborators([]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:299:33
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    297 |   
+    298 |   const constraints = [
+  > 299 |     where('userId', '==', user?.uid || ''),
+        |                                 ^^^
+    300 |     where('read', '==', false),
+    301 |     orderBy('createdAt', 'desc'),
+    302 |     limit(50)
+
+ERROR in src/hooks/useFirebaseRealtime.ts:317:18
+TS18046: 'notification' is of type 'unknown'.
+    315 |   const markAllAsRead = useCallback(async () => {
+    316 |     const batch = notifications.map(notification => 
+  > 317 |       markAsRead(notification.id)
+        |                  ^^^^^^^^^^^^
+    318 |     );
+    319 |     await Promise.all(batch);
+    320 |   }, [notifications, markAsRead]);
+
+ERROR in src/hooks/useFirebaseRealtime.ts:342:47
+TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ USERS: string; TEAMS: string; WORKSPACES: string; TASKS: string; OBJECTIVES: string; KEY_RESULTS: string; MEETINGS: string; MEETING_NOTES: string; COMMENTS: string; NOTIFICATIONS: string; ACTIVITY_LOGS: string; }'.
+    340 |     if (!user) return;
+    341 |
+  > 342 |     const collection = new FirebaseCollection(COLLECTIONS[entityType.toUpperCase()]);
+        |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    343 |     
+    344 |     const constraints = [
+    345 |       where('userId', '==', user.uid),
+
+ERROR in src/hooks/useFirebaseRealtime.ts:345:34
+TS2339: Property 'uid' does not exist on type 'AuthUser'.
+    343 |     
+    344 |     const constraints = [
+  > 345 |       where('userId', '==', user.uid),
+        |                                  ^^^
+    346 |       ...queryHelpers.byDateRange('createdAt', timeRange.start, timeRange.end)
+    347 |     ];
+    348 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:351:8
+TS7006: Parameter 'docs' implicitly has an 'any' type.
+    349 |     const unsubscribe = collection.subscribeToQuery(
+    350 |       constraints,
+  > 351 |       (docs) => {
+        |        ^^^^
+    352 |         // Calculate real-time statistics
+    353 |         const newStats = {
+    354 |           total: docs.length,
+
+ERROR in src/hooks/useFirebaseRealtime.ts:364:22
+TS7006: Parameter 'doc' implicitly has an 'any' type.
+    362 |         let totalCompletionTime = 0;
+    363 |
+  > 364 |         docs.forEach(doc => {
+        |                      ^^^
+    365 |           // Count by status
+    366 |           if (doc.status) {
+    367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:367:46
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    365 |           // Count by status
+    366 |           if (doc.status) {
+  > 367 |             newStats.byStatus[doc.status] = (newStats.byStatus[doc.status] || 0) + 1;
+        |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    368 |             if (doc.status === 'completed') {
+    369 |               completedCount++;
+    370 |               if (doc.createdAt && doc.completedAt) {
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:13
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+ERROR in src/hooks/useFirebaseRealtime.ts:378:50
+TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    376 |           // Count by priority
+    377 |           if (doc.priority) {
+  > 378 |             newStats.byPriority[doc.priority] = (newStats.byPriority[doc.priority] || 0) + 1;
+        |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    379 |           }
+    380 |         });
+    381 |
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/config/firebase.ts
+  Line 11:10:  'getStorage' is defined but never used    @typescript-eslint/no-unused-vars
+  Line 12:10:  'getFirestore' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/config/firebase.ts
+  Line 11:10:  'getStorage' is defined but never used    @typescript-eslint/no-unused-vars
+  Line 12:10:  'getFirestore' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+ERROR in src/pages/TaskManagementFirebase.tsx:196:27
+TS2339: Property 'current_workspace_id' does not exist on type 'AuthUser'.
+    194 |         assigneeName: user.name || user.email,
+    195 |         teamId: data.team_id?.toString(),
+  > 196 |         workspaceId: user.current_workspace_id?.toString(),
+        |                           ^^^^^^^^^^^^^^^^^^^^
+    197 |         dueDate: data.due_date ? new Date(data.due_date) : null,
+    198 |         estimatedHours: data.estimated_hours,
+    199 |         tags: data.labels || []
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+ERROR in src/pages/TaskManagementFirebase.tsx:196:27
+TS2339: Property 'current_workspace_id' does not exist on type 'AuthUser'.
+    194 |         assigneeName: user.name || user.email,
+    195 |         teamId: data.team_id?.toString(),
+  > 196 |         workspaceId: user.current_workspace_id?.toString(),
+        |                           ^^^^^^^^^^^^^^^^^^^^
+    197 |         dueDate: data.due_date ? new Date(data.due_date) : null,
+    198 |         estimatedHours: data.estimated_hours,
+    199 |         tags: data.labels || []
+
+Compiling...
+Failed to compile.
+
+Module not found: Error: You attempted to import ../../shared/firebase-utils which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+ERROR in ./src/hooks/useFirebaseRealtime.ts 11:0-146
+Module not found: Error: You attempted to import ../../shared/firebase-utils which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+
+ERROR in ./src/pages/TaskManagementFirebase.tsx 10:0-60
+Module not found: Error: You attempted to import ../../shared/services/taskService which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+
+webpack compiled with 2 errors and 1 warning
+ERROR in src/pages/TaskManagementFirebase.tsx:196:27
+TS2339: Property 'current_workspace_id' does not exist on type 'AuthUser'.
+    194 |         assigneeName: user.name || user.email,
+    195 |         teamId: data.team_id?.toString(),
+  > 196 |         workspaceId: user.current_workspace_id?.toString(),
+        |                           ^^^^^^^^^^^^^^^^^^^^
+    197 |         dueDate: data.due_date ? new Date(data.due_date) : null,
+    198 |         estimatedHours: data.estimated_hours,
+    199 |         tags: data.labels || []
+
+Compiling...
+Failed to compile.
+
+Module not found: Error: You attempted to import ../../shared/firebase-utils which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+ERROR in ./src/hooks/useFirebaseRealtime.ts 11:0-146
+Module not found: Error: You attempted to import ../../shared/firebase-utils which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+
+ERROR in ./src/pages/TaskManagementFirebase.tsx 10:0-60
+Module not found: Error: You attempted to import ../../shared/services/taskService which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+
+webpack compiled with 2 errors and 1 warning
+ERROR in src/pages/TaskManagementFirebase.tsx:196:27
+TS2339: Property 'current_workspace_id' does not exist on type 'AuthUser'.
+    194 |         assigneeName: user.name || user.email,
+    195 |         teamId: data.team_id?.toString(),
+  > 196 |         workspaceId: user.current_workspace_id?.toString(),
+        |                           ^^^^^^^^^^^^^^^^^^^^
+    197 |         dueDate: data.due_date ? new Date(data.due_date) : null,
+    198 |         estimatedHours: data.estimated_hours,
+    199 |         tags: data.labels || []
+
+Compiling...
+Failed to compile.
+
+Module not found: Error: You attempted to import ../../shared/firebase-utils which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+ERROR in ./src/hooks/useFirebaseRealtime.ts 11:0-146
+Module not found: Error: You attempted to import ../../shared/firebase-utils which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+
+ERROR in ./src/pages/TaskManagementFirebase.tsx 10:0-60
+Module not found: Error: You attempted to import ../../shared/services/taskService which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+
+webpack compiled with 2 errors and 1 warning
+ERROR in src/pages/TaskManagementFirebase.tsx:196:27
+TS2339: Property 'current_workspace_id' does not exist on type 'AuthUser'.
+    194 |         assigneeName: user.name || user.email,
+    195 |         teamId: data.team_id?.toString(),
+  > 196 |         workspaceId: user.current_workspace_id?.toString(),
+        |                           ^^^^^^^^^^^^^^^^^^^^
+    197 |         dueDate: data.due_date ? new Date(data.due_date) : null,
+    198 |         estimatedHours: data.estimated_hours,
+    199 |         tags: data.labels || []
+
+Compiling...
+Failed to compile.
+
+Module not found: Error: You attempted to import ../../shared/firebase-utils which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/shared/firebase-utils.js
+  Line 195:5:  Expected a default case                                         default-case
+  Line 343:1:  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+src/shared/services/taskService.js
+  Line 7:3:    'orderBy' is defined but never used                               no-unused-vars
+  Line 8:3:    'limit' is defined but never used                                 no-unused-vars
+  Line 201:1:  Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
+
+ERROR in ./src/hooks/useFirebaseRealtime.ts 11:0-146
+Module not found: Error: You attempted to import ../../shared/firebase-utils which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+
+ERROR in [eslint] 
+src/shared/services/taskService.js
+  Line 163:12:  'doc' is not defined              no-undef
+  Line 163:16:  'db' is not defined               no-undef
+  Line 164:35:  'serverTimestamp' is not defined  no-undef
+  Line 167:11:  'batchOperations' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 2 errors and 1 warning
+ERROR in src/pages/TaskManagementFirebase.tsx:196:27
+TS2339: Property 'current_workspace_id' does not exist on type 'AuthUser'.
+    194 |         assigneeName: user.name || user.email,
+    195 |         teamId: data.team_id?.toString(),
+  > 196 |         workspaceId: user.current_workspace_id?.toString(),
+        |                           ^^^^^^^^^^^^^^^^^^^^
+    197 |         dueDate: data.due_date ? new Date(data.due_date) : null,
+    198 |         estimatedHours: data.estimated_hours,
+    199 |         tags: data.labels || []
+
+Compiling...
+Failed to compile.
+
+[eslint] 
+src/shared/services/taskService.js
+  Line 163:12:  'doc' is not defined              no-undef
+  Line 163:16:  'db' is not defined               no-undef
+  Line 164:35:  'serverTimestamp' is not defined  no-undef
+  Line 167:11:  'batchOperations' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/shared/firebase-utils.js
+  Line 195:5:  Expected a default case                                         default-case
+  Line 343:1:  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+src/shared/services/taskService.js
+  Line 7:3:    'orderBy' is defined but never used                               no-unused-vars
+  Line 8:3:    'limit' is defined but never used                                 no-unused-vars
+  Line 201:1:  Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
+
+ERROR in [eslint] 
+src/shared/services/taskService.js
+  Line 163:12:  'doc' is not defined              no-undef
+  Line 163:16:  'db' is not defined               no-undef
+  Line 164:35:  'serverTimestamp' is not defined  no-undef
+  Line 167:11:  'batchOperations' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+ERROR in src/pages/TaskManagementFirebase.tsx:196:27
+TS2339: Property 'current_workspace_id' does not exist on type 'AuthUser'.
+    194 |         assigneeName: user.name || user.email,
+    195 |         teamId: data.team_id?.toString(),
+  > 196 |         workspaceId: user.current_workspace_id?.toString(),
+        |                           ^^^^^^^^^^^^^^^^^^^^
+    197 |         dueDate: data.due_date ? new Date(data.due_date) : null,
+    198 |         estimatedHours: data.estimated_hours,
+    199 |         tags: data.labels || []
+
+Compiling...
+Failed to compile.
+
+Attempted import error: 'doc' is not exported from '../firebase-utils' (imported as 'doc').
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/shared/firebase-utils.js
+  Line 195:5:  Expected a default case                                         default-case
+  Line 343:1:  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+src/shared/services/taskService.js
+  Line 7:3:    'orderBy' is defined but never used                               no-unused-vars
+  Line 8:3:    'limit' is defined but never used                                 no-unused-vars
+  Line 205:1:  Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
+
+ERROR in ./src/shared/services/taskService.js 137:11-14
+export 'doc' (imported as 'doc') was not found in '../firebase-utils' (possible exports: COLLECTIONS, FirebaseCollection, PresenceSystem, SubCollection, auth, batchOperations, createTimestamps, db, default, limit, logActivity, logOut, observeAuthState, orderBy, query, queryHelpers, signIn, signUp, storage, updateTimestamp, uploadFile, where)
+
+ERROR in ./src/shared/services/taskService.js 140:19-34
+export 'serverTimestamp' (imported as 'serverTimestamp') was not found in '../firebase-utils' (possible exports: COLLECTIONS, FirebaseCollection, PresenceSystem, SubCollection, auth, batchOperations, createTimestamps, db, default, limit, logActivity, logOut, observeAuthState, orderBy, query, queryHelpers, signIn, signUp, storage, updateTimestamp, uploadFile, where)
+
+webpack compiled with 2 errors and 1 warning
+ERROR in src/pages/TaskManagementFirebase.tsx:196:27
+TS2339: Property 'current_workspace_id' does not exist on type 'AuthUser'.
+    194 |         assigneeName: user.name || user.email,
+    195 |         teamId: data.team_id?.toString(),
+  > 196 |         workspaceId: user.current_workspace_id?.toString(),
+        |                           ^^^^^^^^^^^^^^^^^^^^
+    197 |         dueDate: data.due_date ? new Date(data.due_date) : null,
+    198 |         estimatedHours: data.estimated_hours,
+    199 |         tags: data.labels || []
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/shared/firebase-utils.js
+  Line 195:5:  Expected a default case                                         default-case
+  Line 346:1:  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+src/shared/services/taskService.js
+  Line 7:3:    'orderBy' is defined but never used                               no-unused-vars
+  Line 8:3:    'limit' is defined but never used                                 no-unused-vars
+  Line 205:1:  Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/shared/firebase-utils.js
+  Line 195:5:  Expected a default case                                         default-case
+  Line 346:1:  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+src/shared/services/taskService.js
+  Line 7:3:    'orderBy' is defined but never used                               no-unused-vars
+  Line 8:3:    'limit' is defined but never used                                 no-unused-vars
+  Line 205:1:  Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
+
+webpack compiled with 1 warning
+ERROR in src/pages/TaskManagementFirebase.tsx:196:27
+TS2339: Property 'current_workspace_id' does not exist on type 'AuthUser'.
+    194 |         assigneeName: user.name || user.email,
+    195 |         teamId: data.team_id?.toString(),
+  > 196 |         workspaceId: user.current_workspace_id?.toString(),
+        |                           ^^^^^^^^^^^^^^^^^^^^
+    197 |         dueDate: data.due_date ? new Date(data.due_date) : null,
+    198 |         estimatedHours: data.estimated_hours,
+    199 |         tags: data.labels || []
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/shared/firebase-utils.js
+  Line 195:5:  Expected a default case                                         default-case
+  Line 346:1:  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+src/shared/services/taskService.js
+  Line 7:3:    'orderBy' is defined but never used                               no-unused-vars
+  Line 8:3:    'limit' is defined but never used                                 no-unused-vars
+  Line 205:1:  Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/shared/firebase-utils.js
+  Line 195:5:  Expected a default case                                         default-case
+  Line 346:1:  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+src/shared/services/taskService.js
+  Line 7:3:    'orderBy' is defined but never used                               no-unused-vars
+  Line 8:3:    'limit' is defined but never used                                 no-unused-vars
+  Line 205:1:  Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/shared/firebase-utils.js
+  Line 195:5:  Expected a default case                                         default-case
+  Line 346:1:  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+src/shared/services/taskService.js
+  Line 7:3:    'orderBy' is defined but never used                               no-unused-vars
+  Line 8:3:    'limit' is defined but never used                                 no-unused-vars
+  Line 205:1:  Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/contexts/WorkspaceContext.tsx
+  Line 185:6:  React Hook useEffect has a missing dependency: 'loadWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/hooks/useFirebaseRealtime.ts
+  Line 77:6:   React Hook useEffect has a missing dependency: 'constraints'. Either include it or remove the dependency array                            react-hooks/exhaustive-deps
+  Line 77:19:  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  Line 229:6:  React Hook useCallback has a missing dependency: 'stopEditing'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+
+src/pages/TaskManagementFirebase.tsx
+  Line 1:38:  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/shared/firebase-utils.js
+  Line 195:5:  Expected a default case                                         default-case
+  Line 346:1:  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+src/shared/services/taskService.js
+  Line 7:3:    'orderBy' is defined but never used                               no-unused-vars
+  Line 8:3:    'limit' is defined but never used                                 no-unused-vars
+  Line 205:1:  Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
+
+webpack compiled with 1 warning
+No issues found.
+The build failed because the process exited too early. This probably means the system ran out of memory or someone called `kill -9` on the process.

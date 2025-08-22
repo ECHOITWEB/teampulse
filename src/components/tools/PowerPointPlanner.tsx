@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createChatCompletion, createStructuredCompletion } from '../../utils/openai';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -23,7 +23,7 @@ const PresentationSchema = z.object({
   slides: z.array(SlideSchema)
 });
 
-type Slide = z.infer<typeof SlideSchema>;
+// type Slide = z.infer<typeof SlideSchema>;
 type Presentation = z.infer<typeof PresentationSchema>;
 
 const PowerPointPlanner: React.FC = () => {

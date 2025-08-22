@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const chatController = require('../controllers/chatController');
-const { authenticateUser } = require('../middleware/auth');
+const authenticateUser = require('../middleware/auth');
 
 // Create new chat session
 router.post('/sessions', authenticateUser, chatController.createSession);

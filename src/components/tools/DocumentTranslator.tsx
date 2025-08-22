@@ -45,7 +45,7 @@ const DocumentTranslator: React.FC = () => {
           // 제목 감지 (대문자로 시작하고 짧은 문장)
           const isTitle = line.length < 50 && /^[A-Z가-힣]/.test(line);
           // 불릿 포인트 감지
-          const isBullet = /^[•\-*\d+\.]/.test(line.trim());
+          const isBullet = /^[•\-*\d+.]/.test(line.trim());
           // 들여쓰기 감지
           const indent = line.length - line.trimStart().length;
           
@@ -145,7 +145,7 @@ const DocumentTranslator: React.FC = () => {
             
             // 페이지 넘침 처리
             if (yPosition < 50) {
-              const newPage = pdfDoc.addPage();
+              pdfDoc.addPage();
               yPosition = height - 50;
             }
           } else {

@@ -2,21 +2,28 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api
 
 class ApiService {
   private token: string | null = null;
+  
+  // Axios-like interface for compatibility
+  public defaults = {
+    headers: {
+      common: {} as Record<string, string>
+    }
+  };
 
   constructor() {
     // Load token from localStorage
     this.token = localStorage.getItem('authToken');
+    if (this.token) {
+      this.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+    }
   }
 
   private async request(endpoint: string, options: RequestInit = {}) {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
+      ...this.defaults.headers.common,
       ...(options.headers as Record<string, string> || {}),
     };
-
-    if (this.token) {
-      headers['Authorization'] = `Bearer ${this.token}`;
-    }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...options,
@@ -29,6 +36,39 @@ class ApiService {
     }
 
     return response.json();
+  }
+
+  // Axios-like methods
+  async get(endpoint: string, config?: RequestInit) {
+    return this.request(endpoint, { ...config, method: 'GET' });
+  }
+
+  async post(endpoint: string, data?: any, config?: RequestInit) {
+    return this.request(endpoint, { 
+      ...config, 
+      method: 'POST',
+      body: data ? JSON.stringify(data) : undefined
+    });
+  }
+
+  async put(endpoint: string, data?: any, config?: RequestInit) {
+    return this.request(endpoint, { 
+      ...config, 
+      method: 'PUT',
+      body: data ? JSON.stringify(data) : undefined
+    });
+  }
+
+  async delete(endpoint: string, config?: RequestInit) {
+    return this.request(endpoint, { ...config, method: 'DELETE' });
+  }
+
+  async patch(endpoint: string, data?: any, config?: RequestInit) {
+    return this.request(endpoint, { 
+      ...config, 
+      method: 'PATCH',
+      body: data ? JSON.stringify(data) : undefined
+    });
   }
 
   // Auth methods
@@ -105,4 +145,5 @@ class ApiService {
   }
 }
 
-export default new ApiService();
+const apiService = new ApiService();
+export default apiService;

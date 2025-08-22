@@ -206,7 +206,7 @@ interface MeetingNotesProps {
   isLive?: boolean;
 }
 
-interface Participant {
+interface IParticipant {
   id: string;
   name: string;
   isOnline: boolean;
@@ -214,7 +214,7 @@ interface Participant {
   color: string;
 }
 
-interface AgendaItem {
+interface IAgendaItem {
   id: string;
   text: string;
   completed: boolean;
@@ -226,20 +226,20 @@ const MeetingNotes: React.FC<MeetingNotesProps> = ({
   isLive = true 
 }) => {
   const [notes, setNotes] = useState('');
-  const [participants, setParticipants] = useState<Participant[]>([
+  const [participants] = useState<IParticipant[]>([
     { id: '1', name: '김개발', isOnline: true, isEditing: false, color: '#02A3FE' },
     { id: '2', name: '카리나', isOnline: true, isEditing: true, color: '#ff6b6b' },
     { id: '3', name: '최기획', isOnline: true, isEditing: false, color: '#4ecdc4' },
     { id: '4', name: '김디자인', isOnline: false, isEditing: false, color: '#ffe66d' }
   ]);
-  const [agenda, setAgenda] = useState<AgendaItem[]>([
+  const [agenda, setAgenda] = useState<IAgendaItem[]>([
     { id: '1', text: 'K-POP 콜라보레이션 마케팅 전략', completed: true },
     { id: '2', text: '글로벌 런칭 일정 확정', completed: true },
     { id: '3', text: '사전예약 이벤트 기획 검토', completed: false },
     { id: '4', text: '서버 인프라 확장 계획', completed: false }
   ]);
   const [isSaving, setIsSaving] = useState(false);
-  const saveTimeoutRef = useRef<NodeJS.Timeout>();
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Simulate auto-save
   useEffect(() => {

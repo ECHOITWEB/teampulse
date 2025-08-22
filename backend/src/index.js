@@ -10,25 +10,49 @@ require('dotenv').config();
 
 const db = require('./utils/database');
 const SocketHandler = require('./utils/socketHandler');
+const notificationScheduler = require('./services/notificationScheduler');
 const chatRoutes = require('./routes/chatRoutes');
 const userRoutes = require('./routes/userRoutes');
 const historyRoutes = require('./routes/historyRoutes');
 const meetingRoutes = require('./routes/meetingRoutes');
+const teamRoutes = require('./routes/teamRoutes');
+const objectiveRoutes = require('./routes/objectiveRoutes');
+const taskRoutes = require('./routes/taskRoutes');
+const analyticsRoutes = require('./routes/analyticsRoutes');
+const aiRoutes = require('./routes/aiRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
+const capacityRoutes = require('./routes/capacityRoutes');
+const authRoutes = require('./routes/authRoutes');
+const workspaceRoutes = require('./routes/workspaceRoutes');
+const commentRoutes = require('./routes/commentRoutes');
+const workspaceAdminRoutes = require('./routes/workspaceAdminRoutes');
+const aiChatRoutes = require('./routes/aiChatRoutes');
+const chatAIRoutes = require('./routes/chatAIRoutes');
 
 const app = express();
 const server = createServer(app);
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
+
+// CORS allowed origins
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://teampulse-61474.web.app',
+  'https://teampulse-61474.firebaseapp.com'
+];
 
 // Initialize Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: allowedOrigins,
     credentials: true
   }
 });
 
 // Initialize socket handler
 const socketHandler = new SocketHandler(io);
+
+// Make io available globally for services
+global.io = io;
 
 // Make io available to routes
 app.use((req, res, next) => {
@@ -41,7 +65,16 @@ app.use(helmet());
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
@@ -68,10 +101,23 @@ app.get('/health', (req, res) => {
 });
 
 // API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/workspaces', workspaceRoutes);
+app.use('/api/admin', workspaceAdminRoutes); // Admin SDK 라우트
 app.use('/api/chat', chatRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/history', historyRoutes);
 app.use('/api/meetings', meetingRoutes);
+app.use('/api/teams', teamRoutes);
+app.use('/api/objectives', objectiveRoutes);
+app.use('/api/tasks', taskRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/capacity', capacityRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/api/ai-chat', aiChatRoutes);
+app.use('/api/chat/ai', chatAIRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -100,6 +146,9 @@ const startServer = async () => {
       console.log(`Server is running on port ${PORT}`);
       console.log(`WebSocket server is running`);
       console.log(`Environment: ${process.env.NODE_ENV}`);
+      
+      // Initialize notification scheduler
+      notificationScheduler.init();
     });
   } catch (error) {
     console.error('Failed to start server:', error);
@@ -108,3 +157,22 @@ const startServer = async () => {
 };
 
 startServer();
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing HTTP server and stopping notification scheduler');
+  notificationScheduler.stop();
+  server.close(() => {
+    console.log('HTTP server closed');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT signal received: closing HTTP server and stopping notification scheduler');
+  notificationScheduler.stop();
+  server.close(() => {
+    console.log('HTTP server closed');
+    process.exit(0);
+  });
+});
