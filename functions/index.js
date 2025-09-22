@@ -124,12 +124,24 @@ app.use((req, res) => {
 });
 
 // Export Express app as Firebase Function with increased timeout and memory
+// Declare all secrets that this function needs access to
 exports.api = functions
   .runWith({
     timeoutSeconds: 540, // 9 minutes
     memory: '1GB',
     // Allow unauthenticated invocations
-    invoker: 'public'
+    invoker: 'public',
+    // Declare secrets from Secret Manager
+    secrets: [
+      'REACT_APP_OPENAI_API_KEY',
+      'REACT_APP_ANTHROPIC_API_KEY',
+      'OPENAI_API_KEY1',
+      'OPENAI_API_KEY2', 
+      'OPENAI_API_KEY3',
+      'ANTHROPIC_API_KEY1',
+      'ANTHROPIC_API_KEY2',
+      'ANTHROPIC_API_KEY3'
+    ]
   })
   .https.onRequest((req, res) => {
     // Handle CORS preflight immediately for OPTIONS

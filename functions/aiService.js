@@ -1,4 +1,3 @@
-const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 // Initialize OpenAI and Anthropic clients
@@ -7,20 +6,22 @@ const Anthropic = require('@anthropic-ai/sdk');
 
 class AIService {
   constructor() {
-    // Get API keys from Firebase Functions config
-    const config = functions.config();
+    // Get API keys from Secret Manager via process.env
+    // These are loaded when the function runs with the secrets declared
     
-    // Initialize API key pools from environment config
+    // Initialize API key pools from Secret Manager
     this.openaiKeys = [
-      config.openai?.key1,
-      config.openai?.key2,
-      config.openai?.key3
+      process.env.OPENAI_API_KEY1,
+      process.env.OPENAI_API_KEY2,
+      process.env.OPENAI_API_KEY3,
+      process.env.REACT_APP_OPENAI_API_KEY  // Include frontend key as backup
     ].filter(key => key && key !== 'undefined');
 
     this.anthropicKeys = [
-      config.anthropic?.key1,
-      config.anthropic?.key2,
-      config.anthropic?.key3
+      process.env.ANTHROPIC_API_KEY1,
+      process.env.ANTHROPIC_API_KEY2,
+      process.env.ANTHROPIC_API_KEY3,
+      process.env.REACT_APP_ANTHROPIC_API_KEY  // Include frontend key as backup
     ].filter(key => key && key !== 'undefined');
 
     // Track current key index per workspace
