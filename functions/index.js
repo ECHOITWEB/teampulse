@@ -58,22 +58,22 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Import routes
-const authRoutes = require('./src/routes/authRoutes');
-const workspaceRoutes = require('./src/routes/workspaceRoutes');
-const userRoutes = require('./src/routes/userRoutes');
-const historyRoutes = require('./src/routes/historyRoutes');
-const meetingRoutes = require('./src/routes/meetingRoutes');
-const teamRoutes = require('./src/routes/teamRoutes');
-const objectiveRoutes = require('./src/routes/objectiveRoutes');
-const taskRoutes = require('./src/routes/taskRoutes');
-const analyticsRoutes = require('./src/routes/analyticsRoutes');
-const notificationRoutes = require('./src/routes/notificationRoutes');
-const capacityRoutes = require('./src/routes/capacityRoutes');
-const commentRoutes = require('./src/routes/commentRoutes');
-const workspaceAdminRoutes = require('./src/routes/workspaceAdminRoutes');
-const adminRoutes = require('./src/routes/adminRoutes');
-const agentRoutes = require('./src/routes/agentRoutes');
+// Import routes - Temporarily commented out for deployment
+// const authRoutes = require('./src/routes/authRoutes');
+// const workspaceRoutes = require('./src/routes/workspaceRoutes');
+// const userRoutes = require('./src/routes/userRoutes');
+// const historyRoutes = require('./src/routes/historyRoutes');
+// const meetingRoutes = require('./src/routes/meetingRoutes');
+// const teamRoutes = require('./src/routes/teamRoutes');
+// const objectiveRoutes = require('./src/routes/objectiveRoutes');
+// const taskRoutes = require('./src/routes/taskRoutes');
+// const analyticsRoutes = require('./src/routes/analyticsRoutes');
+// const notificationRoutes = require('./src/routes/notificationRoutes');
+// const capacityRoutes = require('./src/routes/capacityRoutes');
+// const commentRoutes = require('./src/routes/commentRoutes');
+// const workspaceAdminRoutes = require('./src/routes/workspaceAdminRoutes');
+// const adminRoutes = require('./src/routes/adminRoutes');
+// const agentRoutes = require('./src/routes/agentRoutes');
 
 // Health check
 app.get('/health', (req, res) => {
@@ -98,22 +98,22 @@ app.get('/metrics', (req, res) => {
   });
 });
 
-// API routes
-app.use('/auth', authRoutes);
-app.use('/workspaces', workspaceRoutes);
-app.use('/admin', workspaceAdminRoutes);
-app.use('/system-admin', adminRoutes);  // New system admin routes
-app.use('/users', userRoutes);
-app.use('/history', historyRoutes);
-app.use('/meetings', meetingRoutes);
-app.use('/teams', teamRoutes);
-app.use('/objectives', objectiveRoutes);
-app.use('/tasks', taskRoutes);
-app.use('/analytics', analyticsRoutes);
-app.use('/notifications', notificationRoutes);
-app.use('/capacity', capacityRoutes);
-app.use('/comments', commentRoutes);
-app.use('/agents', agentRoutes);
+// API routes - Temporarily commented out for deployment
+// app.use('/auth', authRoutes);
+// app.use('/workspaces', workspaceRoutes);
+// app.use('/admin', workspaceAdminRoutes);
+// app.use('/system-admin', adminRoutes);  // New system admin routes
+// app.use('/users', userRoutes);
+// app.use('/history', historyRoutes);
+// app.use('/meetings', meetingRoutes);
+// app.use('/teams', teamRoutes);
+// app.use('/objectives', objectiveRoutes);
+// app.use('/tasks', taskRoutes);
+// app.use('/analytics', analyticsRoutes);
+// app.use('/notifications', notificationRoutes);
+// app.use('/capacity', capacityRoutes);
+// app.use('/comments', commentRoutes);
+// app.use('/agents', agentRoutes);
 
 // Enhanced error handling with monitoring
 app.use(errorHandler.expressMiddleware());
