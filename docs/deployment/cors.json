@@ -1,8 +1,0 @@
-[
-    {
-      "origin": ["https://teampulse-61474.web.app", "http://localhost:3000"],
-      "method": ["GET", "POST"],
-      "maxAgeSeconds": 3600,
-      "responseHeader": ["Content-Type"]
-    }
-  ]

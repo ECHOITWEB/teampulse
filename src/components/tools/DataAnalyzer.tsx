@@ -5,21 +5,9 @@ const DataAnalyzer: React.FC = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<string>('');
 
-  // Dummy CSV data
-  const dummyData = {
-    fileName: '2024_sales_data.csv',
-    fileSize: '2.4 MB',
-    rows: 5420,
-    columns: 12,
-    preview: [
-      ['Date', 'Product', 'Category', 'Sales', 'Quantity', 'Region'],
-      ['2024-01-01', 'TeamPulse Pro', 'Software', '$4,500', '15', 'Seoul'],
-      ['2024-01-02', 'TeamPulse Basic', 'Software', '$1,200', '8', 'Busan'],
-      ['2024-01-03', 'TeamPulse Enterprise', 'Software', '$12,000', '5', 'Seoul'],
-      ['2024-01-04', 'TeamPulse Pro', 'Software', '$3,000', '10', 'Incheon'],
-      ['2024-01-05', 'TeamPulse Basic', 'Software', '$900', '6', 'Daegu']
-    ]
-  };
+  // File upload state
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [fileData, setFileData] = useState<any>(null);
 
   const handleAnalyze = async () => {
     setIsAnalyzing(true);
@@ -31,136 +19,110 @@ const DataAnalyzer: React.FC = () => {
     const analysis = `## 📊 데이터 분석 결과
 
 ### 1. 데이터 개요
-- **총 레코드 수**: ${dummyData.rows.toLocaleString()}개
-- **분석 기간**: 2024년 1월 ~ 12월
-- **데이터 컬럼**: ${dummyData.columns}개 (날짜, 제품, 카테고리, 매출, 수량, 지역 등)
+- **총 레코드 수**: ${fileData?.rows?.toLocaleString() || 'N/A'}개
+- **분석 기간**: 데이터 업로드 후 확인 가능
+- **데이터 컬럼**: ${fileData?.columns || 'N/A'}개
 
-### 2. 핵심 인사이트
+### 2. 분석 준비
+파일을 업로드하시면 다음 분석을 제공합니다:
 
-#### 💰 매출 분석
-- **총 매출**: $2,450,000 (전년 대비 +35%)
-- **월 평균 매출**: $204,167
-- **최고 매출 월**: 11월 ($342,000)
-- **최저 매출 월**: 2월 ($125,000)
+#### 📈 통계 분석
+- 기술 통계량 (평균, 중앙값, 표준편차)
+- 데이터 분포 및 패턴 분석
+- 이상치 및 결측값 검사
 
-#### 📈 성장 트렌드
-- **분기별 성장률**:
-  - Q1: +12%
-  - Q2: +28%
-  - Q3: +45%
-  - Q4: +52%
-- **예상 연간 성장률**: 38.5%
+#### 📊 트렌드 분석
+- 시계열 패턴 분석
+- 계절성 및 주기성 탐지
+- 성장률 및 변화율 계산
 
-#### 🏆 제품별 성과
-1. **TeamPulse Enterprise** (45% 매출 기여)
-   - 평균 단가: $2,400
-   - 총 판매: 459건
-2. **TeamPulse Pro** (35% 매출 기여)
-   - 평균 단가: $300
-   - 총 판매: 2,858건
-3. **TeamPulse Basic** (20% 매출 기여)
-   - 평균 단가: $150
-   - 총 판매: 3,267건
+#### 🎯 세그먼테이션
+- 카테고리별 분석
+- 지역별/그룹별 비교
+- 고객/제품 세그먼트 분석
 
-#### 🌏 지역별 분포
-- **서울**: 42% (매출의 최대 비중)
-- **부산**: 18%
-- **인천**: 15%
-- **대구**: 12%
-- **기타**: 13%
+### 3. 예측 모델링
+- 미래 트렌드 예측
+- 회귀 분석
+- 상관관계 분석
 
-### 3. 주요 발견사항
+### 4. 시각화
+- 차트 및 그래프 생성
+- 대시보드 권장사항
+- 핵심 지표 요약
 
-🔍 **계절성 패턴**
-- 3분기와 4분기에 매출이 집중되는 경향 (전체 매출의 65%)
-- 연말 프로모션 기간 매출이 평균 대비 2.3배 증가
-
-🎯 **고객 세그먼트**
-- Enterprise 고객이 전체 고객의 8%에 불과하지만 매출의 45% 차지
-- 중소기업 시장에서 Pro 버전 수요가 지속적으로 증가
-
-⚠️ **주의 사항**
-- 2월과 8월에 매출 감소 패턴 관찰
-- 특정 지역(제주, 강원)의 시장 침투율이 5% 미만
-
-### 4. 권장 사항
-
-1. **마케팅 전략**
-   - Q3-Q4 집중 마케팅 캠페인 강화
-   - Enterprise 고객 유치 전략 확대
-
-2. **제품 전략**
-   - Pro 버전 기능 강화 및 가격 최적화
-   - 중소기업 맞춤형 패키지 개발
-
-3. **지역 확장**
-   - 저침투 지역 대상 프로모션 실시
-   - 지역별 맞춤형 영업 전략 수립
-
-### 5. 예측 모델
-- **2025년 예상 매출**: $3,380,000 (+38%)
-- **신규 고객 예상**: 1,250개사
-- **시장 점유율 예상**: 23% → 31%`;
+파일을 업로드하여 맞춤형 분석을 시작하세요.`;
 
     setAnalysisResult(analysis);
     setIsAnalyzing(false);
   };
 
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setUploadedFile(file);
+      // Simulate file processing
+      setFileData({
+        fileName: file.name,
+        fileSize: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+        rows: 0,
+        columns: 0,
+        preview: []
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
+      {/* File Upload */}
+      {!uploadedFile && (
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-6 text-center">
+          <FileSpreadsheet className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold mb-2">데이터 파일 업로드</h3>
+          <p className="text-gray-500 mb-6">CSV, Excel 파일을 업로드하여 AI 분석을 시작하세요</p>
+          <input
+            type="file"
+            accept=".csv,.xlsx,.xls"
+            onChange={handleFileUpload}
+            className="hidden"
+            id="file-upload"
+          />
+          <label
+            htmlFor="file-upload"
+            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer transition-colors"
+          >
+            <FileSpreadsheet className="w-5 h-5 mr-2" />
+            파일 선택
+          </label>
+        </div>
+      )}
+
       {/* File Display */}
-      <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <FileSpreadsheet className="w-8 h-8 text-green-500" />
-            <div>
-              <h3 className="font-semibold text-lg">{dummyData.fileName}</h3>
-              <p className="text-sm text-gray-500">
-                {dummyData.fileSize} • {dummyData.rows.toLocaleString()} rows • {dummyData.columns} columns
-              </p>
+      {uploadedFile && (
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <FileSpreadsheet className="w-8 h-8 text-green-500" />
+              <div>
+                <h3 className="font-semibold text-lg">{fileData?.fileName}</h3>
+                <p className="text-sm text-gray-500">
+                  {fileData?.fileSize} • 분석 준비 완료
+                </p>
+              </div>
+            </div>
+            <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+              업로드 완료
             </div>
           </div>
-          <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
-            준비됨
+
+          <div className="bg-gray-50 rounded-lg p-4 text-center">
+            <p className="text-gray-600">파일이 업로드되었습니다. AI 분석을 시작하려면 아래 버튼을 클릭하세요.</p>
           </div>
         </div>
-
-        {/* Data Preview Table */}
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                {dummyData.preview[0].map((header, index) => (
-                  <th
-                    key={index}
-                    className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    {header}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {dummyData.preview.slice(1).map((row, rowIndex) => (
-                <tr key={rowIndex} className="hover:bg-gray-50">
-                  {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="mt-4 text-sm text-gray-500 text-center">
-          ... {(dummyData.rows - 5).toLocaleString()} more rows
-        </div>
-      </div>
+      )}
 
       {/* Analyze Button */}
-      {!analysisResult && (
+      {uploadedFile && !analysisResult && (
         <div className="flex justify-center">
           <button
             onClick={handleAnalyze}
@@ -215,10 +177,12 @@ const DataAnalyzer: React.FC = () => {
             <button
               onClick={() => {
                 setAnalysisResult('');
+                setUploadedFile(null);
+                setFileData(null);
               }}
               className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              새로운 분석 시작
+              새로운 파일 업로드
             </button>
           </div>
         </div>

@@ -27,131 +27,42 @@ interface Objective {
   status: 'on-track' | 'at-risk' | 'behind' | 'completed';
 }
 
-const OKRShowcase: React.FC = () => {
-  const [selectedObjective, setSelectedObjective] = useState<string>('obj1');
+interface OKRShowcaseProps {
+  objectives?: Objective[];
+}
 
-  // Sample OKR data
-  const objectives: Objective[] = [
+const OKRShowcase: React.FC<OKRShowcaseProps> = ({ objectives = [] }) => {
+  const [selectedObjective, setSelectedObjective] = useState<string>(objectives[0]?.id || '');
+
+  const [showDemo, setShowDemo] = useState(false);
+
+  // Demo objectives for showcase
+  const demoObjectives: Objective[] = [
     {
-      id: 'obj1',
-      title: '글로벌 시장 진출 기반 마련',
-      description: '해외 시장 진출을 위한 제품 현지화 및 파트너십 구축',
+      id: 'demo1',
+      title: '새로운 목표 설정',
+      description: '실제 OKR을 추가하여 팀의 성과를 추적하세요',
       type: 'company',
-      owner: '경영전략팀',
+      owner: '팀 리더',
       period: '2024 Q4',
-      progress: 68,
+      progress: 0,
       status: 'on-track',
       keyResults: [
         {
-          id: 'kr1',
-          title: '영어/일본어 버전 출시',
-          currentValue: 1,
-          targetValue: 2,
-          unit: '개',
-          progress: 50,
-          status: 'on-track'
-        },
-        {
-          id: 'kr2',
-          title: '해외 파트너사 계약 체결',
-          currentValue: 3,
-          targetValue: 5,
-          unit: '개사',
-          progress: 60,
-          status: 'on-track'
-        },
-        {
-          id: 'kr3',
-          title: '글로벌 고객 확보',
-          currentValue: 85,
-          targetValue: 100,
-          unit: '개사',
-          progress: 85,
-          status: 'on-track'
-        }
-      ]
-    },
-    {
-      id: 'obj2',
-      title: '제품 사용성 혁신으로 고객 만족도 향상',
-      description: 'UI/UX 개선 및 AI 기능 강화를 통한 사용자 경험 혁신',
-      type: 'team',
-      owner: '제품개발팀',
-      period: '2024 Q4',
-      progress: 75,
-      status: 'on-track',
-      keyResults: [
-        {
-          id: 'kr4',
-          title: 'NPS 점수 향상',
-          currentValue: 72,
-          targetValue: 80,
-          unit: '점',
-          progress: 90,
-          status: 'on-track'
-        },
-        {
-          id: 'kr5',
-          title: '월간 활성 사용자(MAU) 증가',
-          currentValue: 18000,
-          targetValue: 25000,
-          unit: '명',
-          progress: 72,
-          status: 'on-track'
-        },
-        {
-          id: 'kr6',
-          title: 'AI 기능 활용률',
-          currentValue: 45,
-          targetValue: 70,
-          unit: '%',
-          progress: 64,
-          status: 'at-risk'
-        }
-      ]
-    },
-    {
-      id: 'obj3',
-      title: '개발 프로세스 효율화',
-      description: '자동화 도구 도입 및 프로세스 개선으로 개발 속도 향상',
-      type: 'individual',
-      owner: '김개발',
-      period: '2024 Q4',
-      progress: 82,
-      status: 'on-track',
-      keyResults: [
-        {
-          id: 'kr7',
-          title: '배포 자동화 구축',
-          currentValue: 90,
+          id: 'demo-kr1',
+          title: '첫 번째 핵심 결과',
+          currentValue: 0,
           targetValue: 100,
           unit: '%',
-          progress: 90,
+          progress: 0,
           status: 'on-track'
-        },
-        {
-          id: 'kr8',
-          title: '코드 리뷰 소요 시간 단축',
-          currentValue: 4,
-          targetValue: 2,
-          unit: '시간',
-          progress: 50,
-          status: 'at-risk'
-        },
-        {
-          id: 'kr9',
-          title: '테스트 커버리지 향상',
-          currentValue: 85,
-          targetValue: 90,
-          unit: '%',
-          progress: 94,
-          status: 'completed'
         }
       ]
     }
   ];
 
-  const selectedObj = objectives.find(obj => obj.id === selectedObjective);
+  const displayObjectives = objectives.length > 0 ? objectives : (showDemo ? demoObjectives : []);
+  const selectedObj = displayObjectives.find(obj => obj.id === selectedObjective);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -228,8 +139,20 @@ const OKRShowcase: React.FC = () => {
                 <BarChart3 className="w-5 h-5 text-purple-600" />
                 현재 진행 중인 목표
               </h3>
-              <div className="space-y-3">
-                {objectives.map((obj) => (
+              {displayObjectives.length === 0 ? (
+                <div className="text-center py-8">
+                  <Target className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 mb-4">아직 설정된 목표가 없습니다</p>
+                  <button
+                    onClick={() => setShowDemo(true)}
+                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                  >
+                    데모 보기
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {displayObjectives.map((obj) => (
                   <motion.button
                     key={obj.id}
                     onClick={() => setSelectedObjective(obj.id)}
@@ -268,9 +191,10 @@ const OKRShowcase: React.FC = () => {
                         transition={{ duration: 1, delay: 0.2 }}
                       />
                     </div>
-                  </motion.button>
-                ))}
-              </div>
+                    </motion.button>
+                  ))}
+                </div>
+              )}
             </div>
           </motion.div>
 
@@ -282,7 +206,7 @@ const OKRShowcase: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="lg:col-span-2"
           >
-            {selectedObj && (
+            {selectedObj ? (
               <div className="bg-white rounded-2xl shadow-xl p-8">
                 {/* Objective Header */}
                 <div className="mb-8">
@@ -420,6 +344,12 @@ const OKRShowcase: React.FC = () => {
                     상세 보기
                   </motion.button>
                 </div>
+              </div>
+            ) : (
+              <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
+                <Target className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">목표를 선택하세요</h3>
+                <p className="text-gray-500">왼쪽에서 목표를 선택하거나 새로운 목표를 추가하세요</p>
               </div>
             )}
           </motion.div>
