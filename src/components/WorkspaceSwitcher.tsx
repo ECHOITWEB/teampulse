@@ -36,7 +36,7 @@ const WorkspaceSwitcher: React.FC = () => {
     }
 
     await switchWorkspace(workspace.id);
-    navigate(`/workspaces/${workspace.id}/dashboard`);
+    navigate(`/workspaces/${workspace.id}/goals`);
     setIsOpen(false);
   };
 
@@ -131,9 +131,9 @@ const WorkspaceSwitcher: React.FC = () => {
                 </div>
                 {workspaces.find(w => w.id === currentWorkspace.id)?.plan && (
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    getPlanBadge(workspaces.find(w => w.id === currentWorkspace.id)!.plan).color
+                    getPlanBadge(workspaces.find(w => w.id === currentWorkspace.id)?.plan || 'free').color
                   }`}>
-                    {getPlanBadge(workspaces.find(w => w.id === currentWorkspace.id)!.plan).label}
+                    {getPlanBadge(workspaces.find(w => w.id === currentWorkspace.id)?.plan || 'free').label}
                   </span>
                 )}
               </div>
@@ -144,7 +144,7 @@ const WorkspaceSwitcher: React.FC = () => {
                   <div className="flex items-center gap-2 text-gray-600">
                     <Users className="w-4 h-4" />
                     <span className="text-sm">
-                      {workspaces.find(w => w.id === currentWorkspace.id)?.member_count || 0}명
+                      {workspaces.find(w => w.id === currentWorkspace.id)?.member_count || 1}명
                     </span>
                   </div>
                 </div>
@@ -152,22 +152,36 @@ const WorkspaceSwitcher: React.FC = () => {
                   <div className="flex items-center gap-2 text-gray-600">
                     <TrendingUp className="w-4 h-4" />
                     <span className="text-sm">
-                      {((workspaces.find(w => w.id === currentWorkspace.id)?.ai_usage_this_month || 0) / 1000).toFixed(1)}K 토큰
+                      잔액: {(workspaces.find(w => w.id === currentWorkspace.id)?.pulse_balance || 10000).toLocaleString()} P
                     </span>
                   </div>
                 </div>
               </div>
 
               {/* Workspace Actions */}
-              {(currentWorkspace.role === 'owner' || currentWorkspace.role === 'admin') && (
-                <button
-                  onClick={handleWorkspaceSettings}
-                  className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium text-gray-700"
-                >
-                  <Settings className="w-4 h-4" />
-                  워크스페이스 설정
-                </button>
-              )}
+              <div className="mt-3 space-y-2">
+                {(currentWorkspace.role === 'owner' || currentWorkspace.role === 'admin') && (
+                  <>
+                    <button
+                      onClick={handleWorkspaceSettings}
+                      className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium text-gray-700"
+                    >
+                      <Settings className="w-4 h-4" />
+                      워크스페이스 설정
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate(`/company/${currentWorkspace.companyId}/hq`);
+                        setIsOpen(false);
+                      }}
+                      className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors text-sm font-medium text-blue-700"
+                    >
+                      <Building2 className="w-4 h-4" />
+                      HQ 대시보드
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
 
             {/* Other Workspaces */}
@@ -197,9 +211,9 @@ const WorkspaceSwitcher: React.FC = () => {
                         </p>
                       </div>
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                        getPlanBadge(workspace.plan).color
+                        getPlanBadge(workspace.plan || 'free').color
                       }`}>
-                        {getPlanBadge(workspace.plan).label}
+                        {getPlanBadge(workspace.plan || 'free').label}
                       </span>
                     </button>
                   ))}

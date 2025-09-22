@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
-const { firebaseAuth } = require('../middleware/firebaseAuth');
+const { authenticate } = require('../middleware/firebaseAuth');
 
 // Public routes
-router.post('/sync', firebaseAuth, authController.syncUser);
+router.post('/sync', authenticate, authController.syncUser);
 
 // Protected routes
-router.get('/me', firebaseAuth, authController.getCurrentUser);
-router.put('/profile', firebaseAuth, authController.updateProfile);
-router.delete('/account', firebaseAuth, authController.deleteAccount);
+router.get('/me', authenticate, authController.getCurrentUser);
+router.put('/profile', authenticate, authController.updateProfile);
+router.delete('/account', authenticate, authController.deleteAccount);
 
 module.exports = router;

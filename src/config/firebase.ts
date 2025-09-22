@@ -8,6 +8,7 @@ import {
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getFunctions } from 'firebase/functions';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -27,8 +28,10 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export const functions = getFunctions(app);
 
-// Auth persistence is handled automatically by Firebase
+// Note: Firebase Auth v9+ automatically maintains persistence
+// The auth state is persisted across browser sessions by default
 
 // Configure Google Auth Provider
 const googleProvider = new GoogleAuthProvider();
@@ -36,29 +39,28 @@ googleProvider.setCustomParameters({
   prompt: 'select_account'
 });
 
-// Sign in with Google using popup
+// Sign in with Google using popup (with better COOP handling)
 export const signInWithGoogle = async () => {
   try {
-    // Clear any existing auth state
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      await firebaseSignOut(auth);
-    }
-    
     // Configure provider to force account selection
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({
-      prompt: 'select_account',
-      access_type: 'offline',
-      include_granted_scopes: 'true'
+      prompt: 'select_account'
     });
     
-    // Sign in with popup
+    // Add additional scopes if needed
+    // Note: scopes are already included by default in GoogleAuthProvider
+    
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
     
-    // Get ID token
-    const idToken = await user.getIdToken();
+    // Get ID token with error handling
+    let idToken = null;
+    try {
+      idToken = await user.getIdToken();
+    } catch (tokenError) {
+      console.warn('Could not get ID token, but user is authenticated:', tokenError);
+    }
     
     return {
       user: user,
@@ -66,17 +68,35 @@ export const signInWithGoogle = async () => {
     };
   } catch (error: any) {
     // Handle specific error cases
-    if (error.code === 'auth/popup-closed-by-user') {
+    if (error.code === 'auth/popup-closed-by-user' || 
+        error.code === 'auth/cancelled-popup-request') {
       console.log('User cancelled sign in');
       return null;
     }
+    
     if (error.code === 'auth/popup-blocked') {
       console.error('Popup blocked. Please allow popups for this site.');
       throw new Error('팝업이 차단되었습니다. 브라우저 설정에서 팝업을 허용해주세요.');
     }
+    
     if (error.code === 'auth/unauthorized-domain') {
       console.error('Unauthorized domain. Please add this domain to Firebase Auth.');
       throw new Error('인증되지 않은 도메인입니다. Firebase 콘솔에서 도메인을 추가해주세요.');
+    }
+    
+    // Handle internal assertion errors
+    if (error.code === 'auth/internal-error' || 
+        error.message?.includes('INTERNAL ASSERTION FAILED')) {
+      console.warn('Firebase internal error, retrying authentication...');
+      // Return null to allow retry
+      return null;
+    }
+    
+    // Ignore COOP warnings but continue
+    if (error.message?.includes('Cross-Origin-Opener-Policy')) {
+      console.warn('COOP policy warning detected, but authentication may still succeed');
+      // Don't throw the error, just log it
+      return null;
     }
     
     console.error('Google sign in error:', error);

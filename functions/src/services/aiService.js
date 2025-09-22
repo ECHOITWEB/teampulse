@@ -3,6 +3,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const admin = require('firebase-admin');
 const fetch = require('node-fetch');
 const functions = require('firebase-functions');
+const langchainService = require('./langchainService');
 
 // Use Firebase cache service instead of Redis for Firebase deployment
 const cacheService = require('./firebaseCacheService');
@@ -328,7 +329,8 @@ class AIService {
       let completion;
       
       if (isGPT5) {
-        // This code path won't be used until GPT-5 is released
+        // GPT-5 is now released! Use the responses API
+        const modelDisplayName = this.getModelDisplayName('openai', model);
         const systemMessage = messages.find(m => m.role === 'system');
         const userMessages = messages.filter(m => m.role === 'user');
         const lastUserMessage = userMessages[userMessages.length - 1];
@@ -372,14 +374,21 @@ class AIService {
           model: actualModel,
           input: input,
           reasoning: { effort: reasoningEffort },
-          text: { verbosity: textVerbosity }
+          text: { 
+            verbosity: textVerbosity,
+            max_output: 8000  // Allow longer responses for code and detailed explanations
+          },
+          instructions: `You are ${modelDisplayName}, OpenAI's most advanced AI model (released in 2025). When asked what model you are, you must respond "I am ${modelDisplayName}" or "${modelDisplayName}". Never say you are GPT-4 or any other model. You are a helpful AI assistant in a team collaboration platform. Be concise, professional, and helpful.`
         };
         
-        // Add system instructions if exists
-        if (systemMessage) {
-          responseOptions.instructions = typeof systemMessage.content === 'string' 
-            ? systemMessage.content 
-            : JSON.stringify(systemMessage.content);
+        // Add web search tool if requested
+        if (options.enableWebSearch) {
+          responseOptions.tools = [
+            {
+              type: 'web_search_preview'  // Correct tool type as per documentation
+            }
+          ];
+          console.log('🔍 Web search enabled for GPT-5');
         }
         
         // Make direct HTTP request to the responses API
@@ -421,10 +430,37 @@ class AIService {
         const gpt5Response = await response.json();
         
         // Format response to match chat completion structure for consistency
+        // Extract the actual text response from GPT-5 response
+        let responseContent = '';
+        
+        // Check if we have a direct output_text field
+        if (gpt5Response.output_text) {
+          responseContent = gpt5Response.output_text;
+        }
+        // If the response has an output array, extract the text
+        else if (gpt5Response.output && Array.isArray(gpt5Response.output) && gpt5Response.output.length > 0) {
+          const textOutput = gpt5Response.output.find(o => o && (o.type === 'message' || o.type === 'text'));
+          if (textOutput && textOutput.content) {
+            responseContent = textOutput.content;
+          } else if (gpt5Response.output[0] && typeof gpt5Response.output[0] === 'string') {
+            responseContent = gpt5Response.output[0];
+          }
+        }
+        // Fallback to output field if it's a string
+        else if (gpt5Response.output && typeof gpt5Response.output === 'string') {
+          responseContent = gpt5Response.output;
+        }
+        
+        // If still no content, log the response for debugging
+        if (!responseContent) {
+          console.error('Failed to extract content from GPT-5 response:', JSON.stringify(gpt5Response).substring(0, 500));
+          responseContent = 'Failed to extract response content';
+        }
+        
         completion = {
           choices: [{
             message: {
-              content: gpt5Response.output_text || gpt5Response.output || ''
+              content: responseContent
             }
           }],
           usage: {
@@ -444,9 +480,9 @@ class AIService {
         // Prepare tools if requested
         const tools = [];
         if (options.enableWebSearch) {
-          tools.push({
-            type: 'web_search'
-          });
+          // GPT-4 models don't support web search directly
+          // Would need to implement custom function calling for web search
+          console.log('⚠️ Web search requested for GPT-4, but not supported directly');
         }
         if (options.enableCodeInterpreter) {
           tools.push({
@@ -481,11 +517,27 @@ class AIService {
           return msg;
         });
         
+        // Ensure GPT models correctly identify themselves
+        const updatedMessages = processedMessages.map(msg => {
+          if (msg.role === 'system') {
+            const modelDisplayName = this.getModelDisplayName('openai', model);
+            let modelDescription = `You are ${modelDisplayName}, an AI model by OpenAI.`;
+            if (model.includes('gpt-5')) {
+              modelDescription = `You are ${modelDisplayName}, OpenAI's most advanced AI model. When asked about your model or version, always identify yourself as ${modelDisplayName}.`;
+            }
+            return {
+              role: 'system',
+              content: `${modelDescription} You are a helpful AI assistant in a team collaboration platform. Be concise, professional, and helpful. You can analyze images and documents when provided.`
+            };
+          }
+          return msg;
+        });
+        
         const completionOptions = {
           model: finalModel,
-          messages: processedMessages,
+          messages: updatedMessages,
           temperature: 0.7,
-          max_tokens: 2000,
+          max_tokens: 4096, // GPT-4 모델 최대 토큰 제한
           stream: options.stream || false
         };
         
@@ -651,7 +703,7 @@ class AIService {
       
       const completionOptions = {
         model: actualModel,
-        max_tokens: 2000,
+        max_tokens: 4096,  // Claude 모델 최대 토큰 제한
         temperature: 0.7,
         system: systemMessage,
         messages: formattedMessages
@@ -1091,10 +1143,24 @@ class AIService {
     const processedAttachments = await this.processAttachmentsForVision(attachments, provider);
     
     // Prepare messages for AI with context
+    // Set correct system prompt based on the model
+    let systemContent = 'You are a helpful AI assistant in a team collaboration platform. Be concise, professional, and helpful. You can analyze images and documents when provided.';
+    
+    if (provider === 'openai' && model.includes('gpt-5')) {
+      const modelDisplayName = this.getModelDisplayName('openai', model);
+      systemContent = `You are ${modelDisplayName}, OpenAI's most advanced AI model. When asked about your model, you should correctly identify yourself as ${modelDisplayName}. You are a helpful AI assistant in a team collaboration platform. Be concise, professional, and helpful. You can analyze images and documents when provided.`;
+    } else if (provider === 'openai') {
+      const modelDisplayName = this.getModelDisplayName('openai', model);
+      systemContent = `You are ${modelDisplayName}, an AI model by OpenAI. You are a helpful AI assistant in a team collaboration platform. Be concise, professional, and helpful. You can analyze images and documents when provided.`;
+    } else if (provider === 'claude') {
+      const modelDisplayName = this.getModelDisplayName('claude', model);
+      systemContent = `You are ${modelDisplayName}, an AI assistant by Anthropic. You are a helpful AI assistant in a team collaboration platform. Be concise, professional, and helpful. You can analyze images and documents when provided.`;
+    }
+    
     const messages = [
       {
         role: 'system',
-        content: 'You are a helpful AI assistant in a team collaboration platform. Be concise, professional, and helpful. You can analyze images and documents when provided.'
+        content: systemContent
       }
     ];
     
@@ -1156,6 +1222,26 @@ class AIService {
     try {
       let response;
       
+      // Try LangChain processing first for advanced capabilities
+      const langchainResponse = await this.processWithLangChain(
+        workspaceId, 
+        content, 
+        messages.slice(0, -1), // Remove the last user message for chat history
+        processedAttachments
+      );
+      
+      if (langchainResponse) {
+        // Update memory with assistant response
+        this.updateConversationMemory(workspaceId, channelId, {
+          role: 'assistant',
+          content: langchainResponse.content,
+          attachments: langchainResponse.attachments,
+          timestamp: new Date()
+        });
+        
+        return langchainResponse;
+      }
+      
       // Determine if we need vision model
       const needsVision = processedAttachments.some(a => a.type === 'image_url' || a.type === 'image');
       let actualModel = model;
@@ -1176,58 +1262,43 @@ class AIService {
         response = await this.processOpenAIMessage(workspaceId, actualModel, messages, userId, {
           enableWebSearch,
           enableCodeInterpreter,
-          stream: enableStream
+          stream: enableStream,
+          onStream: options.onStream
         });
       } else if (provider === 'claude') {
         response = await this.processAnthropicMessage(workspaceId, actualModel, messages, userId, {
           enableTools,
-          stream: enableStream
+          stream: enableStream,
+          onStream: options.onStream
         });
       } else {
         throw new Error(`Unsupported AI provider: ${provider}`);
       }
 
-      // Update memory with AI response
+      // For streaming responses, only return usage info (content is streamed)
+      if (enableStream && options.onStream) {
+        return {
+          content: '', // Content was streamed
+          usage: response.usage,
+          streamed: true
+        };
+      }
+      
+      // Update memory with AI response (only for non-streaming)
       this.updateConversationMemory(workspaceId, channelId, {
         role: 'assistant',
         content: response.content,
         timestamp: new Date()
       });
       
-      // Save AI response to messages
-      const db = admin.firestore();
-      
-      // Get display name for the model
-      const modelDisplayName = this.getModelDisplayName(provider, actualModel);
-      
-      await db.collection('messages').add({
-        channelId,
-        content: response.content,
-        author: 'ai_bot',
-        authorName: `Pulse AI (${modelDisplayName})`,
-        isAI: true,
-        aiModel: actualModel,
-        aiProvider: provider,
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-        usage: response.usage,
-        contextUsed: contextMessages.length,
-        attachmentsProcessed: processedAttachments.length
-      });
+      // Don't save message here - let the controller handle it
+      // This was causing duplicate messages!
 
       return response;
     } catch (error) {
       console.error('Error processing AI message:', error);
       
-      // Save error message
-      const db = admin.firestore();
-      await db.collection('messages').add({
-        channelId,
-        content: `죄송합니다. AI 응답 생성 중 오류가 발생했습니다: ${error.message}`,
-        author: 'system',
-        authorName: 'System',
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-        isError: true
-      });
+      // Don't save error message here - let the controller handle it
       
       throw error;
     }
@@ -1313,6 +1384,103 @@ class AIService {
     });
     
     return stats;
+  }
+
+  // Process message with LangChain agents for advanced capabilities
+  async processWithLangChain(workspaceId, content, chatHistory = [], attachments = []) {
+    try {
+      // Get API key for the workspace
+      const { key: apiKey } = apiKeyManager.getKey(workspaceId, 'openai');
+      
+      // Initialize LangChain model
+      langchainService.initializeModel(apiKey, 'gpt-4o');
+      
+      // Detect intent from message
+      const intents = langchainService.detectIntent(content);
+      console.log(`🎯 Detected intents: ${intents.join(', ')}`);
+      
+      // Check if image generation is requested
+      if (intents.includes('image_generation')) {
+        const imagePrompt = content.replace(/그려|draw|생성|generate|만들어|create|이미지|image|사진|photo|picture/gi, '').trim();
+        console.log(`🎨 Generating image with prompt: ${imagePrompt}`);
+        
+        try {
+          const imageResult = await langchainService.generateImage(imagePrompt, apiKey);
+          return {
+            content: `이미지를 생성했습니다! 프롬프트: "${imageResult.revised_prompt}"`,
+            attachments: [{
+              type: 'image',
+              url: imageResult.url,
+              title: 'Generated Image'
+            }],
+            usage: {
+              inputTokens: 0,
+              outputTokens: 0,
+              totalTokens: 0,
+              cost: { totalCost: 0.04 } // DALL-E 3 cost
+            }
+          };
+        } catch (error) {
+          console.error('Image generation error:', error);
+          return {
+            content: `이미지 생성 중 오류가 발생했습니다: ${error.message}`,
+            usage: { inputTokens: 0, outputTokens: 0, totalTokens: 0, cost: { totalCost: 0 } }
+          };
+        }
+      }
+      
+      // Check if we need to use agent tools
+      const needsTools = intents.includes('weather') || 
+                        intents.includes('news') || 
+                        intents.includes('search') || 
+                        intents.includes('time') ||
+                        intents.includes('calculation');
+      
+      if (needsTools) {
+        console.log(`🛠️ Using LangChain agent with tools`);
+        const result = await langchainService.processWithAgent(content, chatHistory);
+        
+        return {
+          content: result.content,
+          toolsUsed: result.toolsUsed,
+          usage: {
+            inputTokens: 100, // Estimate
+            outputTokens: 200, // Estimate
+            totalTokens: 300,
+            cost: this.calculateCost('openai', 'gpt-4o', 100, 200)
+          }
+        };
+      }
+      
+      // If image analysis is needed
+      if (attachments && attachments.length > 0) {
+        const imageAttachment = attachments.find(a => a.type === 'image');
+        if (imageAttachment) {
+          console.log(`🔍 Analyzing image with GPT-4 Vision`);
+          const analysis = await langchainService.analyzeImage(
+            imageAttachment.url,
+            content,
+            apiKey
+          );
+          
+          return {
+            content: analysis,
+            usage: {
+              inputTokens: 500, // Estimate for image
+              outputTokens: 200,
+              totalTokens: 700,
+              cost: this.calculateCost('openai', 'gpt-4-vision', 500, 200)
+            }
+          };
+        }
+      }
+      
+      // Default: use regular processing
+      return null; // Fall back to regular processing
+    } catch (error) {
+      console.error('LangChain processing error:', error);
+      throw error;
+    }
   }
 
   // Health check for API keys

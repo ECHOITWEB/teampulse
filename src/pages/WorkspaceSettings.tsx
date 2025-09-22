@@ -77,7 +77,7 @@ const WorkspaceSettings: React.FC = () => {
     setLoading(true);
     try {
       const membersQuery = query(
-        collection(db, 'workspace_members'),
+        collection(db, 'members'),
         where('workspace_id', '==', workspaceId),
         where('status', '==', 'active')
       );
@@ -168,7 +168,7 @@ const WorkspaceSettings: React.FC = () => {
     if (!currentWorkspace || currentWorkspace.role !== 'owner') return;
     
     try {
-      await updateDoc(doc(db, 'workspace_members', memberId), {
+      await updateDoc(doc(db, 'members', memberId), {
         role: newRole,
         updated_at: serverTimestamp()
       });
@@ -192,7 +192,7 @@ const WorkspaceSettings: React.FC = () => {
     if (!window.confirm('정말로 이 멤버를 제거하시겠습니까?')) return;
     
     try {
-      await updateDoc(doc(db, 'workspace_members', memberId), {
+      await updateDoc(doc(db, 'members', memberId), {
         status: 'inactive',
         removed_at: serverTimestamp()
       });

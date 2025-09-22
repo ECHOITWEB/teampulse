@@ -46,7 +46,7 @@ const WorkspaceManagement: React.FC = () => {
         
         // 실제 멤버 수 확인
         const membersQuery = query(
-          collection(db, 'workspace_members'),
+          collection(db, 'members'),
           where('workspace_id', '==', doc.id),
           where('status', '==', 'active')
         );
@@ -110,7 +110,7 @@ const WorkspaceManagement: React.FC = () => {
     try {
       // 워크스페이스 멤버에 오너 추가
       const membersQuery = query(
-        collection(db, 'workspace_members'),
+        collection(db, 'members'),
         where('workspace_id', '==', workspace.id),
         where('user_id', '==', workspace.ownerId)
       );
@@ -118,7 +118,7 @@ const WorkspaceManagement: React.FC = () => {
       
       if (membersSnapshot.empty && workspace.ownerId) {
         // 오너 멤버가 없으면 추가
-        await addDoc(collection(db, 'workspace_members'), {
+        await addDoc(collection(db, 'members'), {
           workspace_id: workspace.id,
           user_id: workspace.ownerId,
           role: 'owner',

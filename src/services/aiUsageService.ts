@@ -80,7 +80,7 @@ class AIUsageService {
         // Update user usage within workspace
         const userWorkspaceUsageRef = doc(
           db, 
-          'workspace_members',
+          'members',
           `${workspaceId}_${userId}`
         );
         
@@ -136,7 +136,7 @@ class AIUsageService {
 
       // Get all members and their usage
       const membersQuery = query(
-        collection(db, 'workspace_members'),
+        collection(db, 'members'),
         where('workspace_id', '==', workspaceId),
         where('status', '==', 'active')
       );
@@ -212,10 +212,10 @@ class AIUsageService {
       }
 
       // Reset member usage
-      const membersSnapshot = await getDocs(collection(db, 'workspace_members'));
+      const membersSnapshot = await getDocs(collection(db, 'members'));
       for (const memberDoc of membersSnapshot.docs) {
         batch.push(
-          updateDoc(doc(db, 'workspace_members', memberDoc.id), {
+          updateDoc(doc(db, 'members', memberDoc.id), {
             ai_usage_this_month: 0,
             ai_cost_this_month: 0,
             ai_usage_last_month: memberDoc.data().ai_usage_this_month || 0,
@@ -263,7 +263,7 @@ class AIUsageService {
   }> {
     try {
       const memberQuery = query(
-        collection(db, 'workspace_members'),
+        collection(db, 'members'),
         where('workspace_id', '==', workspaceId),
         where('user_id', '==', userId)
       );

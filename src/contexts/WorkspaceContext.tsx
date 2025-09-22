@@ -1,40 +1,34 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
-import { collection, query, where, getDocs, doc, getDoc, updateDoc, deleteDoc, onSnapshot, Unsubscribe } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import workspaceService, { Workspace as WorkspaceType } from '../services/workspaceService';
+import memberService, { Member } from '../services/memberService';
+import companyService, { Company } from '../services/companyService';
 
-interface Workspace {
-  id: string;
-  name: string;
-  description?: string;
-  owner_id: string;
-  plan: 'free' | 'starter' | 'pro' | 'enterprise';
+interface WorkspaceWithRole extends WorkspaceType {
   role: 'owner' | 'admin' | 'member';
   member_count?: number;
-  created_at: any;
   ai_usage_this_month?: number;
   ai_usage_limit?: number;
+  pulse_usage_this_month?: number;
+  pulse_balance?: number;
 }
 
-interface WorkspaceMember {
-  user_id: string;
-  workspace_id: string;
+interface CurrentWorkspace {
+  id: string;
+  name: string;
   role: 'owner' | 'admin' | 'member';
-  status: 'active' | 'invited' | 'inactive';
-  joined_at: any;
+  companyId: string;
+  companyName: string;
 }
 
 interface WorkspaceContextType {
-  workspaces: Workspace[];
-  currentWorkspace: {
-    id: string;
-    name: string;
-    role: 'owner' | 'admin' | 'member';
-  } | null;
+  workspaces: WorkspaceWithRole[];
+  currentWorkspace: CurrentWorkspace | null;
+  currentCompany: Company | null;
   loading: boolean;
   error: string | null;
   loadWorkspaces: () => Promise<void>;
-  setCurrentWorkspace: (workspace: { id: string; name: string; role: 'owner' | 'admin' | 'member' }) => void;
+  setCurrentWorkspace: (workspace: CurrentWorkspace) => void;
   switchWorkspace: (workspaceId: string) => Promise<void>;
   updateWorkspace: (id: string, data: any) => Promise<void>;
   deleteWorkspace: (id: string) => Promise<void>;
@@ -54,252 +48,202 @@ export const useWorkspace = () => {
 
 export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
-  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
-  const [currentWorkspace, setCurrentWorkspace] = useState<{
-    id: string;
-    name: string;
-    role: 'owner' | 'admin' | 'member';
-  } | null>(null);
+  const [workspaces, setWorkspaces] = useState<WorkspaceWithRole[]>([]);
+  const [currentWorkspace, setCurrentWorkspace] = useState<CurrentWorkspace | null>(null);
+  const [currentCompany, setCurrentCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(false);
   const [isLoadingInitial, setIsLoadingInitial] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasWorkspaces, setHasWorkspaces] = useState(false);
+  const [isLoadingWorkspaces, setIsLoadingWorkspaces] = useState(false);
 
-  // Load workspaces and set up real-time listeners
+  // Load workspaces on user change
   useEffect(() => {
     if (!user) {
       setWorkspaces([]);
       setCurrentWorkspace(null);
+      setCurrentCompany(null);
       setHasWorkspaces(false);
       setIsLoadingInitial(false);
       return;
     }
 
-    let unsubscribes: Unsubscribe[] = [];
-
-    const setupWorkspaceListeners = async () => {
-      try {
-        // Listen to user's workspace memberships
-        const membershipsQuery = query(
-          collection(db, 'workspace_members'),
-          where('user_id', '==', user.firebase_uid),
-          where('status', '==', 'active')
-        );
-
-        const unsubscribeMemberships = onSnapshot(membershipsQuery, async (snapshot) => {
-          const workspaceIds = snapshot.docs.map(doc => doc.data().workspace_id);
-          
-          if (workspaceIds.length === 0) {
-            setWorkspaces([]);
-            setHasWorkspaces(false);
-            setCurrentWorkspace(null);
-            setIsLoadingInitial(false);
-            return;
-          }
-
-          setHasWorkspaces(true);
-
-          // Get workspace details
-          const workspaceData: Workspace[] = [];
-          
-          for (const workspaceId of workspaceIds) {
-            try {
-              const workspaceDoc = await getDoc(doc(db, 'workspaces', workspaceId));
-              if (workspaceDoc.exists()) {
-                const data = workspaceDoc.data();
-                const membership = snapshot.docs.find(
-                  m => m.data().workspace_id === workspaceId
-                );
-                
-                // Get member count
-                const membersQuery = query(
-                  collection(db, 'workspace_members'),
-                  where('workspace_id', '==', workspaceId),
-                  where('status', '==', 'active')
-                );
-                const membersSnapshot = await getDocs(membersQuery);
-                
-                workspaceData.push({
-                  id: workspaceDoc.id,
-                  name: data.name,
-                  description: data.description,
-                  owner_id: data.owner_id,
-                  plan: data.plan || 'free',
-                  role: membership?.data().role || 'member',
-                  member_count: membersSnapshot.size,
-                  created_at: data.created_at,
-                  ai_usage_this_month: data.ai_usage_this_month || 0,
-                  ai_usage_limit: data.ai_usage_limit || 10000
-                });
-              }
-            } catch (error) {
-              console.error(`Error loading workspace ${workspaceId}:`, error);
-            }
-          }
-          
-          setWorkspaces(workspaceData);
-
-          // Check if there's a previously selected workspace in localStorage
-          const savedWorkspaceId = localStorage.getItem('selectedWorkspaceId');
-          if (savedWorkspaceId && workspaceData.find(w => w.id === savedWorkspaceId)) {
-            const selectedWorkspace = workspaceData.find(w => w.id === savedWorkspaceId)!;
-            setCurrentWorkspace({
-              id: selectedWorkspace.id,
-              name: selectedWorkspace.name,
-              role: selectedWorkspace.role
-            });
-          } else if (workspaceData.length === 1) {
-            // If user has only one workspace, auto-select it
-            setCurrentWorkspace({
-              id: workspaceData[0].id,
-              name: workspaceData[0].name,
-              role: workspaceData[0].role
-            });
-            localStorage.setItem('selectedWorkspaceId', workspaceData[0].id);
-          }
-
-          setIsLoadingInitial(false);
-        });
-
-        unsubscribes.push(unsubscribeMemberships);
-      } catch (error) {
-        console.error('Error setting up workspace listeners:', error);
-        setError('Failed to load workspaces');
-        setIsLoadingInitial(false);
-      }
+    const loadWorkspacesForUser = async () => {
+      await loadWorkspaces();
     };
+    
+    loadWorkspacesForUser();
+  }, [user?.firebase_uid]); // Only depend on user ID to avoid unnecessary reloads
 
-    setupWorkspaceListeners();
-
-    return () => {
-      unsubscribes.forEach(unsubscribe => unsubscribe());
-    };
-  }, [user]);
-
-  // Load user's workspaces
   const loadWorkspaces = async () => {
     if (!user) return;
     
-    setLoading(true);
-    setError(null);
+    // Prevent duplicate loading
+    if (isLoadingWorkspaces) {
+      return;
+    }
     
     try {
-      // Get user's workspace memberships
-      const membershipsQuery = query(
-        collection(db, 'workspace_members'),
-        where('user_id', '==', user.firebase_uid),
-        where('status', '==', 'active')
-      );
+      setIsLoadingWorkspaces(true);
+      setLoading(true);
+      setError(null);
       
-      const membershipsSnapshot = await getDocs(membershipsQuery);
-      const workspaceIds = membershipsSnapshot.docs.map(doc => doc.data().workspace_id);
+      // Get user's workspaces
+      const userWorkspaces = await workspaceService.getUserWorkspaces(user.firebase_uid);
       
-      if (workspaceIds.length === 0) {
+      if (userWorkspaces.length === 0) {
         setWorkspaces([]);
         setHasWorkspaces(false);
-        setLoading(false);
+        setCurrentWorkspace(null);
+        setCurrentCompany(null);
+        setIsLoadingInitial(false);
         return;
       }
 
       setHasWorkspaces(true);
-
-      // Get workspace details
-      const workspaceData: Workspace[] = [];
       
-      for (const workspaceId of workspaceIds) {
-        const workspaceDoc = await getDoc(doc(db, 'workspaces', workspaceId));
-        if (workspaceDoc.exists()) {
-          const data = workspaceDoc.data();
-          const membership = membershipsSnapshot.docs.find(
-            m => m.data().workspace_id === workspaceId
-          );
-          
-          workspaceData.push({
-            id: workspaceDoc.id,
-            name: data.name,
-            description: data.description,
-            owner_id: data.owner_id,
-            plan: data.plan || 'free',
-            role: membership?.data().role || 'member',
-            created_at: data.created_at,
-            ai_usage_this_month: data.ai_usage_this_month || 0,
-            ai_usage_limit: data.ai_usage_limit || 10000
+      // Get user's role for each workspace
+      const workspacesWithRoles: WorkspaceWithRole[] = [];
+      
+      for (const workspace of userWorkspaces) {
+        const member = await memberService.getMemberByUserAndWorkspace(
+          user.firebase_uid,
+          workspace.id
+        );
+        
+        // Only include workspaces where user is an active member
+        if (member && member.status === 'active') {
+          workspacesWithRoles.push({
+            ...workspace,
+            role: member.workspace_role,
+            member_count: workspace.stats.member_count,
+            ai_usage_this_month: 0, // TODO: Get from AI usage service
+            ai_usage_limit: 10000,
+            pulse_usage_this_month: 0, // TODO: Get from Pulse service
+            pulse_balance: 0
           });
         }
       }
       
-      setWorkspaces(workspaceData);
+      setWorkspaces(workspacesWithRoles);
+
+      // Try to get workspace ID from current URL first
+      const currentPath = window.location.pathname;
+      const urlMatch = currentPath.match(/\/workspaces\/([^\/]+)/);
+      const urlWorkspaceId = urlMatch ? urlMatch[1] : null;
+      
+      // Priority: URL workspace ID > saved workspace ID > first workspace
+      let selectedWorkspace;
+      if (urlWorkspaceId) {
+        selectedWorkspace = workspacesWithRoles.find(w => w.id === urlWorkspaceId);
+      }
+      
+      if (!selectedWorkspace) {
+        const savedWorkspaceId = localStorage.getItem('selectedWorkspaceId');
+        selectedWorkspace = savedWorkspaceId 
+          ? workspacesWithRoles.find(w => w.id === savedWorkspaceId)
+          : workspacesWithRoles[0];
+      }
+
+      if (selectedWorkspace) {
+        // Get company details
+        const company = await companyService.getCompany(selectedWorkspace.company_id);
+        
+        setCurrentWorkspace({
+          id: selectedWorkspace.id,
+          name: selectedWorkspace.name,
+          role: selectedWorkspace.role,
+          companyId: selectedWorkspace.company_id,
+          companyName: selectedWorkspace.company_name
+        });
+        
+        if (company) {
+          setCurrentCompany(company);
+        }
+        
+        localStorage.setItem('selectedWorkspaceId', selectedWorkspace.id);
+      }
+
+      setIsLoadingInitial(false);
     } catch (error) {
       console.error('Error loading workspaces:', error);
       setError('Failed to load workspaces');
+      setIsLoadingInitial(false);
     } finally {
       setLoading(false);
+      setIsLoadingWorkspaces(false);
     }
   };
 
-  // Switch to a different workspace
   const switchWorkspace = async (workspaceId: string) => {
+    console.log('switchWorkspace called with:', workspaceId);
     const workspace = workspaces.find(w => w.id === workspaceId);
-    if (!workspace) {
-      throw new Error('Workspace not found');
-    }
     
+    if (!workspace) {
+      console.error('Workspace not found in list:', workspaceId);
+      // If not in list but we're loading initial, wait
+      if (isLoadingInitial) {
+        return;
+      }
+      // If not loading and not found, redirect to workspace selection
+      window.location.href = '/workspaces';
+      return;
+    }
+
+    // Set workspace immediately to avoid loading state
     setCurrentWorkspace({
       id: workspace.id,
       name: workspace.name,
-      role: workspace.role
+      role: workspace.role,
+      companyId: workspace.company_id,
+      companyName: workspace.company_name
     });
     
     localStorage.setItem('selectedWorkspaceId', workspaceId);
+    console.log('Workspace switched to:', workspace.name);
+
+    // Load company details and update last active in background (non-blocking)
+    Promise.all([
+      companyService.getCompany(workspace.company_id).then(company => {
+        if (company) setCurrentCompany(company);
+      }),
+      user ? memberService.updateLastActive(user.firebase_uid, workspaceId) : Promise.resolve()
+    ]).catch(error => {
+      console.error('Error in switchWorkspace background tasks:', error);
+      // Don't revert the workspace switch, just log the error
+    });
   };
 
-  // Update workspace details (only for owners/admins)
   const updateWorkspace = async (id: string, data: any) => {
-    const workspace = workspaces.find(w => w.id === id);
-    if (!workspace || (workspace.role !== 'owner' && workspace.role !== 'admin')) {
-      throw new Error('Insufficient permissions');
-    }
-    
     try {
-      await updateDoc(doc(db, 'workspaces', id), {
-        ...data,
-        updated_at: new Date()
-      });
-      
-      // Update local state
-      setWorkspaces(prev => prev.map(w => 
-        w.id === id ? { ...w, ...data } : w
-      ));
-      
-      if (currentWorkspace?.id === id) {
-        setCurrentWorkspace(prev => prev ? { ...prev, name: data.name || prev.name } : null);
-      }
+      await workspaceService.updateWorkspace(id, data);
+      await loadWorkspaces(); // Reload to get updated data
     } catch (error) {
       console.error('Error updating workspace:', error);
+      setError('Failed to update workspace');
       throw error;
     }
   };
 
-  // Delete workspace (only for owners)
   const deleteWorkspace = async (id: string) => {
-    const workspace = workspaces.find(w => w.id === id);
-    if (!workspace || workspace.role !== 'owner') {
-      throw new Error('Only workspace owners can delete workspaces');
-    }
-    
     try {
-      // Delete workspace document
-      await deleteDoc(doc(db, 'workspaces', id));
+      await workspaceService.deleteWorkspace(id);
       
-      // Remove from local state
-      setWorkspaces(prev => prev.filter(w => w.id !== id));
-      
+      // If deleted workspace was current, switch to another
       if (currentWorkspace?.id === id) {
-        setCurrentWorkspace(null);
-        localStorage.removeItem('selectedWorkspaceId');
+        const remainingWorkspaces = workspaces.filter(w => w.id !== id);
+        if (remainingWorkspaces.length > 0) {
+          await switchWorkspace(remainingWorkspaces[0].id);
+        } else {
+          setCurrentWorkspace(null);
+          setCurrentCompany(null);
+        }
       }
+      
+      await loadWorkspaces(); // Reload workspaces
     } catch (error) {
       console.error('Error deleting workspace:', error);
+      setError('Failed to delete workspace');
       throw error;
     }
   };
@@ -307,6 +251,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const value: WorkspaceContextType = {
     workspaces,
     currentWorkspace,
+    currentCompany,
     loading,
     error,
     loadWorkspaces,

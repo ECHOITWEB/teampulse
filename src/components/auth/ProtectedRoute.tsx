@@ -20,6 +20,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireWorksp
   }
 
   if (!user) {
+    // Save current location to localStorage for persistence across refresh
+    const currentPath = location.pathname + location.search + location.hash;
+    if (currentPath !== '/login' && currentPath !== '/') {
+      localStorage.setItem('returnUrl', currentPath);
+    }
+    
     // Redirect to login page with return URL
     return <Navigate to="/login" state={{ from: location }} replace />;
   }

@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { createChatCompletion } from '../../utils/openai';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { extractTextFromPDF } from '../../utils/pdfParser';
+import { parsePDFLocally } from '../../utils/pdfParser';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -26,7 +26,8 @@ const DocumentReview: React.FC = () => {
       setExtracting(true);
       
       try {
-        const text = await extractTextFromPDF(uploadedFile);
+        const result = await parsePDFLocally(uploadedFile);
+        const text = result.text;
         setDocumentContent(text);
         setMessages([{
           role: 'assistant',

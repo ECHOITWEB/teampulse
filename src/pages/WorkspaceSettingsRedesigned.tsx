@@ -5,14 +5,15 @@ import {
   Settings, Users, CreditCard, Shield, 
   Save, Plus, UserX, Crown, UserCheck, User,
   AlertCircle, Loader2, CheckCircle, ChevronRight,
-  Mail, Building2, Globe, Lock
+  Mail, Building2, Globe, Lock, UserPlus, Briefcase, Clock, XCircle, TrendingUp
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useWorkspace } from '../contexts/WorkspaceContext';
-import { collection, query, where, getDocs, doc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc, addDoc, serverTimestamp, arrayUnion } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { updateMemberRoleAdmin, deleteWorkspaceAdmin } from '../services/adminApi';
 import { colors, componentStyles, roleColors, animations, shadows, borderRadius } from '../styles/DesignSystem';
+import usageTrackerService from '../services/usageTrackerService';
 
 interface WorkspaceMemberData {
   id: string;
@@ -23,6 +24,10 @@ interface WorkspaceMemberData {
   joined_at: any;
   last_active?: any;
   ai_usage_this_month?: number;
+  totalInputTokens?: number;
+  totalOutputTokens?: number;
+  totalCostKRW?: number;
+  apiCallCount?: number;
 }
 
 const WorkspaceSettingsRedesigned: React.FC = () => {
@@ -32,7 +37,7 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
   const { currentWorkspace, updateWorkspace, deleteWorkspace } = useWorkspace();
   
   const [activeTab, setActiveTab] = useState('general');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   
   // General settings
@@ -45,17 +50,50 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
   const [currentUserRole, setCurrentUserRole] = useState<'owner' | 'admin' | 'member'>('member');
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<'admin' | 'member'>('member');
+  const [invitations, setInvitations] = useState<any[]>([]);
+  const [inviteLink, setInviteLink] = useState('');
+  const [showInviteLink, setShowInviteLink] = useState(false);
+  
+  // Join Requests
+  const [joinRequests, setJoinRequests] = useState<any[]>([]);
+  const [loadingRequests, setLoadingRequests] = useState(false);
+  const [selectedRoles, setSelectedRoles] = useState<{ [key: string]: 'member' | 'admin' }>({});
   
   // Billing
   const [workspaceData, setWorkspaceData] = useState<any>(null);
 
   useEffect(() => {
-    if (currentWorkspace && workspaceId && user) {
-      setWorkspaceName(currentWorkspace.name);
-      loadWorkspaceData();
-      loadMembers();
-      checkUserRole();
-    }
+    const initializeSettings = async () => {
+      if (!workspaceId || !user) {
+        setLoading(false);
+        return;
+      }
+
+      // Wait a bit for workspace context to load if not ready yet
+      if (!currentWorkspace) {
+        const timeout = setTimeout(() => {
+          if (!currentWorkspace) {
+            setLoading(false);
+          }
+        }, 2000);
+        return () => clearTimeout(timeout);
+      }
+
+      // Verify we're on the correct workspace
+      if (currentWorkspace && currentWorkspace.id === workspaceId) {
+        setWorkspaceName(currentWorkspace.name);
+        await Promise.all([
+          loadWorkspaceData(),
+          loadMembers(),
+          checkUserRole(),
+          loadJoinRequests(),
+          loadInvitations()
+        ]);
+        setLoading(false);
+      }
+    };
+
+    initializeSettings();
   }, [currentWorkspace, workspaceId, user]);
 
   const checkUserRole = async () => {
@@ -63,7 +101,7 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
     
     try {
       const memberQuery = query(
-        collection(db, 'workspace_members'),
+        collection(db, 'members'),
         where('workspace_id', '==', workspaceId),
         where('user_id', '==', user.firebase_uid),
         where('status', '==', 'active')
@@ -72,8 +110,8 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
       const memberSnapshot = await getDocs(memberQuery);
       if (!memberSnapshot.empty) {
         const memberData = memberSnapshot.docs[0].data();
-        setCurrentUserRole(memberData.role);
-        console.log('✅ User role verified:', memberData.role);
+        setCurrentUserRole(memberData.workspace_role || memberData.role || 'member');
+        console.log('✅ User role verified:', memberData.workspace_role || memberData.role);
       }
     } catch (error) {
       console.error('Error checking user role:', error);
@@ -100,13 +138,54 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
     }
   };
 
+  // Load pending invitations
+  const loadInvitations = async () => {
+    if (!workspaceId) return;
+    
+    try {
+      const invitationsQuery = query(
+        collection(db, 'workspace_invitations'),
+        where('workspace_id', '==', workspaceId),
+        where('status', '==', 'pending')
+      );
+      
+      const snapshot = await getDocs(invitationsQuery);
+      const invites = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      setInvitations(invites);
+    } catch (error) {
+      console.error('Error loading invitations:', error);
+    }
+  };
+
   const loadMembers = async () => {
     if (!workspaceId) return;
     
     setLoading(true);
     try {
+      // First, get workspace data to find the owner
+      const workspaceQuery = query(
+        collection(db, 'workspaces'),
+        where('__name__', '==', workspaceId)
+      );
+      const workspaceSnapshot = await getDocs(workspaceQuery);
+      let ownerId = '';
+      let ownerName = '';
+      let ownerEmail = '';
+      
+      if (!workspaceSnapshot.empty) {
+        const workspaceData = workspaceSnapshot.docs[0].data();
+        ownerId = workspaceData.owner_id || workspaceData.created_by;
+        ownerName = workspaceData.owner_name || workspaceData.created_by_name || '';
+        ownerEmail = workspaceData.owner_email || workspaceData.created_by_email || '';
+      }
+      
+      // Then get all members
       const membersQuery = query(
-        collection(db, 'workspace_members'),
+        collection(db, 'members'),
         where('workspace_id', '==', workspaceId),
         where('status', '==', 'active')
       );
@@ -116,18 +195,67 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
       
       for (const memberDoc of membersSnapshot.docs) {
         const data = memberDoc.data();
+        // Check if this member is the owner
+        const isOwner = data.user_id === ownerId;
+        // workspace_role 또는 role 필드 사용, owner는 특별 처리
+        const memberRole = isOwner ? 'owner' : (data.workspace_role || data.role || 'member');
+        // 유효한 role 값으로 변환
+        const validRole = ['owner', 'admin', 'member'].includes(memberRole) ? memberRole : 'member';
+        
+        // Get display name from various possible fields
+        let displayName = data.workspace_profile?.display_name || 
+                         data.user_name || 
+                         data.display_name || 
+                         data.name ||
+                         (isOwner && ownerName) ||
+                         'Unknown';
+        
+        // Get email from various possible fields
+        let email = data.user_email || 
+                   data.email || 
+                   (isOwner && ownerEmail) ||
+                   'unknown@email.com';
+        
+        // If still Unknown, try to extract from email
+        if (displayName === 'Unknown' && email !== 'unknown@email.com') {
+          displayName = email.split('@')[0];
+        }
+        
         memberData.push({
           id: memberDoc.id,
           user_id: data.user_id,
-          email: data.user_email || data.email || 'unknown@email.com',
-          name: data.user_name || data.display_name || data.user_email?.split('@')[0] || 'Unknown',
-          role: data.role,
+          email: email,
+          name: displayName,
+          role: validRole,
           joined_at: data.joined_at,
-          ai_usage_this_month: data.ai_usage_this_month || 0
+          ai_usage_this_month: data.ai_usage_this_month || 0,
+          totalInputTokens: 0,
+          totalOutputTokens: 0,
+          totalCostKRW: 0,
+          apiCallCount: 0
         });
       }
       
-      setMembers(memberData.sort((a, b) => {
+      // Load usage data for each member
+      const membersWithUsage = await Promise.all(
+        memberData.map(async (member) => {
+          try {
+            const monthlyUsage = await usageTrackerService.getUserMonthlyUsage(member.user_id);
+            return {
+              ...member,
+              totalInputTokens: monthlyUsage.totalInputTokens || 0,
+              totalOutputTokens: monthlyUsage.totalOutputTokens || 0,
+              totalCostKRW: monthlyUsage.totalCostKRW || 0,
+              apiCallCount: monthlyUsage.count || 0
+            };
+          } catch (error) {
+            console.error(`Error loading usage for ${member.name}:`, error);
+            return member;
+          }
+        })
+      );
+      
+      setMembers(membersWithUsage.sort((a, b) => {
         const roleOrder = { owner: 0, admin: 1, member: 2 };
         return roleOrder[a.role] - roleOrder[b.role];
       }));
@@ -135,6 +263,106 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
       console.error('Error loading members:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Load join requests
+  const loadJoinRequests = async () => {
+    if (!workspaceId) return;
+    
+    setLoadingRequests(true);
+    try {
+      const requestsQuery = query(
+        collection(db, 'workspace_join_requests'),
+        where('workspace_id', '==', workspaceId),
+        where('status', '==', 'pending')
+      );
+      
+      const snapshot = await getDocs(requestsQuery);
+      const requests = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      setJoinRequests(requests);
+    } catch (error) {
+      console.error('Error loading join requests:', error);
+    } finally {
+      setLoadingRequests(false);
+    }
+  };
+
+  // Approve join request
+  const handleApproveRequest = async (requestId: string, request: any) => {
+    if (!workspaceId) return;
+    
+    try {
+      const role = selectedRoles[requestId] || 'member';
+      
+      // Add member to workspace
+      await addDoc(collection(db, 'members'), {
+        workspace_id: workspaceId,
+        user_id: request.user_id,
+        workspace_role: role,
+        permissions: {
+          can_create_objectives: true,
+          can_edit_all_objectives: role === 'admin',
+          can_delete_objectives: role === 'admin',
+          can_manage_members: role === 'admin',
+          can_manage_settings: role === 'admin',
+          can_view_analytics: role === 'admin'
+        },
+        status: 'active',
+        joined_at: serverTimestamp(),
+        last_active: serverTimestamp(),
+        workspace_profile: {
+          display_name: request.user_nickname || request.user_name,
+          department: '',
+          position: request.user_role || 'member',
+          team: ''
+        }
+      });
+      
+      // Update request status
+      await updateDoc(doc(db, 'workspace_join_requests', requestId), {
+        status: 'approved',
+        approved_by: user?.firebase_uid,
+        approved_at: serverTimestamp()
+      });
+      
+      // Reload requests and members
+      await loadJoinRequests();
+      await loadMembers();
+      
+      // Also update workspace members array
+      await updateDoc(doc(db, 'workspaces', workspaceId), {
+        members: arrayUnion(request.user_id)
+      });
+      
+      alert(`${request.user_name}님의 가입 요청을 ${role === 'admin' ? '관리자' : '일반 멤버'}로 승인했습니다.`);
+    } catch (error) {
+      console.error('Error approving request:', error);
+      alert('승인 중 오류가 발생했습니다.');
+    }
+  };
+
+  // Reject join request
+  const handleRejectRequest = async (requestId: string) => {
+    try {
+      // Update request status
+      await updateDoc(doc(db, 'workspace_join_requests', requestId), {
+        status: 'rejected',
+        rejected_by: user?.firebase_uid,
+        rejected_at: serverTimestamp()
+      });
+      
+      // Reload requests
+      await loadJoinRequests();
+      
+      alert('가입 요청을 거절했습니다.');
+    } catch (error) {
+      console.error('Error rejecting request:', error);
+      alert('거절 중 오류가 발생했습니다.');
     }
   };
 
@@ -164,17 +392,33 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
     
     setSaving(true);
     try {
+      // Generate unique invitation code
+      const inviteCode = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      
+      // Create invitation document
       await addDoc(collection(db, 'workspace_invitations'), {
         workspace_id: workspaceId,
+        workspace_name: workspaceName,
         email: inviteEmail,
         role: inviteRole,
         invited_by: user?.firebase_uid,
+        invited_by_name: user?.displayName || user?.email,
         invited_at: serverTimestamp(),
-        status: 'pending'
+        status: 'pending',
+        invite_code: inviteCode,
+        expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days expiry
       });
       
+      // Generate and show invite link
+      const link = `${window.location.origin}/invite/${inviteCode}`;
+      setInviteLink(link);
+      setShowInviteLink(true);
+      
+      // Load invitations to update the list
+      await loadInvitations();
+      
       setInviteEmail('');
-      alert('초대가 전송되었습니다.');
+      alert(`${inviteEmail}님을 초대했습니다. 초대 링크를 공유해주세요.`);
     } catch (error) {
       console.error('Error inviting member:', error);
       alert('초대 중 오류가 발생했습니다.');
@@ -200,7 +444,7 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
     if (!window.confirm('정말로 이 멤버를 제거하시겠습니까?')) return;
     
     try {
-      await updateDoc(doc(db, 'workspace_members', memberId), {
+      await updateDoc(doc(db, 'members', memberId), {
         status: 'inactive',
         removed_at: serverTimestamp()
       });
@@ -252,14 +496,29 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
   const tabs = [
     { id: 'general', label: '일반', icon: Settings },
     { id: 'members', label: '멤버', icon: Users },
+    { id: 'requests', label: '가입 요청', icon: UserCheck, badge: joinRequests.length },
     { id: 'billing', label: '요금제', icon: CreditCard },
     { id: 'security', label: '보안', icon: Shield }
   ];
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex-1 bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8" style={{ minHeight: 'calc(100vh - 8rem)' }}>
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-12 text-center">
+            <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900">설정을 불러오는 중...</h2>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // 권한 체크
   if (!currentWorkspace || (currentUserRole !== 'owner' && currentUserRole !== 'admin')) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
+      <div className="flex-1 bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8" style={{ minHeight: 'calc(100vh - 8rem)' }}>
         <div className="max-w-4xl mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -275,9 +534,9 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg mb-8">
               <span className="text-sm text-gray-500">현재 권한:</span>
               <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${
-                roleColors[currentUserRole].bg
+                roleColors[currentUserRole]?.bg || 'bg-gray-100'
               } ${
-                roleColors[currentUserRole].text
+                roleColors[currentUserRole]?.text || 'text-gray-700'
               }`}>
                 {getRoleIcon(currentUserRole)}
                 {getRoleLabel(currentUserRole)}
@@ -285,10 +544,10 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
             </div>
             
             <button
-              onClick={() => navigate(`/workspaces/${workspaceId}/dashboard`)}
+              onClick={() => navigate(`/workspaces/${workspaceId}/team-chat`)}
               className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all duration-200"
             >
-              대시보드로 돌아가기
+              팀 채팅으로 돌아가기
               <ChevronRight className="w-4 h-4" />
             </button>
           </motion.div>
@@ -298,7 +557,7 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="flex-1 bg-gradient-to-br from-blue-50 via-white to-purple-50" style={{ minHeight: 'calc(100vh - 8rem)' }}>
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <motion.div 
@@ -315,11 +574,11 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
             {/* Current User Role Badge */}
             <div className="flex items-center gap-3">
               <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium shadow-sm ${
-                roleColors[currentUserRole].bg
+                roleColors[currentUserRole]?.bg || 'bg-gray-100'
               } ${
-                roleColors[currentUserRole].text
+                roleColors[currentUserRole]?.text || 'text-gray-700'
               } border ${
-                roleColors[currentUserRole].border
+                roleColors[currentUserRole]?.border || 'border-gray-300'
               }`}>
                 {getRoleIcon(currentUserRole)}
                 <span>{getRoleLabel(currentUserRole)} 권한</span>
@@ -398,39 +657,73 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
                       공개 설정
                     </label>
                     <div className="space-y-3">
-                      <label className="flex items-start gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                      <label className={`relative flex items-start p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                        isPublic 
+                          ? 'border-blue-500 bg-blue-50/50' 
+                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      }`}>
                         <input
                           type="radio"
                           checked={isPublic}
                           onChange={() => setIsPublic(true)}
-                          className="mt-1"
+                          className="sr-only"
                         />
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <Globe className="w-4 h-4 text-blue-600" />
-                            <span className="font-medium text-gray-900">공개 워크스페이스</span>
+                        <div className="flex items-start gap-3 w-full">
+                          <div className={`flex items-center justify-center w-5 h-5 rounded-full border-2 mt-0.5 transition-all ${
+                            isPublic 
+                              ? 'border-blue-600 bg-blue-600' 
+                              : 'border-gray-400 bg-white'
+                          }`}>
+                            {isPublic && (
+                              <div className="w-2 h-2 bg-white rounded-full" />
+                            )}
                           </div>
-                          <p className="text-sm text-gray-600 mt-1">
-                            누구나 검색하고 가입 요청할 수 있습니다.
-                          </p>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <Globe className={`w-4 h-4 ${isPublic ? 'text-blue-600' : 'text-gray-500'}`} />
+                              <span className={`font-medium ${isPublic ? 'text-gray-900' : 'text-gray-700'}`}>
+                                공개 워크스페이스
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600 mt-1">
+                              누구나 검색하고 가입 요청할 수 있습니다.
+                            </p>
+                          </div>
                         </div>
                       </label>
                       
-                      <label className="flex items-start gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                      <label className={`relative flex items-start p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                        !isPublic 
+                          ? 'border-blue-500 bg-blue-50/50' 
+                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      }`}>
                         <input
                           type="radio"
                           checked={!isPublic}
                           onChange={() => setIsPublic(false)}
-                          className="mt-1"
+                          className="sr-only"
                         />
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <Lock className="w-4 h-4 text-gray-600" />
-                            <span className="font-medium text-gray-900">비공개 워크스페이스</span>
+                        <div className="flex items-start gap-3 w-full">
+                          <div className={`flex items-center justify-center w-5 h-5 rounded-full border-2 mt-0.5 transition-all ${
+                            !isPublic 
+                              ? 'border-blue-600 bg-blue-600' 
+                              : 'border-gray-400 bg-white'
+                          }`}>
+                            {!isPublic && (
+                              <div className="w-2 h-2 bg-white rounded-full" />
+                            )}
                           </div>
-                          <p className="text-sm text-gray-600 mt-1">
-                            초대를 통해서만 가입할 수 있습니다.
-                          </p>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <Lock className={`w-4 h-4 ${!isPublic ? 'text-blue-600' : 'text-gray-500'}`} />
+                              <span className={`font-medium ${!isPublic ? 'text-gray-900' : 'text-gray-700'}`}>
+                                비공개 워크스페이스
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600 mt-1">
+                              초대를 통해서만 가입할 수 있습니다.
+                            </p>
+                          </div>
                         </div>
                       </label>
                     </div>
@@ -463,22 +756,55 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
               <div className="p-8">
                 <h2 className="text-xl font-semibold text-gray-900 mb-6">멤버 관리</h2>
                 
+                {/* Workspace Usage Summary */}
+                <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="w-5 h-5 text-blue-600" />
+                      <h3 className="text-sm font-semibold text-gray-700">워크스페이스 총 API 사용량 (이번 달)</h3>
+                    </div>
+                    <div className="flex items-center gap-6">
+                      <div className="text-right">
+                        <p className="text-xs text-gray-600">총 토큰</p>
+                        <p className="text-lg font-bold text-gray-900">
+                          {members.reduce((sum, m) => sum + (m.totalInputTokens || 0) + (m.totalOutputTokens || 0), 0) >= 1000000 ?
+                            `${(members.reduce((sum, m) => sum + (m.totalInputTokens || 0) + (m.totalOutputTokens || 0), 0) / 1000000).toFixed(1)}M` :
+                            `${(members.reduce((sum, m) => sum + (m.totalInputTokens || 0) + (m.totalOutputTokens || 0), 0) / 1000).toFixed(1)}K`
+                          }
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-gray-600">총 비용</p>
+                        <p className="text-lg font-bold text-blue-600">
+                          ₩{members.reduce((sum, m) => sum + (m.totalCostKRW || 0), 0).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-gray-600">API 호출</p>
+                        <p className="text-lg font-bold text-gray-900">
+                          {members.reduce((sum, m) => sum + (m.apiCallCount || 0), 0).toLocaleString()}회
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
                 {/* Invite Member - Only for owners */}
                 {currentUserRole === 'owner' && (
                   <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
                     <h3 className="font-medium text-gray-900 mb-4">새 멤버 초대</h3>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 items-center">
                       <input
                         type="email"
                         value={inviteEmail}
                         onChange={(e) => setInviteEmail(e.target.value)}
-                        placeholder="이메일 주소"
-                        className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="이메일 주소를 입력하세요"
+                        className="flex-1 min-w-0 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                       <select
                         value={inviteRole}
                         onChange={(e) => setInviteRole(e.target.value as 'admin' | 'member')}
-                        className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-28 px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
                         <option value="member">멤버</option>
                         <option value="admin">관리자</option>
@@ -486,12 +812,36 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
                       <button
                         onClick={handleInviteMember}
                         disabled={!inviteEmail || saving}
-                        className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                        className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 whitespace-nowrap"
                       >
-                        <Plus className="w-4 h-4" />
-                        초대
+                        <Plus className="w-4 h-4 flex-shrink-0" />
+                        <span>초대</span>
                       </button>
                     </div>
+                    
+                    {/* Invite Link Modal */}
+                    {showInviteLink && (
+                      <div className="mt-4 p-4 bg-white rounded-lg border border-gray-200">
+                        <p className="text-sm text-gray-600 mb-2">아래 링크를 공유하여 초대하세요:</p>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            readOnly
+                            value={inviteLink}
+                            className="flex-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm"
+                          />
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(inviteLink);
+                              alert('초대 링크가 복사되었습니다!');
+                            }}
+                            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm"
+                          >
+                            복사
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -502,6 +852,7 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
+                    {/* Existing Members */}
                     {members.map((member) => (
                       <motion.div 
                         key={member.id}
@@ -524,9 +875,9 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
                             <div className="flex items-center gap-3">
                               <p className="font-semibold text-gray-900">{member.name}</p>
                               <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${
-                                roleColors[member.role].bg
+                                roleColors[member.role]?.bg || 'bg-gray-100'
                               } ${
-                                roleColors[member.role].text
+                                roleColors[member.role]?.text || 'text-gray-700'
                               }`}>
                                 {getRoleIcon(member.role)}
                                 {getRoleLabel(member.role)}
@@ -540,10 +891,30 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
                         <div className="flex items-center gap-4">
                           {/* AI Usage */}
                           <div className="text-right">
-                            <p className="text-xs text-gray-500">AI 사용량</p>
-                            <p className="font-semibold text-gray-900">
-                              {((member.ai_usage_this_month || 0) / 1000).toFixed(1)}K
-                            </p>
+                            <p className="text-xs text-gray-500">AI 사용량 (이번 달)</p>
+                            <div className="flex items-center gap-3">
+                              <div>
+                                <p className="font-semibold text-gray-900">
+                                  {member.totalInputTokens && member.totalInputTokens > 0 ? 
+                                    (member.totalInputTokens >= 1000000 ? 
+                                      `${(member.totalInputTokens / 1000000).toFixed(1)}M` : 
+                                      `${(member.totalInputTokens / 1000).toFixed(1)}K`
+                                    ) : '0'
+                                  } 토큰
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {member.apiCallCount || 0}회 호출
+                                </p>
+                              </div>
+                              <div className="border-l pl-3">
+                                <p className="font-semibold text-blue-600">
+                                  ₩{(member.totalCostKRW || 0).toLocaleString()}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  비용
+                                </p>
+                              </div>
+                            </div>
                           </div>
 
                           {/* Role Management - Only for owners */}
@@ -570,6 +941,91 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
                         </div>
                       </motion.div>
                     ))}
+                    
+                    {/* Invited Members */}
+                    {invitations.length > 0 && (
+                      <>
+                        <div className="pt-4 mt-4 border-t border-gray-200">
+                          <h4 className="text-sm font-medium text-gray-500 mb-3">초대됨</h4>
+                        </div>
+                        {invitations.map((invitation) => (
+                          <motion.div 
+                            key={invitation.id}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="flex items-center justify-between p-5 bg-gray-50 border border-gray-200 border-dashed rounded-xl"
+                          >
+                            <div className="flex items-center gap-4">
+                              {/* Avatar */}
+                              <div className="w-12 h-12 rounded-full flex items-center justify-center bg-gray-300 text-white font-bold text-lg">
+                                <Mail className="w-6 h-6" />
+                              </div>
+                              
+                              {/* Invitation Info */}
+                              <div>
+                                <div className="flex items-center gap-3">
+                                  <p className="font-semibold text-gray-900">{invitation.email}</p>
+                                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                                    <Clock className="w-3 h-3" />
+                                    초대 대기중
+                                  </span>
+                                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${
+                                    invitation.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-700'
+                                  }`}>
+                                    {invitation.role === 'admin' ? '관리자 예정' : '멤버 예정'}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-500 mt-0.5">
+                                  {invitation.invited_by_name}님이 초대 • 
+                                  {invitation.invited_at?.toDate ? 
+                                    new Date(invitation.invited_at.toDate()).toLocaleDateString('ko-KR') : 
+                                    '날짜 정보 없음'
+                                  }
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Actions */}
+                            {currentUserRole === 'owner' && (
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => {
+                                    const link = `${window.location.origin}/invite/${invitation.invite_code}`;
+                                    navigator.clipboard.writeText(link);
+                                    alert('초대 링크가 복사되었습니다!');
+                                  }}
+                                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                  title="초대 링크 복사"
+                                >
+                                  <ChevronRight className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={async () => {
+                                    if (window.confirm('이 초대를 취소하시겠습니까?')) {
+                                      try {
+                                        await updateDoc(doc(db, 'workspace_invitations', invitation.id), {
+                                          status: 'cancelled',
+                                          cancelled_at: serverTimestamp()
+                                        });
+                                        await loadInvitations();
+                                        alert('초대가 취소되었습니다.');
+                                      } catch (error) {
+                                        console.error('Error cancelling invitation:', error);
+                                        alert('초대 취소 중 오류가 발생했습니다.');
+                                      }
+                                    }
+                                  }}
+                                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                  title="초대 취소"
+                                >
+                                  <XCircle className="w-4 h-4" />
+                                </button>
+                              </div>
+                            )}
+                          </motion.div>
+                        ))}
+                      </>
+                    )}
                   </div>
                 )}
               </div>
@@ -704,6 +1160,103 @@ const WorkspaceSettingsRedesigned: React.FC = () => {
                     </div>
                   )}
                 </div>
+              </div>
+            )}
+
+            {activeTab === 'requests' && (
+              <div className="p-8">
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">가입 요청</h2>
+                
+                {loadingRequests ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                  </div>
+                ) : joinRequests.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                      <UserPlus className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <p className="text-gray-500">대기 중인 가입 요청이 없습니다.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {joinRequests.map((request) => (
+                      <motion.div 
+                        key={request.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-6 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-all duration-200"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="font-semibold text-gray-900">{request.user_name}</h3>
+                              {request.user_nickname && (
+                                <span className="text-sm text-gray-500">({request.user_nickname})</span>
+                              )}
+                            </div>
+                            
+                            <div className="space-y-1 text-sm text-gray-600">
+                              <p className="flex items-center gap-2">
+                                <Mail className="w-4 h-4" />
+                                {request.user_email}
+                              </p>
+                              {request.user_role && (
+                                <p className="flex items-center gap-2">
+                                  <Briefcase className="w-4 h-4" />
+                                  {request.user_role}
+                                </p>
+                              )}
+                              {request.message && (
+                                <p className="mt-2 p-3 bg-gray-50 rounded-lg italic">
+                                  "{request.message}"
+                                </p>
+                              )}
+                              <p className="flex items-center gap-2 text-gray-400">
+                                <Clock className="w-4 h-4" />
+                                {request.requested_at?.toDate ? 
+                                  new Date(request.requested_at.toDate()).toLocaleDateString('ko-KR', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  }) : 
+                                  '날짜 정보 없음'
+                                }
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center gap-2 ml-4">
+                            <select
+                              value={selectedRoles[request.id] || 'member'}
+                              onChange={(e) => setSelectedRoles({...selectedRoles, [request.id]: e.target.value as 'member' | 'admin'})}
+                              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              <option value="member">일반 멤버</option>
+                              <option value="admin">관리자</option>
+                            </select>
+                            <button
+                              onClick={() => handleApproveRequest(request.id, request)}
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                            >
+                              <CheckCircle className="w-4 h-4" />
+                              승인
+                            </button>
+                            <button
+                              onClick={() => handleRejectRequest(request.id)}
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                            >
+                              <XCircle className="w-4 h-4" />
+                              거절
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </motion.div>

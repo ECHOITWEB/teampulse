@@ -117,7 +117,7 @@ const AdminDashboard: React.FC = () => {
         
         // Get member count for this workspace
         const membersQuery = query(
-          collection(db, 'workspace_members'),
+          collection(db, 'members'),
           where('workspace_id', '==', doc.id),
           where('status', '==', 'active')
         );

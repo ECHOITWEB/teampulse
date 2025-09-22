@@ -2,6 +2,8 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const express = require('express');
 const cors = require('cors');
+const OpenAI = require('openai');
+const Anthropic = require('@anthropic-ai/sdk');
 
 // Initialize admin if not already initialized
 if (!admin.apps.length) {
@@ -20,24 +22,38 @@ const app = express();
 // Add performance monitoring middleware (should be first)
 app.use(performanceMonitor.expressMiddleware());
 
-// CORS configuration
+// Create CORS handler for standalone functions
+const corsHandler = cors({ origin: true });
+
+// CORS configuration - Allow all origins for Firebase Functions
 const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'https://teampulse-61474.web.app',
-    'https://teampulse-61474.firebaseapp.com'
-  ],
+  origin: true, // Allow all origins in Firebase Functions
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  optionsSuccessStatus: 200
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Type'],
+  optionsSuccessStatus: 200,
+  maxAge: 86400 // Cache preflight response for 24 hours
 };
 
 // Enable CORS with preflight support
 app.use(cors(corsOptions));
 
-// Handle preflight requests explicitly
+// Handle preflight requests explicitly for all routes
 app.options('*', cors(corsOptions));
+
+// Additional CORS headers for all responses
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -45,7 +61,6 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Import routes
 const authRoutes = require('./src/routes/authRoutes');
 const workspaceRoutes = require('./src/routes/workspaceRoutes');
-const chatRoutes = require('./src/routes/chatRoutes');
 const userRoutes = require('./src/routes/userRoutes');
 const historyRoutes = require('./src/routes/historyRoutes');
 const meetingRoutes = require('./src/routes/meetingRoutes');
@@ -53,11 +68,12 @@ const teamRoutes = require('./src/routes/teamRoutes');
 const objectiveRoutes = require('./src/routes/objectiveRoutes');
 const taskRoutes = require('./src/routes/taskRoutes');
 const analyticsRoutes = require('./src/routes/analyticsRoutes');
-const aiRoutes = require('./src/routes/aiChatRoutes'); // Combined AI routes
 const notificationRoutes = require('./src/routes/notificationRoutes');
 const capacityRoutes = require('./src/routes/capacityRoutes');
 const commentRoutes = require('./src/routes/commentRoutes');
 const workspaceAdminRoutes = require('./src/routes/workspaceAdminRoutes');
+const adminRoutes = require('./src/routes/adminRoutes');
+const agentRoutes = require('./src/routes/agentRoutes');
 
 // Health check
 app.get('/health', (req, res) => {
@@ -86,7 +102,7 @@ app.get('/metrics', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/workspaces', workspaceRoutes);
 app.use('/admin', workspaceAdminRoutes);
-app.use('/chat', chatRoutes);
+app.use('/system-admin', adminRoutes);  // New system admin routes
 app.use('/users', userRoutes);
 app.use('/history', historyRoutes);
 app.use('/meetings', meetingRoutes);
@@ -94,10 +110,10 @@ app.use('/teams', teamRoutes);
 app.use('/objectives', objectiveRoutes);
 app.use('/tasks', taskRoutes);
 app.use('/analytics', analyticsRoutes);
-app.use('/ai', aiRoutes); // All AI functionality including chat
 app.use('/notifications', notificationRoutes);
 app.use('/capacity', capacityRoutes);
 app.use('/comments', commentRoutes);
+app.use('/agents', agentRoutes);
 
 // Enhanced error handling with monitoring
 app.use(errorHandler.expressMiddleware());
@@ -107,8 +123,27 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });
 });
 
-// Export Express app as Firebase Function
-exports.api = functions.https.onRequest(app);
+// Export Express app as Firebase Function with increased timeout and memory
+exports.api = functions
+  .runWith({
+    timeoutSeconds: 540, // 9 minutes
+    memory: '1GB',
+    // Allow unauthenticated invocations
+    invoker: 'public'
+  })
+  .https.onRequest((req, res) => {
+    // Handle CORS preflight immediately for OPTIONS
+    if (req.method === 'OPTIONS') {
+      res.set('Access-Control-Allow-Origin', '*');
+      res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      res.set('Access-Control-Max-Age', '3600');
+      return res.status(204).send('');
+    }
+    
+    // For all other requests, use the Express app
+    return app(req, res);
+  });
 
 // Get AI service helper function
 function getAIService() {
@@ -500,214 +535,14 @@ exports.generateAnalytics = functions.https.onCall(async (data, context) => {
   return analytics;
 });
 
+// Import document processor functions
+const { processDocument, analyzeDocumentWithAI, convertImageToBase64, processDocumentHttp } = require('./src/documentProcessor');
+
+// Export document processing functions
+exports.processDocument = processDocument;
+exports.processDocumentHttp = processDocumentHttp; // HTTP version with CORS
+exports.analyzeDocumentWithAI = analyzeDocumentWithAI;
+exports.convertImageToBase64 = convertImageToBase64;
+
 // Export for testing
 exports.updateKeyResultProgress = updateKeyResultProgress;
-
-// ============ AI Chat Functions ============
-
-// HTTP Function: Process AI chat message
-exports.processAIChatMessage = functions.https.onCall(async (data, context) => {
-  // Verify authentication
-  if (!context.auth) {
-    throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
-  }
-  
-  const userId = context.auth.uid;
-  const { channelId, content } = data;
-  
-  if (!channelId || !content) {
-    throw new functions.https.HttpsError('invalid-argument', 'Channel ID and content are required');
-  }
-  
-  try {
-    // Get channel information to check if AI is invited
-    const channelDoc = await db.collection('channels').doc(channelId).get();
-    
-    if (!channelDoc.exists) {
-      throw new functions.https.HttpsError('not-found', 'Channel not found');
-    }
-    
-    const channel = channelDoc.data();
-    
-    if (!channel.aiBot) {
-      throw new functions.https.HttpsError('failed-precondition', 'AI bot is not invited to this channel');
-    }
-    
-    // Get AI service instance
-    const aiService = getAIService();
-    
-    // Process the message with AI
-    const response = await aiService.processChatMessage(
-      channel.workspaceId,
-      userId,
-      channelId,
-      content,
-      channel.aiBot
-    );
-    
-    return {
-      success: true,
-      data: response
-    };
-  } catch (error) {
-    console.error('Error processing AI message:', error);
-    
-    if (error instanceof functions.https.HttpsError) {
-      throw error;
-    }
-    
-    throw new functions.https.HttpsError('internal', error.message || 'Failed to process AI message');
-  }
-});
-
-// HTTP Function: Get AI usage statistics
-exports.getAIUsageStats = functions.https.onCall(async (data, context) => {
-  // Verify authentication
-  if (!context.auth) {
-    throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
-  }
-  
-  const { workspaceId, startDate, endDate } = data;
-  
-  if (!workspaceId) {
-    throw new functions.https.HttpsError('invalid-argument', 'Workspace ID is required');
-  }
-  
-  try {
-    let query = db.collection('ai_usage')
-      .where('workspaceId', '==', workspaceId)
-      .where('status', '==', 'success');
-    
-    if (startDate) {
-      query = query.where('timestamp', '>=', admin.firestore.Timestamp.fromDate(new Date(startDate)));
-    }
-    
-    if (endDate) {
-      query = query.where('timestamp', '<=', admin.firestore.Timestamp.fromDate(new Date(endDate)));
-    }
-    
-    const snapshot = await query.get();
-    
-    const stats = {
-      totalMessages: 0,
-      totalTokens: 0,
-      totalCost: 0,
-      byProvider: {},
-      byModel: {},
-      byUser: {}
-    };
-    
-    // Get AI service for cost calculation
-    const aiService = getAIService();
-    
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      
-      stats.totalMessages++;
-      stats.totalTokens += data.totalTokens || 0;
-      
-      // Calculate cost for this usage
-      const cost = aiService.calculateCost(
-        data.provider,
-        data.model,
-        data.inputTokens || 0,
-        data.outputTokens || 0
-      );
-      stats.totalCost += cost.totalCost;
-      
-      // Group by provider
-      if (!stats.byProvider[data.provider]) {
-        stats.byProvider[data.provider] = {
-          messages: 0,
-          tokens: 0,
-          cost: 0
-        };
-      }
-      stats.byProvider[data.provider].messages++;
-      stats.byProvider[data.provider].tokens += data.totalTokens || 0;
-      stats.byProvider[data.provider].cost += cost.totalCost;
-      
-      // Group by model
-      if (!stats.byModel[data.model]) {
-        stats.byModel[data.model] = {
-          messages: 0,
-          tokens: 0,
-          cost: 0
-        };
-      }
-      stats.byModel[data.model].messages++;
-      stats.byModel[data.model].tokens += data.totalTokens || 0;
-      stats.byModel[data.model].cost += cost.totalCost;
-      
-      // Group by user
-      if (!stats.byUser[data.userId]) {
-        stats.byUser[data.userId] = {
-          messages: 0,
-          tokens: 0,
-          cost: 0
-        };
-      }
-      stats.byUser[data.userId].messages++;
-      stats.byUser[data.userId].tokens += data.totalTokens || 0;
-      stats.byUser[data.userId].cost += cost.totalCost;
-    });
-    
-    return stats;
-  } catch (error) {
-    console.error('Error fetching usage stats:', error);
-    throw new functions.https.HttpsError('internal', 'Failed to fetch usage statistics');
-  }
-});
-
-// Firestore Trigger: Process AI mentions in messages
-exports.onMessageWithAIMention = functions.firestore
-  .document('messages/{messageId}')
-  .onCreate(async (snap, context) => {
-    const message = snap.data();
-    const messageId = context.params.messageId;
-    
-    // Check if message contains @AI mention and is not from AI itself
-    if (message.content && 
-        message.content.toLowerCase().includes('@ai') && 
-        !message.isAI && 
-        message.author !== 'system') {
-      
-      try {
-        // Get channel information
-        const channelDoc = await db.collection('channels').doc(message.channelId).get();
-        
-        if (!channelDoc.exists || !channelDoc.data().aiBot) {
-          return; // AI not invited to this channel
-        }
-        
-        const channel = channelDoc.data();
-        
-        // Get AI service instance
-        const aiService = getAIService();
-        
-        // Extract content after @AI mention
-        const aiContent = message.content.replace(/^.*@ai\s*/i, '').trim();
-        
-        // Process the message with AI
-        await aiService.processChatMessage(
-          channel.workspaceId,
-          message.author,
-          message.channelId,
-          aiContent,
-          channel.aiBot
-        );
-      } catch (error) {
-        console.error('Error processing AI mention:', error);
-        
-        // Send error message to channel
-        await db.collection('messages').add({
-          channelId: message.channelId,
-          content: '죄송합니다. AI 응답 처리 중 오류가 발생했습니다.',
-          author: 'system',
-          authorName: 'System',
-          timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          isError: true
-        });
-      }
-    }
-  });

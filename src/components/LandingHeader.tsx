@@ -40,6 +40,9 @@ const LandingHeader: React.FC = () => {
             <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
               기능
             </a>
+            <a href="#team-chat" className="text-gray-600 hover:text-gray-900 transition-colors">
+              팀채팅
+            </a>
             <a href="#ai-tools" className="text-gray-600 hover:text-gray-900 transition-colors">
               AI 도구
             </a>

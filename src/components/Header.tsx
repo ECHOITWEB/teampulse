@@ -27,12 +27,9 @@ const Header: React.FC = () => {
 
   const navItems = currentWorkspace ? [
     { path: '/', label: '홈', icon: '🏠' },
-    { path: `/workspaces/${currentWorkspace.id}/dashboard`, label: '대시보드', icon: '📊' },
     { path: `/workspaces/${currentWorkspace.id}/team-chat`, label: '팀 채팅', icon: '💬' },
-    { path: `/workspaces/${currentWorkspace.id}/meetings`, label: '회의 관리', icon: '📅' },
     { path: `/workspaces/${currentWorkspace.id}/goals`, label: '목표 관리', icon: '🎯' },
-    { path: `/workspaces/${currentWorkspace.id}/goals-analytics`, label: '목표 분석', icon: '📈' },
-    { path: `/workspaces/${currentWorkspace.id}/tasks`, label: '업무 관리', icon: '📋' },
+    { path: `/workspaces/${currentWorkspace.id}/meetings`, label: '회의 관리', icon: '📅' },
     { path: `/workspaces/${currentWorkspace.id}/ai-tools`, label: 'AI 도구', icon: '🤖' }
   ] : [];
 
@@ -167,6 +164,16 @@ const Header: React.FC = () => {
                           </div>
                         </div>
                         <div className="p-2">
+                          {currentWorkspace && (
+                            <Link
+                              to={`/workspaces/${currentWorkspace.id}/profile`}
+                              onClick={() => setIsUserMenuOpen(false)}
+                              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                            >
+                              <User className="w-4 h-4" />
+                              프로필 설정
+                            </Link>
+                          )}
                           <button
                             onClick={handleSignOut}
                             className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"

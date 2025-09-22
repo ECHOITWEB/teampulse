@@ -3,10 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import LandingHeader from '../components/LandingHeader';
 import Footer from '../components/Footer';
-import TeamChatPreview from '../components/TeamChatPreview';
-import GoalsPreview from '../components/GoalsPreview';
-import AIToolsPreview from '../components/AIToolsPreview';
 import WorkspacePreview from '../components/WorkspacePreview';
+import TeamChatShowcase from '../components/TeamChatShowcase';
+import OKRShowcase from '../components/OKRShowcase';
+import DocumentTranslator from '../components/tools/DocumentTranslator';
+import DataAnalyzer from '../components/tools/DataAnalyzer';
+import MeetingAssistant from '../components/tools/MeetingAssistant';
+import TeamPulseAI from '../components/tools/TeamPulseAI';
+import CompanyKnowledgeBot from '../components/tools/CompanyKnowledgeBot';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   ArrowRight, Sparkles, Shield, Zap, Users, Brain, Target,
@@ -14,6 +18,171 @@ import {
   CheckCircle, Lock, Check, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { PRICING, formatPrice } from '../config/pricing';
+
+// AI Tools Configuration
+interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  component: React.ComponentType;
+  category: string;
+  color: string;
+  badge?: string;
+}
+
+const AIToolsShowcase: React.FC = () => {
+  const [selectedTool, setSelectedTool] = useState<string>('document-translator');
+  
+  const tools: Tool[] = [
+    {
+      id: 'document-translator',
+      name: '문서 번역',
+      description: '실시간 다국어 번역으로 글로벌 소통을 지원합니다',
+      icon: '🌐',
+      component: DocumentTranslator,
+      category: 'translation',
+      color: 'from-blue-500 to-cyan-400',
+      badge: 'OpenAI API'
+    },
+    {
+      id: 'data-analyzer',
+      name: '데이터 분석',
+      description: 'CSV 파일을 업로드하고 전문적인 인사이트를 얻으세요',
+      icon: '📊',
+      component: DataAnalyzer,
+      category: 'analysis',
+      color: 'from-purple-500 to-pink-400'
+    },
+    {
+      id: 'meeting-assistant',
+      name: '미팅 어시스턴트',
+      description: 'OKR 회의를 녹음하고 자동으로 회의록과 To-Do를 생성합니다',
+      icon: '🎙️',
+      component: MeetingAssistant,
+      category: 'productivity',
+      color: 'from-green-500 to-teal-400'
+    },
+    {
+      id: 'personal-chatbot',
+      name: '개인용 챗봇',
+      description: 'Pulse AI와 대화하며 업무를 효율적으로 처리하세요',
+      icon: '💬',
+      component: TeamPulseAI,
+      category: 'chat',
+      color: 'from-indigo-500 to-purple-400'
+    },
+    {
+      id: 'company-knowledge',
+      name: '회사 지식 Q&A',
+      description: '회사 정보에 대한 질문에 즉시 답변을 받으세요',
+      icon: '🏢',
+      component: CompanyKnowledgeBot,
+      category: 'knowledge',
+      color: 'from-orange-500 to-red-400'
+    }
+  ];
+
+  const selectedToolData = tools.find(tool => tool.id === selectedTool);
+  const SelectedComponent = selectedToolData?.component;
+
+  return (
+    <div className="relative">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-3xl" />
+      
+      <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 p-8">
+        {/* Tool Selector - Premium Card Style */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 lg:gap-4 mb-6 sm:mb-8">
+          {tools.map((tool) => (
+            <motion.button
+              key={tool.id}
+              onClick={() => setSelectedTool(tool.id)}
+              className={`relative overflow-hidden rounded-2xl transition-all duration-300 ${
+                selectedTool === tool.id
+                  ? 'shadow-2xl scale-105'
+                  : 'shadow-lg hover:shadow-xl hover:scale-102'
+              }`}
+              whileHover={{ y: -4 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${tool.color} opacity-90`} />
+              <div className="relative p-2 sm:p-3 lg:p-4 text-white">
+                <div className="text-xl sm:text-2xl lg:text-3xl mb-1 sm:mb-2 filter drop-shadow-lg">{tool.icon}</div>
+                <h3 className="text-xs sm:text-sm lg:text-base font-bold mb-1">{tool.name}</h3>
+                {tool.badge && (
+                  <span className="inline-block px-2 py-0.5 text-xs font-semibold bg-white/20 backdrop-blur rounded-full">
+                    {tool.badge}
+                  </span>
+                )}
+                <p className="text-xs opacity-90 mt-1 sm:mt-2 line-clamp-2 hidden sm:block">{tool.description}</p>
+              </div>
+              {selectedTool === tool.id && (
+                <motion.div
+                  layoutId="selector"
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-white"
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
+              )}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Selected Tool Display - Enhanced Container */}
+        <motion.div
+          key={selectedTool}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, type: "spring" }}
+          className="relative"
+        >
+          {/* Tool Header */}
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+            <div className="flex items-center gap-4">
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${selectedToolData?.color} flex items-center justify-center text-2xl shadow-lg`}>
+                {selectedToolData?.icon}
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">{selectedToolData?.name}</h3>
+                <p className="text-sm text-gray-600">{selectedToolData?.description}</p>
+              </div>
+            </div>
+            {selectedToolData?.badge && (
+              <span className="px-3 py-1 text-sm font-semibold text-blue-700 bg-blue-100 rounded-full">
+                {selectedToolData.badge}
+              </span>
+            )}
+          </div>
+
+          {/* Tool Component Container */}
+          <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 min-h-[500px]">
+            {SelectedComponent && <SelectedComponent />}
+          </div>
+        </motion.div>
+
+        {/* Feature Badges */}
+        <div className="flex flex-wrap gap-2 mt-6 pt-6 border-t border-gray-200">
+          <span className="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
+            실시간 처리
+          </span>
+          <span className="px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-100 rounded-full">
+            AI 기반
+          </span>
+          <span className="px-3 py-1 text-xs font-semibold text-purple-700 bg-purple-100 rounded-full">
+            팀 협업
+          </span>
+          <span className="px-3 py-1 text-xs font-semibold text-orange-700 bg-orange-100 rounded-full">
+            생산성 향상
+          </span>
+          <span className="px-3 py-1 text-xs font-semibold text-pink-700 bg-pink-100 rounded-full">
+            엔터프라이즈 지원
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -39,18 +208,6 @@ const Home: React.FC = () => {
   ];
 
   const features = [
-    {
-      icon: <MessageSquare className="w-8 h-8" />,
-      title: 'AI 팀 채팅',
-      description: '실시간 AI 어시스턴트와 함께하는 스마트한 팀 커뮤니케이션',
-      details: [
-        '24/7 즉각적인 AI 응답으로 업무 연속성 보장',
-        '컨텍스트 기반 대화로 정확한 답변 제공',
-        '다국어 지원으로 글로벌 팀 협업 가능',
-        '팀 지식베이스와 연동된 스마트 검색'
-      ],
-      gradient: 'from-blue-500 to-cyan-400'
-    },
     {
       icon: <Target className="w-8 h-8" />,
       title: '목표 관리',
@@ -246,6 +403,11 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Team Chat Showcase Section - Before Interactive Previews */}
+      <section id="team-chat">
+        <TeamChatShowcase />
+      </section>
+
       {/* Interactive Previews Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto">
@@ -266,18 +428,21 @@ const Home: React.FC = () => {
             </p>
           </motion.div>
           
-          {/* Team Chat Preview */}
+
+          {/* AI Tools Showcase */}
           <motion.div
+            id="ai-tools"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="mb-20"
           >
-            <TeamChatPreview />
+            <h3 className="text-2xl font-bold text-gray-900 mb-8">AI 도구 체험</h3>
+            <AIToolsShowcase />
           </motion.div>
 
-          {/* Goals & OKR Preview */}
+          {/* OKR Goal Management Showcase */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -285,18 +450,8 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="mb-20"
           >
-            <GoalsPreview />
-          </motion.div>
-
-          {/* AI Tools Preview */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20"
-          >
-            <AIToolsPreview />
+            <h3 className="text-2xl font-bold text-gray-900 mb-8">OKR 목표 관리</h3>
+            <OKRShowcase />
           </motion.div>
 
           {/* Workspace Management Preview */}

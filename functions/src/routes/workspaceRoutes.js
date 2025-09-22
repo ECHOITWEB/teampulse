@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const workspaceController = require('../controllers/workspaceController');
-const { firebaseAuth } = require('../middleware/firebaseAuth');
+const { authenticate } = require('../middleware/firebaseAuth');
 const { 
   requireWorkspaceMember, 
   requireWorkspaceRole,
@@ -9,7 +9,7 @@ const {
 } = require('../middleware/workspaceAuth');
 
 // All routes require authentication
-router.use(firebaseAuth);
+router.use(authenticate);
 
 // Workspace CRUD
 router.post('/', workspaceController.createWorkspace);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Plus, Users, ArrowRight, Building2, Sparkles, 
@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useWorkspace } from '../contexts/WorkspaceContext';
-import { collection, query, where, getDocs, addDoc, doc, updateDoc, getDoc, serverTimestamp, arrayUnion } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, doc, updateDoc, getDoc, serverTimestamp, arrayUnion, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import WorkspaceCreator from '../modules/onboarding/components/WorkspaceCreator';
 import { approveJoinRequestAdmin } from '../services/adminApi';
@@ -18,12 +18,16 @@ interface WorkspaceData {
   name: string;
   fullName: string;
   companyName: string;
+  company_id: string;
+  company_name: string;
   description?: string;
   memberCount: number;
   role: string;
   createdAt: any;
   plan: 'free' | 'starter' | 'pro' | 'enterprise';
   aiUsage?: number;
+  pulseUsage?: number;
+  pulseAvailable?: number;
   isPublic?: boolean;
   allowJoinRequests?: boolean;
 }
@@ -38,6 +42,7 @@ interface JoinRequest {
 
 const WorkspaceSelection: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const { setCurrentWorkspace } = useWorkspace();
   const [workspaces, setWorkspaces] = useState<WorkspaceData[]>([]);
@@ -50,20 +55,53 @@ const WorkspaceSelection: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'my' | 'search' | 'create'>('my');
   const [requestingJoin, setRequestingJoin] = useState<string | null>(null);
   const [pendingApprovals, setPendingApprovals] = useState<any[]>([]);
+  const [isLoadingWorkspaces, setIsLoadingWorkspaces] = useState(false);
 
+  // Main effect for initial load
   useEffect(() => {
+    // Check if we have a saved return URL and should redirect back
+    const savedReturnUrl = localStorage.getItem('returnUrl');
+    if (savedReturnUrl && savedReturnUrl !== '/workspaces' && savedReturnUrl !== '/login') {
+      // Check if the URL contains a workspace ID
+      const workspaceMatch = savedReturnUrl.match(/\/workspaces\/([^\/]+)/);
+      if (workspaceMatch) {
+        // Navigate back to the saved URL
+        console.log('Found saved returnUrl, navigating back to:', savedReturnUrl);
+        navigate(savedReturnUrl);
+        // Don't remove returnUrl yet - let the actual page handle it
+        return;
+      }
+    }
+    
     if (user) {
       loadUserData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.firebase_uid]);
+  
+  // Reload workspaces when page becomes visible (e.g., after navigation)
+  useEffect(() => {
+    const handleFocus = () => {
+      if (user && location.pathname === '/workspaces') {
+        loadUserWorkspaces();
+      }
+    };
+    
+    window.addEventListener('focus', handleFocus);
+    
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
+  // Load pending approvals only when workspaces actually change
   useEffect(() => {
     if (workspaces.length > 0 && user) {
       loadPendingApprovals();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaces.length]);
+  }, [workspaces]);
 
   const loadUserData = async () => {
     if (!user) {
@@ -83,7 +121,7 @@ const WorkspaceSelection: React.FC = () => {
       
       // Check if user has no workspaces and show appropriate tab
       const membershipsQuery = query(
-        collection(db, 'workspace_members'),
+        collection(db, 'members'),
         where('user_id', '==', user.firebase_uid),
         where('status', '==', 'active')
       );
@@ -108,12 +146,19 @@ const WorkspaceSelection: React.FC = () => {
       return;
     }
     
+    // Prevent duplicate loading
+    if (isLoadingWorkspaces) {
+      console.log('🟡 Already loading workspaces, skipping...');
+      return;
+    }
+    
+    setIsLoadingWorkspaces(true);
     console.log('🔵 Searching for workspaces for user:', user.firebase_uid);
     
     try {
       // Get user's workspace memberships
       const membershipsQuery = query(
-        collection(db, 'workspace_members'),
+        collection(db, 'members'),
         where('user_id', '==', user.firebase_uid),
         where('status', '==', 'active')
       );
@@ -153,25 +198,37 @@ const WorkspaceSelection: React.FC = () => {
           m => m.data().workspace_id === doc.id
         );
         
-        // Get member count
+        // Get real member count
         const membersQuery = query(
-          collection(db, 'workspace_members'),
+          collection(db, 'members'),
           where('workspace_id', '==', doc.id),
           where('status', '==', 'active')
         );
         const membersSnapshot = await getDocs(membersQuery);
+        const actualMemberCount = membersSnapshot.size || 1;
+        
+        // Get real AI usage (this month)
+        const aiUsageThisMonth = data.ai_usage_this_month || 0;
+        
+        // Get Pulse usage data
+        const pulseUsageThisMonth = data.pulse_usage_this_month || 0;
+        const pulseBalance = data.pulse_balance || 0;
         
         workspaceData.push({
           id: doc.id,
           name: data.name,
           fullName: data.full_name || `${data.company_name}-${data.name}`,
           companyName: data.company_name || '',
+          company_id: data.company_id || '',
+          company_name: data.company_name || '',
           description: data.description,
-          memberCount: membersSnapshot.size,
-          role: membership?.data().role || 'member',
+          memberCount: actualMemberCount,
+          role: membership?.data().workspace_role || 'member',
           createdAt: data.created_at,
           plan: data.plan || 'free',
-          aiUsage: data.ai_usage_this_month || 0,
+          aiUsage: aiUsageThisMonth,
+          pulseUsage: pulseUsageThisMonth,
+          pulseAvailable: pulseBalance,
           isPublic: data.is_public !== false,
           allowJoinRequests: data.allow_join_requests !== false
         });
@@ -183,6 +240,8 @@ const WorkspaceSelection: React.FC = () => {
       ));
     } catch (error) {
       console.error('🔴 Error loading workspaces:', error);
+    } finally {
+      setIsLoadingWorkspaces(false);
     }
   };
 
@@ -248,8 +307,32 @@ const WorkspaceSelection: React.FC = () => {
 
   const handleApproveRequest = async (requestId: string, workspaceId: string, userId: string, userName: string, userEmail: string) => {
     try {
-      // Admin SDK를 사용한 가입 요청 승인
-      await approveJoinRequestAdmin(workspaceId, requestId);
+      // 1. 요청 상태를 승인으로 변경
+      await updateDoc(doc(db, 'workspace_join_requests', requestId), {
+        status: 'approved',
+        approved_at: serverTimestamp(),
+        approved_by: user?.firebase_uid
+      });
+
+      // 2. 멤버로 추가
+      const memberRef = doc(db, 'members', `${workspaceId}_${userId}`);
+      await setDoc(memberRef, {
+        user_id: userId,
+        workspace_id: workspaceId,
+        workspace_role: 'member',
+        joined_at: serverTimestamp(),
+        status: 'active',
+        workspace_profile: {
+          display_name: userName,
+          email: userEmail
+        }
+      });
+
+      // 3. 워크스페이스의 members 배열에 추가
+      const workspaceRef = doc(db, 'workspaces', workspaceId);
+      await updateDoc(workspaceRef, {
+        members: arrayUnion(userId)
+      });
       
       alert('가입 요청이 승인되었습니다.');
       await loadPendingApprovals();
@@ -296,7 +379,7 @@ const WorkspaceSelection: React.FC = () => {
         
         // Check if user is already a member
         const memberQuery = query(
-          collection(db, 'workspace_members'),
+          collection(db, 'members'),
           where('workspace_id', '==', doc.id),
           where('user_id', '==', user?.firebase_uid)
         );
@@ -305,7 +388,7 @@ const WorkspaceSelection: React.FC = () => {
         
         // Get member count
         const membersQuery = query(
-          collection(db, 'workspace_members'),
+          collection(db, 'members'),
           where('workspace_id', '==', doc.id),
           where('status', '==', 'active')
         );
@@ -327,6 +410,8 @@ const WorkspaceSelection: React.FC = () => {
             name: data.name,
             fullName: data.full_name || `${data.company_name}-${data.name}`,
             companyName: data.company_name || '',
+            company_id: data.company_id || '',
+            company_name: data.company_name || '',
             description: data.description,
             memberCount: membersSnapshot.size,
             role: hasPendingRequest ? 'pending' : 'none',
@@ -352,7 +437,7 @@ const WorkspaceSelection: React.FC = () => {
           
           // Similar checks as above
           const memberQuery = query(
-            collection(db, 'workspace_members'),
+            collection(db, 'members'),
             where('workspace_id', '==', doc.id),
             where('user_id', '==', user?.firebase_uid)
           );
@@ -360,7 +445,7 @@ const WorkspaceSelection: React.FC = () => {
           const isMember = !memberSnapshot.empty;
           
           const membersQuery = query(
-            collection(db, 'workspace_members'),
+            collection(db, 'members'),
             where('workspace_id', '==', doc.id),
             where('status', '==', 'active')
           );
@@ -372,6 +457,8 @@ const WorkspaceSelection: React.FC = () => {
               name: data.name,
               fullName: data.full_name || `${data.company_name}-${data.name}`,
               companyName: data.company_name || '',
+              company_id: data.company_id || '',
+              company_name: data.company_name || '',
               description: data.description,
               memberCount: membersSnapshot.size,
               role: 'none',
@@ -397,41 +484,37 @@ const WorkspaceSelection: React.FC = () => {
     
     setRequestingJoin(workspace.id);
     try {
-      if (workspace.isPublic) {
-        // If public, join directly
-        await addDoc(collection(db, 'workspace_members'), {
-          workspace_id: workspace.id,
-          user_id: user.firebase_uid,
-          user_name: user.displayName || user.email,
-          user_email: user.email,
-          role: 'member',
-          status: 'active',
-          joined_at: serverTimestamp()
-        });
-        
-        // Update workspace members array
-        await updateDoc(doc(db, 'workspaces', workspace.id), {
-          members: arrayUnion(user.firebase_uid)
-        });
-        
-        alert('워크스페이스에 성공적으로 가입되었습니다!');
-        await loadUserWorkspaces();
-        setActiveTab('my');
-      } else {
-        // If private, send join request
-        await addDoc(collection(db, 'workspace_join_requests'), {
-          workspace_id: workspace.id,
-          workspace_name: workspace.fullName,
-          user_id: user.firebase_uid,
-          user_name: user.displayName || user.email,
-          user_email: user.email,
-          status: 'pending',
-          requested_at: serverTimestamp()
-        });
-        
-        alert('가입 요청이 전송되었습니다. 관리자 승인을 기다려주세요.');
-        await loadJoinRequests();
+      // Check if already has a pending request
+      const existingRequestQuery = query(
+        collection(db, 'workspace_join_requests'),
+        where('workspace_id', '==', workspace.id),
+        where('user_id', '==', user.firebase_uid),
+        where('status', '==', 'pending')
+      );
+      
+      const existingRequests = await getDocs(existingRequestQuery);
+      if (!existingRequests.empty) {
+        alert('이미 가입 요청을 보내셨습니다. 관리자 승인을 기다려주세요.');
+        setRequestingJoin(null);
+        return;
       }
+      
+      // Always send join request (for both public and private workspaces)
+      await addDoc(collection(db, 'workspace_join_requests'), {
+        workspace_id: workspace.id,
+        workspace_name: workspace.fullName || workspace.name,
+        user_id: user.firebase_uid,
+        user_name: user.displayName || user.name || user.email?.split('@')[0] || 'User',
+        user_email: user.email || 'unknown@email.com',
+        user_nickname: user.displayName || user.name || user.email?.split('@')[0] || 'User',
+        status: 'pending',
+        requested_at: serverTimestamp(),
+        isPublicWorkspace: workspace.isPublic || false
+      });
+      
+      alert('가입 요청이 전송되었습니다. 관리자 승인을 기다려주세요.');
+      await loadJoinRequests();
+      await searchWorkspaces(); // Refresh search results to show pending status
     } catch (error) {
       console.error('Error requesting to join workspace:', error);
       alert('가입 요청 중 오류가 발생했습니다.');
@@ -441,16 +524,27 @@ const WorkspaceSelection: React.FC = () => {
   };
 
   const selectWorkspace = async (workspace: WorkspaceData) => {
-    setCurrentWorkspace({
-      id: workspace.id,
-      name: workspace.name,
-      role: workspace.role as 'owner' | 'admin' | 'member'
-    });
+    // Show loading state immediately
+    setLoading(true);
     
-    // Store selection in localStorage for persistence
-    localStorage.setItem('selectedWorkspaceId', workspace.id);
-    
-    navigate(`/workspaces/${workspace.id}/dashboard`);
+    try {
+      setCurrentWorkspace({
+        id: workspace.id,
+        name: workspace.name,
+        role: workspace.role as 'owner' | 'admin' | 'member',
+        companyId: workspace.company_id,
+        companyName: workspace.company_name
+      });
+      
+      // Store selection in localStorage for persistence
+      localStorage.setItem('selectedWorkspaceId', workspace.id);
+      
+      // Navigate immediately without waiting
+      navigate(`/workspaces/${workspace.id}/team-chat`);
+    } catch (error) {
+      console.error('Error selecting workspace:', error);
+      setLoading(false);
+    }
   };
 
   const getPlanBadge = (plan: string) => {
@@ -465,11 +559,17 @@ const WorkspaceSelection: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">워크스페이스를 불러오는 중...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="text-center"
+        >
+          <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">워크스페이스 로딩 중...</h2>
+          <p className="text-gray-600">잠시만 기다려주세요</p>
+        </motion.div>
       </div>
     );
   }
@@ -614,16 +714,16 @@ const WorkspaceSelection: React.FC = () => {
                     <div className="space-y-2">
                       <div className="flex items-center text-sm text-gray-500">
                         <Users className="w-4 h-4 mr-2" />
-                        <span>{workspace.memberCount}명의 멤버</span>
+                        <span>{workspace.memberCount || 1}명의 멤버</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-500">
                         <Shield className="w-4 h-4 mr-2" />
                         <span className="capitalize">{workspace.role === 'owner' ? '소유자' : workspace.role === 'admin' ? '관리자' : '멤버'}</span>
                       </div>
-                      {workspace.plan !== 'free' && (
+                      {workspace.pulseUsage !== undefined && (
                         <div className="flex items-center text-sm text-gray-500">
                           <TrendingUp className="w-4 h-4 mr-2" />
-                          <span>AI 사용량: {workspace.aiUsage?.toLocaleString()} 토큰</span>
+                          <span>Pulse 사용량: {workspace.pulseUsage.toLocaleString()} Pulse</span>
                         </div>
                       )}
                     </div>
@@ -669,7 +769,7 @@ const WorkspaceSelection: React.FC = () => {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="font-medium text-gray-900">
-                            {approval.user_name} ({approval.user_email})
+                            {approval.user_nickname || approval.user_name} ({approval.user_email && approval.user_email !== 'unknown@email.com' ? approval.user_email : '이메일 미제공'})
                           </div>
                           <div className="text-sm text-gray-500 mt-1">
                             워크스페이스: {approval.workspaceName}
@@ -780,7 +880,7 @@ const WorkspaceSelection: React.FC = () => {
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center text-sm text-gray-500">
                         <Users className="w-4 h-4 mr-2" />
-                        <span>{workspace.memberCount}명의 멤버</span>
+                        <span>{workspace.memberCount || 1}명의 멤버</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-500">
                         <span className={`px-2 py-1 rounded text-xs ${getPlanBadge(workspace.plan).color}`}>

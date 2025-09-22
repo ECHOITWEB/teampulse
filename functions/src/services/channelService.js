@@ -39,7 +39,7 @@ class ChannelService {
     
     // Query Firestore
     const db = admin.firestore();
-    const doc = await db.collection('channels').doc(channelId).get();
+    const doc = await db.collection('chat_channels').doc(channelId).get();
     
     if (!doc.exists) {
       return null;
@@ -107,7 +107,7 @@ class ChannelService {
     });
     
     // Update channel last activity
-    await db.collection('channels').doc(channelId).update({
+    await db.collection('chat_channels').doc(channelId).update({
       lastActivity: admin.firestore.FieldValue.serverTimestamp(),
       lastMessage: messageData.content?.substring(0, 100) || ''
     });
@@ -199,7 +199,7 @@ class ChannelService {
   // Update channel with cache invalidation
   async updateChannel(channelId, updates) {
     const db = admin.firestore();
-    await db.collection('channels').doc(channelId).update({
+    await db.collection('chat_channels').doc(channelId).update({
       ...updates,
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     });
@@ -215,7 +215,7 @@ class ChannelService {
   // Add member to channel
   async addMember(channelId, userId) {
     const db = admin.firestore();
-    await db.collection('channels').doc(channelId).update({
+    await db.collection('chat_channels').doc(channelId).update({
       members: admin.firestore.FieldValue.arrayUnion(userId),
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     });
@@ -231,7 +231,7 @@ class ChannelService {
   // Remove member from channel
   async removeMember(channelId, userId) {
     const db = admin.firestore();
-    await db.collection('channels').doc(channelId).update({
+    await db.collection('chat_channels').doc(channelId).update({
       members: admin.firestore.FieldValue.arrayRemove(userId),
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     });

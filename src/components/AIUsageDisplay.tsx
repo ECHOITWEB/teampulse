@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { AlertCircle, Zap } from 'lucide-react';
 import { useWorkspace } from '../contexts/WorkspaceContext';
-import { useAuth } from '../contexts/AuthContext';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
@@ -12,7 +11,6 @@ interface AIUsageDisplayProps {
 
 const AIUsageDisplay: React.FC<AIUsageDisplayProps> = ({ inline = false }) => {
   const { currentWorkspace } = useWorkspace();
-  const { user } = useAuth();
   const [usage, setUsage] = useState({
     used: 0,
     limit: 10000,

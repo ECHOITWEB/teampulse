@@ -1,378 +1,253 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { createChatCompletion, analyzeFile } from '../../utils/openai';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import api from '../../services/api';
+import React, { useState, useEffect } from 'react';
+import { Send, Bot, User, Loader, AlertCircle } from 'lucide-react';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
-  file?: {
-    name: string;
-    type: string;
-    content?: string;
-  };
 }
 
-interface Session {
-  id: string;
-  session_name: string;
-  created_at: string;
-  updated_at: string;
-  message_count: number;
-  last_message_at: string | null;
+interface ChatLimit {
+  count: number;
+  timestamp: number;
 }
 
 const TeamPulseAI: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      role: 'assistant',
+      content: '안녕하세요! TeamPulse AI입니다. 무엇을 도와드릴까요? 💬'
+    }
+  ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [attachedFile, setAttachedFile] = useState<File | null>(null);
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [sessions, setSessions] = useState<Session[]>([]);
-  const [showHistory, setShowHistory] = useState(true);
-  const [loadingSession, setLoadingSession] = useState(false);
+  const [messageCount, setMessageCount] = useState(0);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [isComposing, setIsComposing] = useState(false);
 
+  // Check and load chat limit from localStorage on component mount
   useEffect(() => {
-    initializeSession();
-    loadSessions();
-  }, []);
-
-  const initializeSession = async () => {
-    try {
-      await api.demoLogin();
-      // Don't create a new session automatically
-    } catch (error) {
-      console.error('Failed to initialize:', error);
-    }
-  };
-
-  const loadSessions = async () => {
-    try {
-      const response = await api.getChatSessions('teampulse_ai');
-      setSessions(response.sessions || []);
-    } catch (error) {
-      console.error('Failed to load sessions:', error);
-    }
-  };
-
-  const createNewSession = async () => {
-    try {
-      const sessionName = `대화 ${new Date().toLocaleDateString('ko-KR')} ${new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}`;
-      const session = await api.createChatSession('teampulse_ai', sessionName);
-      setSessionId(session.id);
-      setMessages([]);
-      await loadSessions();
-      return session.id;
-    } catch (error) {
-      console.error('Failed to create session:', error);
-      return null;
-    }
-  };
-
-  const loadSession = async (session: Session) => {
-    try {
-      setLoadingSession(true);
-      const response = await api.getSessionMessages(session.id);
-      setSessionId(session.id);
-      setMessages(response.messages.map((msg: any) => ({
-        role: msg.role,
-        content: msg.content,
-        file: msg.file_info ? JSON.parse(msg.file_info) : undefined
-      })));
-    } catch (error) {
-      console.error('Failed to load session messages:', error);
-    } finally {
-      setLoadingSession(false);
-    }
-  };
-
-  const deleteSession = async (sessionIdToDelete: string) => {
-    try {
-      await api.deleteSession(sessionIdToDelete);
-      if (sessionId === sessionIdToDelete) {
-        setSessionId(null);
-        setMessages([]);
+    const checkChatLimit = () => {
+      const limitKey = 'teampulse_chat_limit';
+      const storedLimit = localStorage.getItem(limitKey);
+      
+      if (storedLimit) {
+        const limit: ChatLimit = JSON.parse(storedLimit);
+        const now = Date.now();
+        const twentyFourHours = 24 * 60 * 60 * 1000;
+        
+        // Check if 24 hours have passed
+        if (now - limit.timestamp > twentyFourHours) {
+          // Reset the limit
+          localStorage.removeItem(limitKey);
+          setMessageCount(0);
+          setIsBlocked(false);
+        } else {
+          // Still within 24 hours
+          setMessageCount(limit.count);
+          if (limit.count >= 3) {
+            setIsBlocked(true);
+          }
+        }
       }
-      await loadSessions();
-    } catch (error) {
-      console.error('Failed to delete session:', error);
-    }
-  };
-
-
-
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setAttachedFile(file);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() && !attachedFile) return;
-
-    // Create a new session if none exists
-    let currentSessionId = sessionId;
-    if (!currentSessionId) {
-      currentSessionId = await createNewSession();
-      if (!currentSessionId) return;
-    }
-
-    let fileInfo = null;
-
-    if (attachedFile) {
-      fileInfo = {
-        name: attachedFile.name,
-        type: attachedFile.type
-      };
-    }
-
-    const userMessage: Message = { 
-      role: 'user', 
-      content: input || '파일을 분석해주세요.',
-      file: fileInfo || undefined
     };
     
-    setMessages([...messages, userMessage]);
+    checkChatLimit();
+  }, []);
+
+  // Save chat limit to localStorage
+  const saveChatLimit = (count: number) => {
+    const limitKey = 'teampulse_chat_limit';
+    const limit: ChatLimit = {
+      count: count,
+      timestamp: Date.now()
+    };
+    localStorage.setItem(limitKey, JSON.stringify(limit));
+  };
+
+  const handleSendMessage = async () => {
+    if (!input.trim()) return;
+    
+    // Check if blocked
+    if (isBlocked || messageCount >= 3) {
+      alert('24시간 동안 3개의 메시지 한도를 초과했습니다. 내일 다시 시도해주세요!');
+      return;
+    }
+
+    const userMessage: Message = { role: 'user', content: input };
+    setMessages(prev => [...prev, userMessage]);
     setInput('');
-    const currentFile = attachedFile;
-    setAttachedFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
     setLoading(true);
-
-    // Save user message to database
-    try {
-      await api.sendMessage(currentSessionId, {
-        role: 'user',
-        content: userMessage.content,
-        file_info: fileInfo || undefined
-      });
-    } catch (error) {
-      console.error('Failed to save user message:', error);
+    
+    const newCount = messageCount + 1;
+    setMessageCount(newCount);
+    saveChatLimit(newCount);
+    
+    if (newCount >= 3) {
+      setIsBlocked(true);
     }
 
     try {
-      let response: string = '';
-
-      if (currentFile) {
-        // 파일이 있으면 analyzeFile 함수 사용
-        response = await analyzeFile(currentFile, input || '이 파일을 분석해주세요.');
-      } else {
-        // 파일이 없으면 일반 챗 완성
-        const chatResponse = await createChatCompletion([
-          { role: 'system', content: 'You are TeamPulse AI, a helpful assistant for workplace tasks. Respond in Korean.' },
-          ...messages.map(m => ({ role: m.role, content: m.content })),
-          { role: 'user', content: input }
-        ]);
-        response = chatResponse || '응답을 생성할 수 없습니다.';
-      }
-
-      setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+      // Simulate API call with mock responses
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Save assistant response to database
-      try {
-        await api.sendMessage(currentSessionId, {
-          role: 'assistant',
-          content: response,
-          tokens_used: response.length // Rough estimate
-        });
-      } catch (error) {
-        console.error('Failed to save assistant message:', error);
-      }
+      const responses = [
+        '좋은 질문이네요! TeamPulse는 팀 협업을 위한 최고의 도구입니다. OKR 관리, 실시간 채팅, AI 기반 분석 등 다양한 기능을 제공합니다.',
+        '그것에 대해 더 자세히 설명드리겠습니다. TeamPulse의 AI 기능은 회의록 자동 생성, 데이터 분석, 문서 번역 등을 포함합니다. 생산성을 크게 향상시킬 수 있죠!',
+        'TeamPulse Pro를 사용하시면 더 많은 고급 기능을 이용하실 수 있습니다. 무제한 메시지, 팀 협업 도구, 고급 분석 기능 등이 포함되어 있습니다. 지금 바로 업그레이드해보세요!'
+      ];
+
+      const assistantMessage: Message = {
+        role: 'assistant',
+        content: responses[newCount - 1] || '더 많은 기능을 원하시면 TeamPulse Pro를 이용해주세요!'
+      };
+
+      setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Error:', error);
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: '죄송합니다. 오류가 발생했습니다. 다시 시도해주세요.' 
-      }]);
+      const errorMessage: Message = {
+        role: 'assistant',
+        content: '죄송합니다. 일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
+      };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    // Don't send message if Korean/IME composition is in progress
+    if (e.key === 'Enter' && !e.shiftKey && !isComposing) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
+  };
+
+  // Calculate remaining time
+  const getRemainingTime = () => {
+    const limitKey = 'teampulse_chat_limit';
+    const storedLimit = localStorage.getItem(limitKey);
+    
+    if (storedLimit) {
+      const limit: ChatLimit = JSON.parse(storedLimit);
+      const now = Date.now();
+      const twentyFourHours = 24 * 60 * 60 * 1000;
+      const elapsed = now - limit.timestamp;
+      const remaining = twentyFourHours - elapsed;
+      
+      if (remaining > 0) {
+        const hours = Math.floor(remaining / (60 * 60 * 1000));
+        const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
+        return `${hours}시간 ${minutes}분`;
+      }
+    }
+    return null;
+  };
+
+  const remainingTime = getRemainingTime();
+
   return (
-    <div className="flex h-full">
-      {/* History Sidebar */}
-      <div className={`${showHistory ? 'w-64' : 'w-0'} transition-all duration-300 bg-gray-50 border-r overflow-hidden flex flex-col`}>
-        <div className="p-4 border-b bg-white">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-800">대화 기록</h3>
-            <button
-              onClick={() => setShowHistory(!showHistory)}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              ✕
-            </button>
-          </div>
-          <button
-            onClick={createNewSession}
-            className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+    <div className="flex flex-col h-[600px] max-w-4xl mx-auto">
+      {/* Chat Messages - removed overflow-y-auto to prevent auto-scrolling */}
+      <div className="flex-1 p-4 space-y-4 bg-gray-50 rounded-t-xl" style={{ overflowY: 'auto' }}>
+        {messages.map((message, index) => (
+          <div
+            key={index}
+            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            + 새 대화 시작
-          </button>
-        </div>
-        <div className="flex-1 overflow-y-auto p-4 space-y-2">
-          {sessions.map((session) => (
             <div
-              key={session.id}
-              className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                sessionId === session.id ? 'bg-blue-100 border-blue-300 border' : 'bg-white hover:bg-gray-100'
+              className={`flex items-start gap-3 max-w-[80%] ${
+                message.role === 'user' ? 'flex-row-reverse' : ''
               }`}
-              onClick={() => loadSession(session)}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm text-gray-800 truncate">{session.session_name}</p>
-                  <p className="text-xs text-gray-500">
-                    {new Date(session.updated_at).toLocaleDateString('ko-KR')} {new Date(session.updated_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                  <p className="text-xs text-gray-400">{session.message_count || 0}개 메시지</p>
-                </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (window.confirm('이 대화를 삭제하시겠습니까?')) {
-                      deleteSession(session.id);
-                    }
-                  }}
-                  className="ml-2 text-red-500 hover:text-red-700 text-sm"
-                >
-                  🗑
-                </button>
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  message.role === 'user'
+                    ? 'bg-blue-500'
+                    : 'bg-gradient-to-br from-purple-500 to-pink-500'
+                }`}
+              >
+                {message.role === 'user' ? (
+                  <User className="w-5 h-5 text-white" />
+                ) : (
+                  <Bot className="w-5 h-5 text-white" />
+                )}
+              </div>
+              <div
+                className={`px-4 py-2 rounded-xl ${
+                  message.role === 'user'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-white text-gray-800 shadow-sm'
+                }`}
+              >
+                {message.content}
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
+        {loading && (
+          <div className="flex justify-start">
+            <div className="flex items-start gap-3 max-w-[80%]">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                <Bot className="w-5 h-5 text-white" />
+              </div>
+              <div className="px-4 py-2 bg-white rounded-xl shadow-sm">
+                <Loader className="w-5 h-5 animate-spin text-gray-500" />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
-        <div className="p-4 border-b bg-white flex items-center justify-between">
-          <button
-            onClick={() => setShowHistory(!showHistory)}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            ☰
-          </button>
-          <h2 className="font-semibold text-gray-800">
-            {sessionId ? (sessions.find(s => s.id === sessionId)?.session_name || 'TeamPulse AI') : 'TeamPulse AI'}
-          </h2>
-          <div className="w-8" />
-        </div>
-        
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {!sessionId && messages.length === 0 && (
-            <div className="text-center text-gray-500 mt-20">
-              <p className="text-lg mb-4">👋 안녕하세요! TeamPulse AI입니다.</p>
-              <p>새 대화를 시작하려면 메시지를 입력하거나</p>
-              <p>왼쪽 사이드바에서 이전 대화를 선택하세요.</p>
-            </div>
-          )}
-          {loadingSession ? (
-            <div className="text-center text-gray-500 mt-20">
-              <p>대화를 불러오는 중...</p>
-            </div>
-          ) : (
-            messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[70%] rounded-lg p-4 ${
-                    message.role === 'user'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 text-gray-800'
-                  }`}
-                >
-                  {message.role === 'assistant' ? (
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {message.content}
-                    </ReactMarkdown>
-                  ) : (
-                    <div>
-                      {message.file && (
-                        <div className="mb-2 text-sm text-blue-200">
-                          📎 {message.file.name}
-                        </div>
-                      )}
-                      <p>{message.content}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
-          )}
-          {loading && (
-            <div className="flex justify-start">
-              <div className="bg-gray-100 rounded-lg p-4">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-        
-        <form onSubmit={handleSubmit} className="p-4 border-t bg-white">
-          {attachedFile && (
-            <div className="mb-2 p-2 bg-gray-100 rounded flex items-center justify-between">
-              <span className="text-sm text-gray-600">
-                📎 {attachedFile.name}
+      {/* Message Counter */}
+      {(messageCount > 0 || isBlocked) && (
+        <div className="px-4 py-2 bg-yellow-50 border-t border-yellow-200">
+          <div className="flex items-center gap-2 text-sm text-yellow-800">
+            <AlertCircle className="w-4 h-4" />
+            {isBlocked ? (
+              <span className="font-semibold">
+                메시지 한도에 도달했습니다. {remainingTime && `${remainingTime} 후에 다시 사용 가능합니다.`}
               </span>
-              <button
-                type="button"
-                onClick={() => {
-                  setAttachedFile(null);
-                  if (fileInputRef.current) {
-                    fileInputRef.current.value = '';
-                  }
-                }}
-                className="text-red-500 hover:text-red-700 text-sm"
-              >
-                삭제
-              </button>
-            </div>
-          )}
-          <div className="flex space-x-2">
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileUpload}
-              accept=".pdf,.csv,.xls,.xlsx,image/*"
-              className="hidden"
-              id="file-upload"
-            />
-            <label
-              htmlFor="file-upload"
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer flex items-center"
-            >
-              📁
-            </label>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="메시지를 입력하세요..."
-              className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={loading}
-            />
-            <button
-              type="submit"
-              disabled={loading || (!input.trim() && !attachedFile)}
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              전송
-            </button>
+            ) : (
+              <span>데모 메시지 {messageCount}/3 사용</span>
+            )}
           </div>
-        </form>
+        </div>
+      )}
+
+      {/* Input Area */}
+      <div className="p-4 bg-white border-t border-gray-200 rounded-b-xl">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={handleKeyPress}
+            onCompositionStart={handleCompositionStart}
+            onCompositionEnd={handleCompositionEnd}
+            placeholder={isBlocked ? "24시간 후에 다시 사용 가능합니다" : "메시지를 입력하세요..."}
+            disabled={loading || isBlocked}
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+          />
+          <button
+            onClick={handleSendMessage}
+            disabled={loading || !input.trim() || isBlocked}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+          >
+            {loading ? (
+              <Loader className="w-5 h-5 animate-spin" />
+            ) : (
+              <Send className="w-5 h-5" />
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

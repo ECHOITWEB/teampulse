@@ -1,10 +1,9 @@
-GPT-5-mini : 모델명 gpt-5-mini
-GPT-5 : 모델명 gpt-5
-GPT-5-nano : 모델명 gpt-5-nano
+GPT-4.1-mini : 모델명 gpt-4.1-mini
 GPT-4.1 : 모델명 gpt-4.1
-GPT-4.1-mini : 모델명 gpt-4.1-mini 
+GPT-4.1-nano : 모델명 gpt-4.1-nano
 GPT-4o : 모델명 gpt-4o
 이미지 생성 : 모델명 gpt-image-1
+
 출처 :        │
 │   https://platform.openai.com/docs/pricing \                                      │
 │   클로드는 Claude Opus 4.1    claude-opus-4-1-20250805                            │

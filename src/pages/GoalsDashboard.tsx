@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Target, Users, User, ChevronDown, ChevronRight, MoreVertical, AlertCircle, MessageCircle, BarChart3 } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { Plus, Target, Users, User, ChevronDown, ChevronRight, MoreVertical, AlertCircle, MessageCircle } from 'lucide-react';
+import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import CreateObjectiveModal from '../components/modals/CreateObjectiveModal';
 import GoalComments from '../components/goals/GoalComments';
@@ -392,7 +392,10 @@ const GoalsDashboardNew: React.FC = () => {
         <CreateObjectiveModal
           isOpen={showCreateModal}
           onClose={() => setShowCreateModal(false)}
-          onSubmit={handleCreateObjective}
+          onSuccess={() => {
+            setShowCreateModal(false);
+            loadObjectives();
+          }}
           currentQuarter={selectedQuarter}
           currentYear={selectedYear}
         />
@@ -410,14 +413,7 @@ const GoalsDashboardNew: React.FC = () => {
               <h1 className="text-3xl font-bold text-gray-900">목표 관리 (OKR)</h1>
               <p className="text-gray-600 mt-2">목표와 핵심 결과를 통해 성과를 추적하세요</p>
             </div>
-            <div className="mt-4 sm:mt-0 flex items-center space-x-3">
-              <Link
-                to={`/workspaces/${workspaceId}/goals-analytics`}
-                className="flex items-center space-x-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors"
-              >
-                <BarChart3 className="w-5 h-5" />
-                <span>분석 보기</span>
-              </Link>
+            <div className="mt-4 sm:mt-0">
               <button
                 onClick={() => setShowCreateModal(true)}
                 className="flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors"
@@ -650,7 +646,10 @@ const GoalsDashboardNew: React.FC = () => {
       <CreateObjectiveModal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
-        onSubmit={handleCreateObjective}
+        onSuccess={() => {
+          setShowCreateModal(false);
+          loadObjectives();
+        }}
         currentQuarter={selectedQuarter}
         currentYear={selectedYear}
       />

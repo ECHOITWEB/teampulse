@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import { z } from 'zod';
-import { extractTextFromPDF } from './pdfParser';
+import { parsePDFLocally } from './pdfParser';
 
 const openai = new OpenAI({
   apiKey: process.env.REACT_APP_OPENAI_API_KEY,
@@ -132,7 +132,8 @@ export async function analyzeFile(
       return result || '이미지를 분석할 수 없습니다.';
     } else if (file.type === 'application/pdf') {
       try {
-        const pdfText = await extractTextFromPDF(file);
+        const pdfResult = await parsePDFLocally(file);
+        const pdfText = pdfResult.text;
         const result = await createChatCompletion([
           { role: 'system', content: 'You are analyzing a PDF document. Provide insights and answer questions about the content in Korean.' },
           { role: 'user', content: `PDF Content (${file.name}):\n\n${pdfText.substring(0, 10000)}${pdfText.length > 10000 ? '\n\n[문서가 너무 길어 일부만 표시됩니다]' : ''}\n\nQuestion: ${prompt}` }

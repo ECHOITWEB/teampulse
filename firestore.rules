@@ -173,6 +173,14 @@ service cloud.firestore {
       allow delete: if false;
     }
     
+    // Workspace invitations
+    match /workspace_invitations/{invitationId} {
+      allow read: if true; // Anyone with the link can read
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if false;
+    }
+    
     // Workspace storage tracking
     match /workspaceStorage/{workspaceId} {
       allow read: if isAuthenticated();

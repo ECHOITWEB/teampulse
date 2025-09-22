@@ -129,8 +129,8 @@ class WorkspaceService {
     
     // Query Firestore
     const db = admin.firestore();
-    const snapshot = await db.collection('channels')
-      .where('workspaceId', '==', workspaceId)
+    const snapshot = await db.collection('chat_channels')
+      .where('workspace_id', '==', workspaceId)
       .get();
     
     const channels = [];
