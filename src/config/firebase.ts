@@ -11,15 +11,21 @@ import { getStorage } from 'firebase/storage';
 import { getFunctions } from 'firebase/functions';
 
 // Your web app's Firebase configuration
+// These values should be set in your .env file
 const firebaseConfig = {
-  apiKey: "AIzaSyDntelxrvxbDGP7eWASajYPtJJUwveQ7FQ",
-  authDomain: "teampulse-61474.firebaseapp.com",
-  projectId: "teampulse-61474",
-  storageBucket: "teampulse-61474.firebasestorage.app",
-  messagingSenderId: "96569153819",
-  appId: "1:96569153819:web:e488999f9d9c2cab295bbe",
-  measurementId: "G-C5P674RG81"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "",
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "",
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "",
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || "",
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || ""
 };
+
+// Validate required configuration
+if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+  console.error("Firebase configuration is missing. Please check your environment variables.");
+}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
