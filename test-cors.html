@@ -142,14 +142,15 @@
         import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
         import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
+        // Replace with your Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyDntelxrvxbDGP7eWASajYPtJJUwveQ7FQ",
+            apiKey: "YOUR_FIREBASE_API_KEY_HERE",
             authDomain: "teampulse-61474.firebaseapp.com",
             projectId: "teampulse-61474",
             storageBucket: "teampulse-61474.firebasestorage.app",
             messagingSenderId: "96569153819",
-            appId: "1:96569153819:web:e488999f9d9c2cab295bbe",
-            measurementId: "G-C5P674RG81"
+            appId: "YOUR_FIREBASE_APP_ID_HERE",
+            measurementId: "YOUR_MEASUREMENT_ID_HERE"
         };
 
         const app = initializeApp(firebaseConfig);

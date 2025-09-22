@@ -10,16 +10,8 @@ class APIKeyManager {
     const config = functions.config();
     
     this.keys = {
-      openai: this._initializeKeys(config?.openai, [
-        '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',
-        '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',
-        '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'
-      ]),
-      anthropic: this._initializeKeys(config?.anthropic, [
-        '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',
-        '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',
-        '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'
-      ])
+      openai: this._initializeKeys(config?.openai, []),
+      anthropic: this._initializeKeys(config?.anthropic, [])
     };
     
     // Key status tracking with TTL cache
@@ -45,7 +37,11 @@ class APIKeyManager {
         }
       }
     }
-    return keys.length > 0 ? keys : defaultKeys.filter(key => key && key !== 'undefined');
+    // Never use default keys - they should only come from environment variables
+    if (keys.length === 0) {
+      console.warn('⚠️ No API keys configured. Please set them in Firebase Functions config.');
+    }
+    return keys;
   }
   
   _initializeKeyStatus() {

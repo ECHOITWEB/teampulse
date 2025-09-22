@@ -49,7 +49,7 @@ firebase deploy --only hosting
 `.env.production` 파일 생성:
 ```env
 REACT_APP_API_URL=https://your-backend-url.com/api
-REACT_APP_FIREBASE_API_KEY=AIzaSyDntelxrvxbDGP7eWASajYPtJJUwveQ7FQ
+REACT_APP_FIREBASE_API_KEY=your-firebase-api-key
 REACT_APP_FIREBASE_AUTH_DOMAIN=teampulse-61474.firebaseapp.com
 REACT_APP_FIREBASE_PROJECT_ID=teampulse-61474
 ```

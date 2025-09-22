@@ -1,5 +1,7 @@
 .env
-.env.*
+.env.local
+.env.production
+.env.invite
 cors.json
 *.log
 node_modules/
